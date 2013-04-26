@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include "VarBuffer.h"
+#include "Indice.h"
 
 
 
@@ -24,7 +25,7 @@ class ArbolBmas
 
 private:
 
-	struct Nodo 
+	class Nodo : public Indice
 	{
 		int maxClaves;		// Numero maximo de claves en el nodo
 
