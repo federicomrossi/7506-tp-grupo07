@@ -24,11 +24,11 @@ protected:
 	list<string>* fileList;
 
 public:
-	dirHandler(char* path);
+	dirHandler(const char* path);
 	virtual ~dirHandler();
 	list<string>* getFileList();
-	void getFiles(char* dir);
-	void setPath (char* path);
+	void getFiles(const char* dir);
+	void setPath (const char* path);
 };
 
 #endif /* DIRHANDLER_H_ */

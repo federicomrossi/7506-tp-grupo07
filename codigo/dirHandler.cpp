@@ -11,7 +11,7 @@
 #include <string.h>
 using namespace std;
 
-dirHandler::dirHandler(char* path) {
+dirHandler::dirHandler(const char* path) {
 	this->fileList= new list<string>;
 	this->initialPathName=path;
 }
@@ -24,7 +24,7 @@ list<string>* dirHandler::getFileList() {
 	return this->fileList;
 }
 
-void dirHandler::setPath(char* path){
+void dirHandler::setPath(const char* path){
 	this->initialPathName=path;
 }
 
@@ -35,7 +35,7 @@ void dirHandler::setPath(char* path){
  * 	"Yesterday.txt" guardara "home/Usuario/music/lyrics/The_Beatles/Yesterday.txt".
  *
  */
-void dirHandler::getFiles(char* dir){
+void dirHandler::getFiles(const char* dir){
 	DIR *dirStream;
 	struct dirent *dirEntry;
 	dirStream = opendir(dir);
