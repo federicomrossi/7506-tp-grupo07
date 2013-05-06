@@ -6,6 +6,7 @@
 class Validator{
     public:
         static int validateOpcion(std::string op);
+        static int validateHeader(std::string header);
 
 };
 

@@ -19,7 +19,7 @@ int Menu::start(){
     cin >> op;
     int r = 0;
     int opcion = 0;
-    if (opcion = Validator::validateOpcion(op)){
+    if ((opcion = Validator::validateOpcion(op))){
         r = this->ingresarOpcion(opcion);
     }else{
         cout << "Opcion Invalida" << endl;
@@ -51,6 +51,7 @@ int Menu::ingresarOpcion(int opcion){
             cout << "Eliminando cualquier registro de canciones previo" << endl;
             in->eliminarTodo();
             cout << "Indexando canciones desde el directorio" << from << endl;
+            from = "/home/pablo/tpDatos/7506-tp-grupo07/temas";
             in->indexarCancionesDesde(from, 0);
             delete in;
             break;
