@@ -1,6 +1,6 @@
 #include <iostream>
-#include "menu.h"
-#include "validator.h"
+#include "Menu.h"
+#include "Validator.h"
 #include "Indexer.h"
 #include "Buscador.h"
 

@@ -1,4 +1,4 @@
-#include "validator.h"
+#include "Validator.h"
 #include <iostream>
 #include <sstream>
 

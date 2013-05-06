@@ -7,6 +7,7 @@
 //
 
 #include "VarBuffer.h"
+#include <string.h>
 
 VarBuffer::VarBuffer(unsigned int maxSize)
 {
@@ -24,7 +25,7 @@ void VarBuffer::clear()
 /*
  * La funcion se encargar de leer una procion de archivo a partir de la definicion del largo del
  * registro que fue guardado y almacena dicha porcion el el buffer.
- * Devuelve 0 si la operacion fue correcta, -1 si se habia alcanzado el fin de archivo, -2 si se 
+ * Devuelve 0 si la operacion fue correcta, -1 si se habia alcanzado el fin de archivo, -2 si se
  * produce un problema de IO y -3 si hay buffer overflow
  */
 int VarBuffer::read(ifstream &file)
@@ -32,25 +33,25 @@ int VarBuffer::read(ifstream &file)
     if (file.eof()) {
         return -1;
     }
-    
+
     unsigned int readSize;
     file.read((char*)&readSize, sizeof(readSize));
     if (! file.good()) {
         return -2;
     }
-    
+
     if (readSize > this->maxSize) {
         return -3;
     }
-    
+
     this->bufferSize = readSize;
     file.read(buffer, this->bufferSize);
     if (! file.good()) {
         return -2;
     }
-    
+
     return 0;
-    
+
 }
 
 /*
@@ -64,12 +65,12 @@ int VarBuffer::write(ofstream &file)
     if (! file.good()) {
         return -2;
     }
-    
+
     file.write(buffer, bufferSize);
     if (! file.good()) {
         return -2;
-    }   
-    
+    }
+
     return 0;
 }
 
@@ -86,7 +87,7 @@ int VarBuffer::pack(const void *object, unsigned int size)
 
     memcpy(buffer,object,size);
     this->bufferSize=size;
-    
+
     return 0;
 }
 
