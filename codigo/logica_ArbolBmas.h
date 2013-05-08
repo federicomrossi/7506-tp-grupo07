@@ -7,7 +7,6 @@
 #define ARBOLBMAS_H
 
 
-#include <iostream>
 #include "VarBuffer.h"
 #include "Indice.h"
 
@@ -43,7 +42,7 @@ private:
 
 		//
 		int particionar(Nodo *nodoNuevo);
-	};	
+	};
 
 	Nodo raiz;				// Nodo de la raiz
 	int altura;				// Altura del arbol
