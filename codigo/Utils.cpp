@@ -10,3 +10,21 @@ int Utils::splitString(std::string s, char del, std::list<std::string> *ptr){
     }
     return 0;
 }
+
+
+int Utils::getClaveFromHeader(std::string header, std::string* clave){
+    std::list<std::string> *ptr = new std::list<std::string>;
+    Utils::splitString(header,'-',ptr);
+    std::ostringstream s;
+    s << ptr->front() << "-";
+    ptr->pop_front();
+    if(ptr->size() == 3){
+        ptr->pop_front();
+    }
+    s << ptr->front() << "-";
+    ptr->pop_front();
+    s << ptr->front();
+    *clave = s.str();
+    delete ptr;
+    return 0;
+}

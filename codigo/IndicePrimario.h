@@ -7,8 +7,8 @@ class IndicePrimario{
     public:
         IndicePrimario();
         ~IndicePrimario();
-        int agregar(std:string claveTema, int posArch);
-        int recuperar(std:string claveTema);
+        int agregar(std::string claveTema, int posArch);
+        int recuperar(std::string claveTema);
         int eliminarTodo();
     private:
         //UN HASH
