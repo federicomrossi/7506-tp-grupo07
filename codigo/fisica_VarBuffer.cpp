@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Federico Colangelo. All rights reserved.
 //
 
-#include "VarBuffer.h"
+#include "fisica_VarBuffer.h"
 #include <string.h>
 
 VarBuffer::VarBuffer(unsigned int maxSize)

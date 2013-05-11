@@ -5,7 +5,7 @@
  *      Author: rburdet
  */
 
-#include "FileHandler.h"
+#include "logica_FileHandler.h"
 #include <iostream>
 #include <fstream>
 #include <cstdlib>

@@ -1,7 +1,7 @@
-#include "Validator.h"
+#include "logica_Validator.h"
 #include <iostream>
 #include <sstream>
-#include "Utils.h"
+#include "logica_Utils.h"
 
 
 int Validator::validateOpcion(std::string op){

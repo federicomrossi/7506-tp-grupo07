@@ -1,8 +1,8 @@
 #include <iostream>
-#include "Menu.h"
-#include "Validator.h"
-#include "Indexer.h"
-#include "Buscador.h"
+#include "interfaz_Menu.h"
+#include "logica_Validator.h"
+#include "logica_Indexer.h"
+#include "logica_Buscador.h"
 
 using namespace std;
 
