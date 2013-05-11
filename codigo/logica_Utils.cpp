@@ -1,6 +1,6 @@
 #include <iostream>
 #include <sstream>
-#include "Utils.h"
+#include "logica_Utils.h"
 
 int Utils::splitString(std::string s, char del, std::list<std::string> *ptr){
     std::string s2;

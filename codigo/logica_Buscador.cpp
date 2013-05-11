@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Buscador.h"
+#include "logica_Buscador.h"
 
 Buscador::Buscador(){
 }

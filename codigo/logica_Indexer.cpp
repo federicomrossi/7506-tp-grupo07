@@ -1,10 +1,10 @@
 #include <iostream>
-#include "Indexer.h"
-#include "dirHandler.h"
-#include "fileHandler.h"
-#include "Validator.h"
-#include "IndicePrimario.h"
-#include "Utils.h"
+#include "fisica_DirHandler.h"
+#include "logica_Indexer.h"
+#include "logica_FileHandler.h"
+#include "logica_Validator.h"
+#include "logica_IndicePrimario.h"
+#include "logica_Utils.h"
 
 Indexer::Indexer(){
 }
@@ -17,8 +17,8 @@ int Indexer::eliminarTodo(){
 }
 
 int Indexer::indexarCancionesDesde(std::string path, int mode){
-    dirHandler *dirH = new dirHandler(path.c_str());
-    fileHandler *fileH = new fileHandler();
+    DirHandler *dirH = new DirHandler(path.c_str());
+    FileHandler *fileH = new FileHandler();
     dirH->getFiles(path.c_str());
     std::list<string> *archivos = dirH->getFileList();
     std::list<string>::iterator it;

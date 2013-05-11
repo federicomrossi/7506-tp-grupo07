@@ -1,4 +1,4 @@
-#include "IndicePrimario.h"
+#include "logica_IndicePrimario.h"
 #include <string>
 
 IndicePrimario::IndicePrimario(){

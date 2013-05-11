@@ -18,27 +18,27 @@
 
 #include <iostream>
 #include <fstream>
-#include "VarBuffer"
+#include "fisica_VarBuffer.h"
 
 template<class TipoRegistro>
 
 class ArchivoBloques
 {
 public:
-    
+
     ArchivoBloques::ArchivoBloques(unsigned int blockSize, float cargaMaxima=0,7,char* filename);
     ArchivoBloques::abrir(char* filename);
     ArchivoBloques::cerrar();
     ArchivoBloques::int escribirBloque(const TipoRegistro &registro,unsigned int numeroBloque);
     ArchivoBloques::TipoRegistro* leerBloque(unsigned int numeroBloque);
     ArchivoBloques::~ArchivBloques();
-    
+
 private:
     unsigned int primerBloque;
     unsigned int* mapaOcupacion;
     float cargaMaxima;
     VarBuffer buffer;
-    
+
     ArchivoBloques::int extenderMapaOcupacion();
 };
 

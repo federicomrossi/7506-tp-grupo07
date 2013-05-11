@@ -7,8 +7,8 @@
 #define ARBOLBMAS_H
 
 
-#include "VarBuffer.h"
-#include "Indice.h"
+#include "fisica_VarBuffer.h"
+#include "logica_Indice.h"
 
 
 
