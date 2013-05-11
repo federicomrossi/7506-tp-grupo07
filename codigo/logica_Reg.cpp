@@ -5,7 +5,7 @@
  *      Author: rburdet
  */
 
-#include "Reg.h"
+#include "logica_Reg.h"
 #include <string>
 using namespace std;
 
