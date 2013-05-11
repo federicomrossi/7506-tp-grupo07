@@ -35,7 +35,11 @@ int Indexer::indexarCancionesDesde(std::string path, int mode){
                 std::cout << "Archivo ya indexado. Descartado" << endl;
             }else{
                 std::cout << "OK." << endl << "Indexando..";
-
+                std::list<std::string>* autores = new std::list<std::string>;
+                Utils::getAutoresFromHeader(header,autores);
+                delete autores;
+                std::string titulo = Utils::getTituloFromHeader(header);
+                std::cout << "TITULO: " << titulo << endl;
             }
         }
     }
@@ -50,7 +54,7 @@ int Indexer::indexarCancionesDesde(std::string path, int mode){
 int Indexer::estaIndexado(std::string header){
     IndicePrimario *ind = new IndicePrimario;
     std::string s;
-    Utils::getClaveFromHeader(header, &s);
+    s = Utils::getClaveFromHeader(header);
     std::cout << s << endl;
     if(ind->recuperar(s)){
         return 1;
