@@ -15,10 +15,10 @@
 
 using namespace std;
 
-class fileHandler {
+class FileHandler {
 public:
-	fileHandler();
-	virtual ~fileHandler();
+	FileHandler();
+	virtual ~FileHandler();
 	string getFirstLine(string fileName);
 	string getAuthor(string line);
 	string getSongName(string line);

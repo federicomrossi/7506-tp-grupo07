@@ -5,26 +5,26 @@
  *      Author: rburdet
  */
 
-#include "dirHandler.h"
+#include "DirHandler.h"
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
 using namespace std;
 
-dirHandler::dirHandler(const char* path) {
+DirHandler::DirHandler(const char* path) {
 	this->fileList= new list<string>;
 	this->initialPathName=path;
 }
 
-dirHandler::~dirHandler() {
+DirHandler::~DirHandler() {
 	delete this->fileList;
 }
 
-list<string>* dirHandler::getFileList() {
+list<string>* DirHandler::getFileList() {
 	return this->fileList;
 }
 
-void dirHandler::setPath(const char* path){
+void DirHandler::setPath(const char* path){
 	this->initialPathName=path;
 }
 
@@ -35,7 +35,7 @@ void dirHandler::setPath(const char* path){
  * 	"Yesterday.txt" guardara "home/Usuario/music/lyrics/The_Beatles/Yesterday.txt".
  *
  */
-void dirHandler::getFiles(const char* dir){
+void DirHandler::getFiles(const char* dir){
 	DIR *dirStream;
 	struct dirent *dirEntry;
 	dirStream = opendir(dir);

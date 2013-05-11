@@ -5,20 +5,20 @@
  *      Author: rburdet
  */
 
-#include "fileHandler.h"
+#include "FileHandler.h"
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
 #include <string>
 using namespace std;
 
-fileHandler::fileHandler() {
+FileHandler::FileHandler() {
 }
 
-fileHandler::~fileHandler() {
+FileHandler::~FileHandler() {
 }
 
-string fileHandler::getFirstLine(string fileName){
+string FileHandler::getFirstLine(string fileName){
 	string line;
 	ifstream inFile;
 	inFile.open(fileName.c_str());
@@ -27,13 +27,13 @@ string fileHandler::getFirstLine(string fileName){
 	return line;
 }
 
-string fileHandler::getAuthor(string line){
+string FileHandler::getAuthor(string line){
 	int pos = line.find_first_of("-");
 	line.erase(pos,line.size());
 	return line;
 }
 
-string fileHandler::getSongName(string line) {
+string FileHandler::getSongName(string line) {
 	string tmp=line;
 	int pos1 = line.find_first_of("-");
 	line.erase(0,pos1+1);

@@ -18,14 +18,14 @@
 #include "dirent.h"
 using namespace std;
 
-class dirHandler {
+class DirHandler {
 protected:
 	string initialPathName;
 	list<string>* fileList;
 
 public:
-	dirHandler(const char* path);
-	virtual ~dirHandler();
+	DirHandler(const char* path);
+	virtual ~DirHandler();
 	list<string>* getFileList();
 	void getFiles(const char* dir);
 	void setPath (const char* path);
