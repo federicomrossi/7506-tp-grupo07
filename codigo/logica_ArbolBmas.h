@@ -44,11 +44,12 @@ private:
 		int particionar(Nodo *nodoNuevo);
 	};
 
-	Nodo raiz;				// Nodo de la raiz
-	int altura;				// Altura del arbol
-	int orden;				// Orden del arbol
-	Nodo *Nodos[];			// Almacenador para rama
-	VarBuffer archivo;		// Archivo de almacenamiento del arbol
+	ArchivoBloques archivo;			// Archivo donde se almacena el árbol
+	Nodo raiz;						// Nodo de la raiz
+	int altura;						// Altura del arbol
+	int orden;						// Orden del arbol
+	Nodo *Nodos[];					// Almacenador para rama
+	VarBuffer archivo;				// Archivo de almacenamiento del arbol
 
 	//
 	Nodo* buscarHoja(const TipoClave clave);
@@ -67,20 +68,11 @@ public:
 	// Destructor
 	~ArbolBmas();
 
-	// CONSIDERAR BORRAR ESTE METODO
-	int iniciar(string nombre, int modo);
-
-	// CONSIDERAR BORRAR ESTE METODO
-	int crear(string nombre, int modo);
-
-	// CONSIDERAR BORRAR ESTE METODO
-	int cerrar();
+	// Crea el arbol
+	int crear(string& nombre_archivo);
 
 	//
 	int insertar(const TipoClave clave, const int direccionRegistro);
-
-	//
-	int eliminar(const TipoClave clave, const int direccionRegistro = -1);
 
 	//
 	int buscar(const TipoClave clave, const int direccionRegistro = -1);
@@ -93,6 +85,11 @@ public:
  * ***************************************************************************/
 
 
+// Crea el arbol
+int ArbolBmas::crear(string& nombre_archivo)
+{
+	this->archivo.abrir(nombre_archivo.c_str());
+}
 
 
 
