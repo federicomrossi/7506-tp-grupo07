@@ -23,7 +23,7 @@
 EXEC = interfaz_main
 
 # Directorios
-BINDIR = bin
+BINDIR =
 
 # Compilador
 CC = g++

@@ -24,6 +24,14 @@ class ArbolBmas
 
 private:
 
+	// Estructura con informacion del arbol. Se utiliza solamente para
+	// almacenar o para levantar los metadatos del arbol desde un archivo
+	struct Metadata {
+		unsigned int contBloques;		// Contador de bloques existentes
+		unsigned int nivel;				// Contador del nivel actual del árbol
+	};
+
+	// Clase interna que representa el nodo de un arbol. 
 	class Nodo
 	{
 		unsigned int nivel;			// Nivel en el que se encuentra el nodo
@@ -47,7 +55,9 @@ private:
 		int particionar(Nodo *nodoNuevo);
 	};
 
-	ArchivoBloques archivo;			// Archivo donde se almacena el árbol
+
+
+	ArchivoBloques *archivo;		// Archivo donde se almacena el árbol
 	Nodo *raiz;						// Nodo de la raiz
 	unsigned int contBloques;		// Contador de bloques existentes
 	unsigned int nivel;				// Contador del nivel actual del árbol
@@ -91,12 +101,15 @@ public:
 
 // Constructor
 template < typename TipoClave >
-ArbolBmas< TipoClave >::ArbolBmas() : contBloques(0), nivel(0) { }
+ArbolBmas< TipoClave >::ArbolBmas() : contBloques(0), nivel(0) {}
 
 
 // Destructor
 template < typename TipoClave >
-ArbolBmas< TipoClave >::~ArbolBmas() { }
+ArbolBmas< TipoClave >::~ArbolBmas() 
+{
+	if(this->archivo) delete this->archivo;
+}
 
 
 // Abre un arbol ya existente
@@ -105,16 +118,23 @@ ArbolBmas< TipoClave >::~ArbolBmas() { }
 template < typename TipoClave >
 void ArbolBmas< TipoClave >::abrir(string& nombre_archivo)
 {
-	// Abrimos el archivo donde almacenaremos el arbol
-	this->archivo.abrir(nombre_archivo.c_str());
+	// // Creamos el archivo
+	// this->archivo = new ArchivoBloques(nombre_archivo);
 	
-	this->raiz = new Nodo();
-	this->archivo.escribirBloque(this->raiz, 0);
+	// // Abrimos el archivo donde almacenaremos el arbol
+	// this->archivo->abrir(nombre_archivo.c_str());
+	
+	// this->raiz = new Nodo();
+	// this->archivo.escribirBloque((void*) this->raiz, 0);
 
-	// Abrimos el archivo donde se encuentra almacenado el arbol
-	this->archivo.abrir(nombre_archivo.c_str());
+	// // Abrimos el archivo donde se encuentra almacenado el arbol
+	// this->archivo.abrir(nombre_archivo.c_str());
 
-	this->raiz = this->archivo.leerBloque(1);
+	// this->raiz = this->archivo.leerBloque(1);
+
+	// Levantamos metadatos del arbol
+	Metadata *metadata;
+	this->archivo->leerBloque((void*) metadata, 0);
 }
 
 
@@ -122,6 +142,10 @@ void ArbolBmas< TipoClave >::abrir(string& nombre_archivo)
 template < typename TipoClave >
 int ArbolBmas< TipoClave >::insertar(const TipoClave clave)
 {
+	// Corroboramos que se haya creado el arbol
+	if(!this->archivo)
+		throw "ERROR: no se ha abierto el arbol";
+
 	return 0;
 }
 
@@ -130,6 +154,10 @@ int ArbolBmas< TipoClave >::insertar(const TipoClave clave)
 template < typename TipoClave >
 int ArbolBmas< TipoClave >::buscar(const TipoClave clave)
 {
+	// Corroboramos que se haya creado el arbol
+	if(!this->archivo)
+		throw "ERROR: no se ha abierto el arbol";
+
 	return 0;
 }
 
