@@ -22,7 +22,19 @@ public:
 
     ArchivoBloques(unsigned int blockSize, char* filename);
     
-    void cerrar();
+    /*
+    // Crea un archivo de bloques con el nombre definido en el constructor de la clase.
+    // Devuelve 0 si lo crea exitosamente y 1 si ya existia un archivo con ese nombre, en cuyo caso lo crea desde cero.
+    */
+    int crearArchivo();
+    
+    /*
+    // Abre el archivo con el nombre declarado en el constructor.
+    // Devuelve 0 si lo abre correctamente y -1 si no existe.
+    */
+    int abrirArchivo();
+    
+    void cerrarArchivo();
     
     /*
     // PRE: El tamano del VarBuffer debera ser menor o igual al tamano del bloque.
@@ -44,8 +56,9 @@ public:
 private:
     unsigned int blockSize;
     unsigned short int primerBloque;
-    VarBuffer IObuffer;
+    VarBuffer IOBuffer;
     char* filename;
+    fstream file;
 
     //int extenderMapaOcupacion();
 };
