@@ -107,5 +107,15 @@ void ArbolBmas< TipoClave >::crear(string& nombre_archivo)
 }
 
 
+//
+template < typename TipoClave >
+int ArbolBmas< TipoClave >::insertar(const TipoClave clave, 
+	const int direccionRegistro)
+{
+	return 0;
+}
+
+
+
 
 #endif
