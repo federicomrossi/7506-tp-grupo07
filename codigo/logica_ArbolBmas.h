@@ -47,7 +47,7 @@ private:
 		int particionar(Nodo *nodoNuevo);
 	};
 
-	ArchivoBloques<Nodo> archivo;	// Archivo donde se almacena el árbol
+	ArchivoBloques archivo;			// Archivo donde se almacena el árbol
 	Nodo *raiz;						// Nodo de la raiz
 	unsigned int contBloques;		// Contador de bloques existentes
 	unsigned int nivel;				// Contador del nivel actual del árbol
@@ -70,8 +70,10 @@ public:
 	// Destructor
 	~ArbolBmas();
 
-	// Crea el arbol
-	void crear(string& nombre_archivo);
+	// Abre un arbol ya existente
+	// PRE: 'nombre_archivo' es la ruta del archivo donde se almacena el arbol.
+	// POST: si no existe el archivo se lanza una excepcion.
+	void abrir(string& nombre_archivo);
 
 	//
 	int insertar(const TipoClave clave, const int direccionRegistro);
@@ -97,20 +99,22 @@ template < typename TipoClave >
 ArbolBmas< TipoClave >::~ArbolBmas() { }
 
 
-// Crea el arbol
+// Abre un arbol ya existente
+// PRE: 'nombre_archivo' es la ruta del archivo donde se almacena el arbol.
+// POST: si no existe el archivo se crea uno nuevo y se inicializa el arbol,
 template < typename TipoClave >
-void ArbolBmas< TipoClave >::crear(string& nombre_archivo)
+void ArbolBmas< TipoClave >::abrir(string& nombre_archivo)
 {
-	// Abrimos el archivo donde almacenamos el arbol
-	// Caso en que el archivo no existia
-	if(this->archivo.abrir(nombre_archivo.c_str()) == 0)
-	{
-		this->raiz = new Nodo();
-		this->archivo.escribirBloque(this->raiz, 0);
-	}
-	// Caso en que el archivo ya existia previamente
-	else
-		this->raiz = this->archivo.leerBloque(0);
+	// Abrimos el archivo donde almacenaremos el arbol
+	this->archivo.abrir(nombre_archivo.c_str());
+	
+	this->raiz = new Nodo();
+	this->archivo.escribirBloque(this->raiz, 0)
+
+	// Abrimos el archivo donde se encuentra almacenado el arbol
+	this->archivo.abrir(nombre_archivo.c_str());
+
+	this->raiz = this->archivo.leerBloque(1);
 }
 
 
