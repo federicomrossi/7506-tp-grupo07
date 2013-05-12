@@ -34,7 +34,7 @@ int VarBuffer::read(ifstream &file)
         return -1;
     }
 
-    unsigned int readSize;
+    unsigned short int readSize;
     file.read((char*)&readSize, sizeof(readSize));
     if (! file.good()) {
         return -2;
@@ -79,7 +79,7 @@ int VarBuffer::write(ofstream &file)
  * Para ello copia binariamente el objeto dentro del <buffer> y el tamano es guaradado en <bufferSize>.
  * Devuelve el <bufferSize> si el empaquetado fue exitoso y -3 si se produce un buffer overflow.
  */
-int VarBuffer::pack(const void *object, unsigned int size)
+int VarBuffer::pack(const void *object, unsigned short int size)
 {
     if (size > this->maxSize) {
         return -3;

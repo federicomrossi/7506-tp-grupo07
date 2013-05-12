@@ -10,8 +10,8 @@
 //  Copyright (c) 2013 Federico Colangelo. All rights reserved.
 //
 
-#ifndef VarBuffer_h
-#define VarBuffer_h
+#ifndef fisica_VarBuffer_h
+#define fisica_VarBuffer_h
 
 #include <iostream>
 #include <fstream>
@@ -26,12 +26,12 @@ public:
     void clear();
     int read(ifstream &file);
     int write(ofstream &file);
-    int pack(const void* object, unsigned int size);
+    int pack(const void* object, unsigned short int size);
     int unpack(void* object);
     
 private:
-    unsigned int bufferSize;
-    unsigned int maxSize;
+    unsigned short int bufferSize;
+    unsigned short int maxSize;
     char* buffer;    
 };
 
