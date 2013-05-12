@@ -5,7 +5,7 @@
  *      Author: rburdet
  */
 #include "fisica_Block.h"
-#include "Reg.h"
+#include "logica_Reg.h"
 
 const int blockSize = 512; // DEBE SER CONFIGURABLE DESDE AFUERA !!!
 
