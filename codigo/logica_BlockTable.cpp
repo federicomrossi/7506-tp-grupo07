@@ -8,12 +8,11 @@
 #include "logica_BlockTable.h"
 
 BlockTable::BlockTable() {
-	// TODO Auto-generated constructor stub
 
 }
 
 int BlockTable::insert(Reg & aReg){
-
+	return 0; //hacer
 }
 
 int BlockTable::saveBlock(Block * aBlock){

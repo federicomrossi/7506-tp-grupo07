@@ -10,7 +10,7 @@
 
 int HashExtensible::makeNameANumber(string name) {
 	int acum = 0;
-	for (int i = 0; i < name.length(); i++){
+	for (unsigned int i = 0; i < name.length(); i++){
 		acum = acum + int(name[i]);
 	}
 	return acum;

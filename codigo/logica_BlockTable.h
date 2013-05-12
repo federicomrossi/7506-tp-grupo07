@@ -40,7 +40,7 @@ class BlockTable{
 
 	protected:
 		int size;
-		int blockReferences[];
+		int *blockReferences;
 		const char* fileName; //El archivo va a ser siempre el mismo, configurable en momento de compilacion
 };
 
