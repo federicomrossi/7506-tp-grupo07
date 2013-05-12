@@ -46,10 +46,10 @@ void DirHandler::getFiles(const char* dir){
 		if (dirEntry->d_name[0]=='.')
 			continue;
 		if (dirEntry->d_type == DT_DIR){
-			char tmpName[strlen(dir)+strlen(dirEntry->d_name)+1];
-			sprintf(tmpName,"%s/%s", dir, dirEntry->d_name);
-			this->setPath(tmpName);
-			this->getFiles(tmpName);
+			char *tmp=new char[strlen(dir)+strlen(dirEntry->d_name)+1];
+			sprintf(tmp,"%s/%s", dir, dirEntry->d_name);
+			this->setPath(tmp);
+			this->getFiles(tmp);
 		}
 		else{
 			string actualPath = dir;
