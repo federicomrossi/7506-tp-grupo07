@@ -16,7 +16,7 @@ int HashExtensible::makeNameANumber(string name) {
 	return acum;
 }
 
-int HashExtensible::::doHash(int x,int tableSize){
+int HashExtensible::doHash(int x,int tableSize){
 	return (x % tableSize);
 }
 

@@ -35,6 +35,14 @@ int Block::Insert(Reg & aReg){
 		return (blockTable.insert(aReg)); // Si lo puede guardar, 1
 	}
 }
+
+list<Reg>* Block::getRegList(){
+	return this->regsList;
+}
+
+int Block::separate(){
+	return 0; //hacer
+}
 /*Block::~Block() {
 	// TODO Auto-generated destructor stub
 } */

@@ -21,7 +21,3 @@ int BlockTable::saveBlock(Block * aBlock){
 	return 0;
 }
 
-BlockTable::~BlockTable() {
-	// TODO Auto-generated destructor stub
-}
-

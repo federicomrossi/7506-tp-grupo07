@@ -18,7 +18,7 @@ public:
 	//HashExtensible();
 	int makeNameANumber(string name);
 	int doHash(int number, int tableSize);
-	virtual ~Hash();
+	virtual ~HashExtensible();
 };
 
 
