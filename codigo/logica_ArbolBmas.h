@@ -7,8 +7,8 @@
 #define ARBOLBMAS_H
 
 
-#include "fisica_VarBuffer.h"
-#include "logica_Indice.h"
+#include <stack>
+#include "fisica_ArchivoBloques.h"
 
 
 
@@ -24,12 +24,15 @@ class ArbolBmas
 
 private:
 
-	class Nodo : public Indice
+	class Nodo
 	{
-		int maxClaves;		// Numero maximo de claves en el nodo
+		unsigned int nivel;			// Nivel en el que se encuentra el nodo
+		unsigned int numBloque;		// Numero de bloque que representa
+		short int cantRegistros;	// Cantidad ḿáxima de registros que puede
+									// contener el nodo.
 
 		// Constructor
-		Nodo(int maxClaves, int unico = 1);
+		Nodo();
 
 		//
 		int insertar(const TipoClave clave, int direccionRegistro);
@@ -44,12 +47,11 @@ private:
 		int particionar(Nodo *nodoNuevo);
 	};
 
-	ArchivoBloques archivo;			// Archivo donde se almacena el árbol
+	ArchivoBloques<Nodo> archivo;	// Archivo donde se almacena el árbol
 	Nodo raiz;						// Nodo de la raiz
-	int altura;						// Altura del arbol
-	int orden;						// Orden del arbol
-	Nodo *Nodos[];					// Almacenador para rama
-	VarBuffer archivo;				// Archivo de almacenamiento del arbol
+	unsigned int contBloques;		// Contador de bloques existentes
+	unsigned int nivel;				// Contador del nivel actual del árbol
+	stack<Nodo> ramaNodos;			// Almacenador para rama (HACERLO PILA)
 
 	//
 	Nodo* buscarHoja(const TipoClave clave);
@@ -63,13 +65,13 @@ private:
 public:
 
 	// Constructor
-	ArbolBmas(int orden, int tamanioClave = sizeof(TipoClave), int unico = 1);
+	ArbolBmas();
 
 	// Destructor
 	~ArbolBmas();
 
 	// Crea el arbol
-	int crear(string& nombre_archivo);
+	void crear(string& nombre_archivo);
 
 	//
 	int insertar(const TipoClave clave, const int direccionRegistro);
@@ -85,10 +87,23 @@ public:
  * ***************************************************************************/
 
 
+// Constructor
+template < typename TipoClave >
+ArbolBmas< TipoClave >::ArbolBmas() : contBloques(0), nivel(0) { }
+
+
+// Destructor
+template < typename TipoClave >
+ArbolBmas< TipoClave >::~ArbolBmas() { }
+
+
 // Crea el arbol
-int ArbolBmas::crear(string& nombre_archivo)
+template < typename TipoClave >
+void ArbolBmas< TipoClave >::crear(string& nombre_archivo)
 {
+	// Abrimos el archivo donde almacenamos el arbol
 	this->archivo.abrir(nombre_archivo.c_str());
+	this->raiz = new Nodo();
 }
 
 

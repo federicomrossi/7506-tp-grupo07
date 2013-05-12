@@ -1,5 +1,6 @@
 #include <iostream>
 #include "interfaz_Menu.h"
+#include "logica_ArbolBmas.h"
 
 using namespace std;
 

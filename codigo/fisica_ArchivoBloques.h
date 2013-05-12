@@ -20,18 +20,23 @@
 #include <fstream>
 #include "fisica_VarBuffer.h"
 
-template<class TipoRegistro>
-
+template < class TipoRegistro >
 class ArchivoBloques
 {
 public:
 
-    ArchivoBloques::ArchivoBloques(unsigned int blockSize, float cargaMaxima=0,7,char* filename);
-    ArchivoBloques::abrir(char* filename);
-    ArchivoBloques::cerrar();
-    ArchivoBloques::int escribirBloque(const TipoRegistro &registro,unsigned int numeroBloque);
-    ArchivoBloques::TipoRegistro* leerBloque(unsigned int numeroBloque);
-    ArchivoBloques::~ArchivBloques();
+    ArchivoBloques(unsigned int blockSize, char* filename, 
+        float cargaMaxima = 0.7);
+
+    void abrir(char* filename);
+
+    void cerrar();
+    
+    int escribirBloque(const TipoRegistro &registro,unsigned int numeroBloque);
+    
+    TipoRegistro* leerBloque(unsigned int numeroBloque);
+    
+    ~ArchivoBloques();
 
 private:
     unsigned int primerBloque;
@@ -39,7 +44,7 @@ private:
     float cargaMaxima;
     VarBuffer buffer;
 
-    ArchivoBloques::int extenderMapaOcupacion();
+    int extenderMapaOcupacion();
 };
 
 #endif

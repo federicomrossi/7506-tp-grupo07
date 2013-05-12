@@ -37,12 +37,12 @@ void DirHandler::setPath(const char* path){
  */
 void DirHandler::getFiles(const char* dir){
 	DIR *dirStream;
-	struct dirent *dirEntry;
+	struct dirent *dirEntry  = 0;
 	dirStream = opendir(dir);
 
 	if (! dirStream)
 		return ;
-	while (dirEntry = readdir(dirStream)){
+	while (dirEntry == readdir(dirStream)){
 		if (dirEntry->d_name[0]=='.')
 			continue;
 		if (dirEntry->d_type == DT_DIR){
