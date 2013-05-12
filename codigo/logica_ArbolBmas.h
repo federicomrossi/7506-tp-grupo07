@@ -76,10 +76,10 @@ public:
 	void abrir(string& nombre_archivo);
 
 	//
-	int insertar(const TipoClave clave, const int direccionRegistro);
+	int insertar(const TipoClave clave);
 
 	//
-	int buscar(const TipoClave clave, const int direccionRegistro = -1);
+	int buscar(const TipoClave clave);
 };
 
 
@@ -120,8 +120,7 @@ void ArbolBmas< TipoClave >::abrir(string& nombre_archivo)
 
 //
 template < typename TipoClave >
-int ArbolBmas< TipoClave >::insertar(const TipoClave clave, 
-	const int direccionRegistro)
+int ArbolBmas< TipoClave >::insertar(const TipoClave clave)
 {
 	return 0;
 }
@@ -129,8 +128,7 @@ int ArbolBmas< TipoClave >::insertar(const TipoClave clave,
 
 //
 template < typename TipoClave >
-int ArbolBmas< TipoClave >::buscar(const TipoClave clave, 
-	const int direccionRegistro)
+int ArbolBmas< TipoClave >::buscar(const TipoClave clave)
 {
 	return 0;
 }
