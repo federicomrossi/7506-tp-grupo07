@@ -48,7 +48,7 @@ private:
 	};
 
 	ArchivoBloques<Nodo> archivo;	// Archivo donde se almacena el árbol
-	Nodo raiz;						// Nodo de la raiz
+	Nodo *raiz;						// Nodo de la raiz
 	unsigned int contBloques;		// Contador de bloques existentes
 	unsigned int nivel;				// Contador del nivel actual del árbol
 	stack<Nodo> ramaNodos;			// Almacenador para rama (HACERLO PILA)
@@ -102,8 +102,15 @@ template < typename TipoClave >
 void ArbolBmas< TipoClave >::crear(string& nombre_archivo)
 {
 	// Abrimos el archivo donde almacenamos el arbol
-	this->archivo.abrir(nombre_archivo.c_str());
-	this->raiz = new Nodo();
+	// Caso en que el archivo no existia
+	if(this->archivo.abrir(nombre_archivo.c_str()) == 0)
+	{
+		this->raiz = new Nodo();
+		this->archivo.escribirBloque(this->raiz, 0);
+	}
+	// Caso en que el archivo ya existia previamente
+	else
+		this->raiz = this->archivo.leerBloque(0);
 }
 
 

@@ -32,7 +32,8 @@ public:
 
     void cerrar();
     
-    int escribirBloque(const TipoRegistro &registro,unsigned int numeroBloque);
+    // [DOCUMENTAR!]
+    int escribirBloque(const TipoRegistro *registro,unsigned int numeroBloque);
     
     TipoRegistro* leerBloque(unsigned int numeroBloque);
     
