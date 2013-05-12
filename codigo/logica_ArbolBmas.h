@@ -109,7 +109,7 @@ void ArbolBmas< TipoClave >::abrir(string& nombre_archivo)
 	this->archivo.abrir(nombre_archivo.c_str());
 	
 	this->raiz = new Nodo();
-	this->archivo.escribirBloque(this->raiz, 0)
+	this->archivo.escribirBloque(this->raiz, 0);
 
 	// Abrimos el archivo donde se encuentra almacenado el arbol
 	this->archivo.abrir(nombre_archivo.c_str());
