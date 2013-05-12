@@ -130,7 +130,7 @@ int ArbolBmas< TipoClave >::insertar(const TipoClave clave,
 //
 template < typename TipoClave >
 int ArbolBmas< TipoClave >::buscar(const TipoClave clave, 
-	const int direccionRegistro = -1)
+	const int direccionRegistro)
 {
 	return 0;
 }
