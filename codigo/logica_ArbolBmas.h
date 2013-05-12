@@ -14,7 +14,21 @@
 
 
 /* ****************************************************************************
- * DECLARACIÓN DE LA CLASE
+ * CONSTANTES
+ * ***************************************************************************/
+
+namespace {
+
+	// Constantes para los numeros de bloque
+	const int NUM_BLOQUE_METADATA = 0;
+	const int NUM_BLOQUE_RAIZ = 1;
+}
+
+
+
+
+/* ****************************************************************************
+ * DECLARACIÓN DEL TEMPLATE
  * ***************************************************************************/
 
 
@@ -27,8 +41,8 @@ private:
 	// Estructura con informacion del arbol. Se utiliza solamente para
 	// almacenar o para levantar los metadatos del arbol desde un archivo
 	struct Metadata {
-		unsigned int contBloques;		// Contador de bloques existentes
 		unsigned int nivel;				// Contador del nivel actual del árbol
+		unsigned int contBloques;		// Contador de bloques existentes
 	};
 
 	// Clase interna que representa el nodo de un arbol. 
@@ -59,9 +73,18 @@ private:
 
 	ArchivoBloques *archivo;		// Archivo donde se almacena el árbol
 	Nodo *raiz;						// Nodo de la raiz
-	unsigned int contBloques;		// Contador de bloques existentes
 	unsigned int nivel;				// Contador del nivel actual del árbol
-	stack<Nodo> ramaNodos;			// Almacenador para rama (HACERLO PILA)
+	unsigned int contBloques;		// Contador de bloques existentes
+	stack<Nodo*> ramaNodos;			// Almacenador para rama (HACERLO PILA)
+
+
+	// Carga la metadata del arbol desde el archivo.
+	// POST: si todavia no ha sido abierto o creado el archivo, no hace nada.
+	void cargarMetadata();
+
+	// Guarda la metadata actual del arbol en el archivo, actualizando info.
+	// POST: si todavia no ha sido abierto o creado el archivo, no hace nada.
+	void guardarMetadata();
 
 	//
 	Nodo* buscarHoja(const TipoClave clave);
@@ -95,7 +118,7 @@ public:
 
 
 /* ****************************************************************************
- * DEFINICIÓN DE LA CLASE
+ * DEFINICIÓN DEL TEMPLATE
  * ***************************************************************************/
 
 
@@ -108,6 +131,7 @@ ArbolBmas< TipoClave >::ArbolBmas() : contBloques(0), nivel(0) {}
 template < typename TipoClave >
 ArbolBmas< TipoClave >::~ArbolBmas() 
 {
+	// Liberamos archivo
 	if(this->archivo) delete this->archivo;
 }
 
@@ -118,23 +142,33 @@ ArbolBmas< TipoClave >::~ArbolBmas()
 template < typename TipoClave >
 void ArbolBmas< TipoClave >::abrir(string& nombre_archivo)
 {
-	// // Creamos el archivo
-	// this->archivo = new ArchivoBloques(nombre_archivo);
+	// Creamos un archivo de bloques
+	this->archivo = new ArchivoBloques(sizeof(Nodo), nombre_archivo.c_str());
+
+	// Inicializamos el archivo de bloques o lo levantamos si ya existia
+	if(this->archivo->abrirArchivo() == -1)
+	{
+		// El archivo no existe, lo creamos
+		this->archivo->crearArchivo();
+
+		// Creamos metadata del arbol con valores iniciales
+		guardarMetadata();
+
+		// Creamos el nodo raiz
+		this->raiz = new Nodo();
+		this->archivo->escribirBloque((void*) this->raiz, NUM_BLOQUE_RAIZ);
+
+		return;
+	}
 	
-	// // Abrimos el archivo donde almacenaremos el arbol
-	// this->archivo->abrir(nombre_archivo.c_str());
-	
-	// this->raiz = new Nodo();
-	// this->archivo.escribirBloque((void*) this->raiz, 0);
+	// Cargamos metadata
+	cargarMetadata();
 
-	// // Abrimos el archivo donde se encuentra almacenado el arbol
-	// this->archivo.abrir(nombre_archivo.c_str());
+	// Cargamos nodo raiz
+	this->archivo->leerBloque((void*) this->raiz, NUM_BLOQUE_RAIZ);
 
-	// this->raiz = this->archivo.leerBloque(1);
-
-	// Levantamos metadatos del arbol
-	Metadata *metadata;
-	this->archivo->leerBloque((void*) metadata, 0);
+	// Apilamos puntero a nodo raiz para comenzar rama
+	this->ramaNodos.push(this->raiz);
 }
 
 
@@ -162,3 +196,50 @@ int ArbolBmas< TipoClave >::buscar(const TipoClave clave)
 }
 
 #endif
+
+
+
+
+/*
+ *  METODOS PRIVADOS
+ */
+
+
+// Carga la metadata del arbol desde el archivo.
+// POST: si todavia no ha sido abierto o creado el archivo, no hace nada.
+template < typename TipoClave >
+void ArbolBmas< TipoClave >::cargarMetadata()
+{
+	// Corroboramos que esté abierto el archivo
+	if(!this->archivo->estaAbierto()) return;
+
+	// Levantamos la metadata del archivo
+	Metadata *metadata;
+	this->archivo->leerBloque((void*) metadata, NUM_BLOQUE_METADATA);
+
+	// Cargamos datos en atributos
+	this->nivel = metadata->nivel;
+	this->contBloques = metadata->contBloques;
+
+	delete metadata;
+}
+
+
+// Guarda la metadata actual del arbol en el archivo, actualizando info.
+// POST: si todavia no ha sido abierto o creado el archivo, no hace nada.
+template < typename TipoClave >
+void ArbolBmas< TipoClave >::guardarMetadata()
+{
+	// Corroboramos que esté abierto el archivo
+	if(!this->archivo->estaAbierto()) return;
+
+	// Creamos la metadata a almacenar
+	Metadata *metadata = new Metadata();
+	metadata->nivel = this->nivel;
+	metadata->contBloques = this->contBloques;
+
+	// Escribimos metadata en archivo
+	this->archivo->escribirBloque((void*) metadata, NUM_BLOQUE_METADATA);
+
+	delete metadata;
+}
