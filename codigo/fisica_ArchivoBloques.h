@@ -24,7 +24,7 @@ public:
     
     /*
     // Crea un archivo de bloques con el nombre definido en el constructor de la clase.
-    // Devuelve 0 si lo crea exitosamente y 1 si ya existia un archivo con ese nombre, en cuyo caso lo crea desde cero.
+    // Devuelve 0 si lo crea exitosamente y 1 si ya existia un archivo con ese nombre, en cuyo caso lo deja creado pero elimina todo su contenido.
     */
     int crearArchivo();
     
@@ -35,6 +35,8 @@ public:
     int abrirArchivo();
     
     void cerrarArchivo();
+    
+    bool estaAbierto();
     
     /*
     // PRE: El tamano del VarBuffer debera ser menor o igual al tamano del bloque.
