@@ -20,7 +20,7 @@ class ArchivoBloques
 {
 public:
 
-    ArchivoBloques(unsigned int blockSize, char* filename);
+    ArchivoBloques(unsigned int blockSize, const char* filename);
     
     /*
     // Crea un archivo de bloques con el nombre definido en el constructor de la clase.
@@ -59,7 +59,7 @@ private:
     unsigned int blockSize;
     unsigned short int primerBloque;
     VarBuffer IOBuffer;
-    char* filename;
+    const char* filename;
     fstream file;
 
     //int extenderMapaOcupacion();

@@ -23,6 +23,7 @@ class VarBuffer
     
 public:
     VarBuffer(unsigned int maxSize);
+    ~VarBuffer();
     void clear();
     int read(ifstream &file);
     int write(ofstream &file);
