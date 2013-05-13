@@ -50,16 +50,16 @@ int Menu::ingresarOpcion(int opcion){
             cout << "Indexando canciones desde 0" << endl;
             cout << "Eliminando cualquier registro de canciones previo" << endl;
             in->eliminarTodo();
-            cout << "Indexando canciones desde el directorio" << from << endl;
             from = "/home/pablo/tpDatos/7506-tp-grupo07/temas";
-            in->indexarCancionesDesde(from, 0);
+            cout << "Indexando canciones desde el directorio" << from << endl;
+            in->indexarCancionesDesde(0);
             delete in;
             break;
         case 2:
             in = new Indexer;
             cout << "Indexando canciones en modo append" << endl;
             cout << "Indexando canciones desde el directorio" << from << endl;
-            in->indexarCancionesDesde(from,1);
+            in->indexarCancionesDesde(1);
             delete in;
             break;
         case 3:

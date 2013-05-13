@@ -7,8 +7,8 @@ class IndiceAutor{
     public:
         IndiceAutor();
         ~IndiceAutor();
-        int agregar(int posArch, std:string autor);
-        int recuperar(std:string autor, int **posArch);
+        int agregar(int posArch, std::string autor);
+        int recuperar(std::string autor, int **posArch);
         int eliminarTodo();
     private:
         //UN ARBOL
