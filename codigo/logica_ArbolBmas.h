@@ -59,8 +59,9 @@ private:
 
 
 		// Constructor
-		Nodo(unsigned int nivel, unsigned int numBloque, 
-			short int cantRegistros);
+		// Nodo(unsigned int nivel, unsigned int numBloque, 
+		// 	short int cantRegistros);
+		Nodo();
 
 		// //
 		// int insertar(const TipoClave clave, int direccionRegistro);
