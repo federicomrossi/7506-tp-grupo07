@@ -19,9 +19,13 @@
 
 namespace {
 
+	// Constantes para el tamaño de los bloques
+	const int CANT_REG_NODO_INTERNO = 5;
+	const int CANT_REG_NODO_HOJA = 6;
+
 	// Constantes para los numeros de bloque
-	const int NUM_BLOQUE_METADATA = 0;
-	const int NUM_BLOQUE_RAIZ = 1;
+	const unsigned int NUM_BLOQUE_METADATA = 0;
+	const unsigned int NUM_BLOQUE_RAIZ = 1;
 }
 
 
@@ -46,29 +50,30 @@ private:
 	};
 
 	// Clase interna que representa el nodo de un arbol. 
-	class Nodo
+	struct Nodo
 	{
 		unsigned int nivel;			// Nivel en el que se encuentra el nodo
 		unsigned int numBloque;		// Numero de bloque que representa
 		short int cantRegistros;	// Cantidad ḿáxima de registros que puede
 									// contener el nodo.
 
+
 		// Constructor
-		Nodo();
+		Nodo(unsigned int nivel, unsigned int numBloque, 
+			short int cantRegistros);
 
-		//
-		int insertar(const TipoClave clave, int direccionRegistro);
+		// //
+		// int insertar(const TipoClave clave, int direccionRegistro);
 
-		//
-		int eliminar(const TipoClave clave, int direccionRegistro = -1);
+		// //
+		// int eliminar(const TipoClave clave, int direccionRegistro = -1);
 
-		// Devuelve la mayor clave del nodo
-		int claveMayor();
+		// // Devuelve la mayor clave del nodo
+		// int claveMayor();
 
-		//
-		int particionar(Nodo *nodoNuevo);
+		// //
+		// int particionar(Nodo *nodoNuevo);
 	};
-
 
 
 	ArchivoBloques *archivo;		// Archivo donde se almacena el árbol
@@ -86,14 +91,14 @@ private:
 	// POST: si todavia no ha sido abierto o creado el archivo, no hace nada.
 	void guardarMetadata();
 
-	//
-	Nodo* buscarHoja(const TipoClave clave);
+	// //
+	// Nodo* buscarHoja(const TipoClave clave);
 
-	// Carga un nodo en memoria
-	Nodo* cargarNodo(const int direccionRegistro);
+	// // Carga un nodo en memoria
+	// Nodo* cargarNodo(const int direccionRegistro);
 
-	// Almacena un nodo en archivo
-	int almacenarNodo(Nodo *nodo);
+	// // Almacena un nodo en archivo
+	// int almacenarNodo(Nodo *nodo);
 
 public:
 
@@ -101,7 +106,7 @@ public:
 	ArbolBmas();
 
 	// Destructor
-	~ArbolBmas();
+	// ~ArbolBmas();
 
 	// Abre un arbol ya existente
 	// PRE: 'nombre_archivo' es la ruta del archivo donde se almacena el arbol.
@@ -124,16 +129,19 @@ public:
 
 // Constructor
 template < typename TipoClave >
-ArbolBmas< TipoClave >::ArbolBmas() : contBloques(0), nivel(0) {}
+ArbolBmas< TipoClave >::ArbolBmas() {
+	this->contBloques = 0;
+	this->nivel = 0;
+}
 
 
 // Destructor
-template < typename TipoClave >
-ArbolBmas< TipoClave >::~ArbolBmas() 
-{
-	// Liberamos archivo
-	if(this->archivo) delete this->archivo;
-}
+// template < typename TipoClave >
+// ArbolBmas< TipoClave >::~ArbolBmas() 
+// {
+// 	// Liberamos archivo
+// 	if(this->archivo != 0) delete this->archivo;
+// }
 
 
 // Abre un arbol ya existente
@@ -156,6 +164,8 @@ void ArbolBmas< TipoClave >::abrir(string& nombre_archivo)
 
 		// Creamos el nodo raiz
 		this->raiz = new Nodo();
+		this->raiz->nivel = this->nivel;
+		this->raiz->numBloque = NUM_BLOQUE_RAIZ;
 		this->archivo->escribirBloque((void*) this->raiz, NUM_BLOQUE_RAIZ);
 
 		return;
@@ -214,7 +224,7 @@ void ArbolBmas< TipoClave >::cargarMetadata()
 	if(!this->archivo->estaAbierto()) return;
 
 	// Levantamos la metadata del archivo
-	Metadata *metadata;
+	Metadata *metadata = 0;
 	this->archivo->leerBloque((void*) metadata, NUM_BLOQUE_METADATA);
 
 	// Cargamos datos en atributos
@@ -242,4 +252,18 @@ void ArbolBmas< TipoClave >::guardarMetadata()
 	this->archivo->escribirBloque((void*) metadata, NUM_BLOQUE_METADATA);
 
 	delete metadata;
+}
+
+
+
+/*
+ *  ESTRUCTURAS INTERNAS
+ */
+
+
+// Constructor
+template < typename TipoClave >
+ArbolBmas< TipoClave >::Nodo::Nodo()
+{
+
 }
