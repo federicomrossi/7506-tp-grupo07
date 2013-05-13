@@ -43,6 +43,10 @@ list<Reg>* Block::getRegList(){
 int Block::separate(){
 	return 0; //hacer
 }
+
+int Block::getBlockAdress(){
+	return blockAdress;
+}
 /*Block::~Block() {
 	// TODO Auto-generated destructor stub
 } */

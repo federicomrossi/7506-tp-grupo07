@@ -18,6 +18,10 @@ Reg::Reg(int id, int fileAdress) {
 Reg::~Reg() {
 }
 
+int Reg:: getId(){
+	return id;
+}
+
 int Reg:: getSize(){
 	return size;
 }

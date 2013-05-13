@@ -17,6 +17,8 @@
 #ifndef BLOCKTABLE_H_
 #define BLOCKTABLE_H_
 
+#include "fisica_ArchivoBloques.h"
+#include "logica_HashExtensible.h"
 #include "logica_Reg.h"
 
 using namespace std;
@@ -34,7 +36,7 @@ class BlockTable{
 		int search(Reg&); // Busca el registro atraves de la funcion hash
 		int open(char* fileName); //Abre el archivo donde tengo la tabla
 		int close(); // Lo cierra
-
+		int getSize();
 	//	int getBlock(Block& aBlock , int blockAdress); //se copia al bloque en blockAdress en el bloque nuevo vacio aBlock
 
 
@@ -42,6 +44,7 @@ class BlockTable{
 		int size;
 		int *blockReferences;
 		const char* fileName; //El archivo va a ser siempre el mismo, configurable en momento de compilacion
+		ArchivoBloques* archivo;
 };
 
 #endif

@@ -13,6 +13,7 @@ Esta informacion incluye:
 #ifndef BLOCK_H_
 #define BLOCK_H_
 
+
 #include "logica_BlockTable.h"
 #include "logica_Reg.h"
 #include <list>
@@ -49,6 +50,7 @@ class Block {
 		/* Para persistir a un bloque */
 		
 		list<Reg>* getRegList();
+		int getBlockAdress();
 
 	protected:
 		int blockCurrentSize;
@@ -57,6 +59,7 @@ class Block {
 		int blockAdress;
 		int dispersionSize;
 		list<Reg>* regsList;
+		ArchivoBloques* archivo;
 
 };
 #endif

@@ -17,6 +17,7 @@ protected:
 public:
 	Reg(int id, int fileAdress);
 	int getSize();
+	int getId();
 	virtual ~Reg();
 };
 
