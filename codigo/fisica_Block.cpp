@@ -9,10 +9,10 @@
 
 const int blockSize = 512; // DEBE SER CONFIGURABLE DESDE AFUERA !!!
 
-Block::Block(BlockTable& aBlockTable): blockTable(aBlockTable) //primero tengo que llamar a este constructor
+Block::Block(/*const BlockTable& aBlockTable*/)/*: blockTable(aBlockTable) *///primero tengo que llamar a este constructor
 {
 	blockCurrentSize=0;
-	blockTable=aBlockTable;
+	//blockTable=aBlockTable;
 	dispersionSize=0;
 	blockAdress=0;
 	maxBlockSize=blockCurrentSize;
@@ -29,10 +29,12 @@ int Block::Insert(Reg & aReg){
 	if (blockCurrentSize + (aReg.getSize()) < maxBlockSize){
 		blockCurrentSize=blockCurrentSize+ aReg.getSize();
 		this->getRegList()->push_back(aReg);
-		return (blockTable.saveBlock(this)); //si lo pude guardar, 1;
+		return 0; // cambiar
+	//	return (blockTable.saveBlock(this)); //si lo pude guardar, 1;
 	}else {
 		this->separate();
-		return (blockTable.insert(aReg)); // Si lo puede guardar, 1
+		return 1 ; //cambiar
+	//	return (blockTable.insert(aReg)); // Si lo puede guardar, 1
 	}
 }
 

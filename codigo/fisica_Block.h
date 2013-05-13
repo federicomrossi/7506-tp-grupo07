@@ -14,9 +14,10 @@ Esta informacion incluye:
 #define BLOCK_H_
 
 
-#include "logica_BlockTable.h"
+//#include "logica_BlockTable.h"
 #include "logica_Reg.h"
 #include <list>
+#include "fisica_ArchivoBloques.h"
 
 using namespace std;
 /*
@@ -26,7 +27,7 @@ using namespace std;
 
 class Block {
 	public:
-		Block(BlockTable& aBlockTable); //Creo un bloque en una tabla de bloques. Inicialmente el tamanio es 0
+		Block(/*BlockTable& aBlockTable*/); //Creo un bloque en una tabla de bloques. Inicialmente el tamanio es 0
 
 		/* Agrego un registro a la cubeta, los resultados posibles son: 0 sino se agrego, 1 si se agrego, 2 si se duplico el tamanio.
 			*/
@@ -55,7 +56,7 @@ class Block {
 	protected:
 		int blockCurrentSize;
 		int maxBlockSize;
-		BlockTable& blockTable;
+//		BlockTable& blockTable;
 		int blockAdress;
 		int dispersionSize;
 		list<Reg>* regsList;
