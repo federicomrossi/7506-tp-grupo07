@@ -27,30 +27,35 @@ using namespace std;
 
 class Block {
 	public:
-		Block(/*BlockTable& aBlockTable*/); //Creo un bloque en una tabla de bloques. Inicialmente el tamanio es 0
+		Block(int DispersionSize,int blockAdress); //Creo un bloque en una tabla de bloques. Inicialmente el tamanio es 0
 
-		/* Agrego un registro a la cubeta, los resultados posibles son: 0 sino se agrego, 1 si se agrego, 2 si se duplico el tamanio.
-			*/
+		//  Agrego un registro a la cubeta, los resultados posibles son: 0 sino se agrego, 1 si se agrego, 2 si se duplico el tamanio.
 		int Insert(Reg & aReg);
 
-		/* Si el bloque queda en overflow tengo que crear otro para luego redistribuir los registros*/
+		// Si el bloque queda en overflow tengo que crear otro para luego redistribuir los registros*/
 		Block* createNew(int newDispersionSize);
 
-		int separate(); //crea un nuevo bloque, redispersando y cambiando los tamanios de dispersion de ambos bloques
+		//crea un nuevo bloque, redispersando y cambiando los tamanios de dispersion de ambos bloques
+		int separate();
 
-		/* Cuando se produce un overflow, tengo que redispersar los registros */
-		int redistribute(Block * aNewBlock);
+		// Cuando se produce un overflow, tengo que redispersar los registros */
+		int redistribute(Block * aNewBlock,int tableSize);
 
-		/* Cuando se duplica la tabla, o un bloque queda en overflow pero con mas de 1 referencia en la tabla entonces es necesario cambiar el tamanio de dispersion del bloque
-		 * Devuelve el nuevo tamanio de dispersion*/
+		// Cuando se duplica la tabla, o un bloque queda en overflow pero con mas de 1 referencia en la tabla entonces es necesario cambiar el tamanio de dispersion del bloque
+		// Devuelve el nuevo tamanio de dispersion
+		void changeDispersionSize(int);
 
-		int changeDispersionSize();
-
-		/* Cuando un bloque queda en overflow, necesito buscar el proximo bloque en donde pueda redispersar,  */
+		// Cuando un bloque queda en overflow, necesito buscar el proximo bloque en donde pueda redispersar,  */
 		int getBlockInTable();
-		/* Para persistir a un bloque */
 		
-		list<Reg>* getRegList();
+		//Si entra el registro devuelve verdadero, si no falso
+		bool easyInsert(Reg& aReg);
+
+		int getDispersionSize(){
+			return dispersionSize;
+		}
+
+		list<Reg> getRegList();
 		int getBlockAdress();
 
 	protected:
@@ -59,8 +64,11 @@ class Block {
 //		BlockTable& blockTable;
 		int blockAdress;
 		int dispersionSize;
-		list<Reg>* regsList;
+		list<Reg> regsList;
 		ArchivoBloques* archivo;
+
+	private:
+		static int blockNum; //lo puedo llegar a necesitar
 
 };
 #endif

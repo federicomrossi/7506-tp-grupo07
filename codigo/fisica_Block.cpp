@@ -5,18 +5,20 @@
  *      Author: rburdet
  */
 #include "fisica_Block.h"
+#include "logica_HashExtensible.h"
 #include "logica_Reg.h"
 
-const int blockSize = 512; // DEBE SER CONFIGURABLE DESDE AFUERA !!!
+using namespace std;
+const int MAX_BLOCK_SIZE = 512; // DEBE SER CONFIGURABLE DESDE AFUERA !!!
 
-Block::Block(/*const BlockTable& aBlockTable*/)/*: blockTable(aBlockTable) *///primero tengo que llamar a este constructor
+Block::Block(int dispersionSize,int blockAdress)/*: blockTable(aBlockTable) *///primero tengo que llamar a este constructor
 {
 	blockCurrentSize=0;
 	//blockTable=aBlockTable;
-	dispersionSize=0;
-	blockAdress=0;
+	this->dispersionSize=dispersionSize;
+	this->blockAdress=blockAdress;
 	maxBlockSize=blockCurrentSize;
-	regsList= 0; //NULL
+	blockNum++;
 }
 
 /*
@@ -28,7 +30,7 @@ int Block::Insert(Reg & aReg){
 	//si puedo agregar agrego
 	if (blockCurrentSize + (aReg.getSize()) < maxBlockSize){
 		blockCurrentSize=blockCurrentSize+ aReg.getSize();
-		this->getRegList()->push_back(aReg);
+		this->getRegList().push_back(aReg);
 		return 0; // cambiar
 	//	return (blockTable.saveBlock(this)); //si lo pude guardar, 1;
 	}else {
@@ -38,7 +40,10 @@ int Block::Insert(Reg & aReg){
 	}
 }
 
-list<Reg>* Block::getRegList(){
+void Block::changeDispersionSize(int newDispersionSize){
+	this->dispersionSize=newDispersionSize;
+}
+list<Reg> Block::getRegList(){
 	return this->regsList;
 }
 
@@ -49,6 +54,25 @@ int Block::separate(){
 int Block::getBlockAdress(){
 	return blockAdress;
 }
+
+bool Block::easyInsert(Reg& aReg){
+	return (aReg.getSize()+ blockCurrentSize < MAX_BLOCK_SIZE);
+}
+	/*
+	Block* Block::createNew(int newDispersionSize){
+		Block* aNewBlock = new Block(newDispersionSize);
+	}
+	*/
+
+int Block::redistribute(Block* aNewBlock,int tableSize){
+		list<Reg>::iterator it;
+		HashExtensible *aHash= new HashExtensible();
+		for (it = this->getRegList().begin(); it != this->getRegList().end() ; it++) {
+			aHash->doHash((*it).getId(),tableSize); //SEGUIR CON ESTOOOO
+		}
+
+}
+
 /*Block::~Block() {
-	// TODO Auto-generated destructor stub
-} */
+}*/
+int Block::blockNum=0;
