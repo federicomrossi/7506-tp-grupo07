@@ -19,15 +19,17 @@ BlockTable::BlockTable() {
 }
 
 int BlockTable::insert(Reg & aReg){
-	HashExtensible *aHash = new HashExtensible();
-	int pos = aHash->doHash(aReg.getId(),this->getSize());
-	int blockNumber = this->blockReferences[pos];
+	// HashExtensible *aHash = new HashExtensible();
+	// int pos = aHash->doHash(aReg.getId(),this->getSize());
+	// int blockNumber = this->blockReferences[pos];
 	this->archivo = new ArchivoBloques(MAX_BLOCK_SIZE,".hashBlock");
 	archivo->abrirArchivo();
 	Block *tmpBlock=new Block();
 	//archivo->leerBloque((void*) tmpBlock,blockNumber); No esta implementado
 	tmpBlock->Insert(aReg);
 	//archivo->escribirBloque((void*)tmpBlock,blockNumber); No esta implementado
+
+	return 0;
 }
 
 int BlockTable::saveBlock(Block * aBlock){
