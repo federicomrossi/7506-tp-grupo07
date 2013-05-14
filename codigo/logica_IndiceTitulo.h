@@ -7,8 +7,8 @@ class IndiceTitulo{
     public:
         IndiceTitulo();
         ~IndiceTitulo();
-        int agregar(int posArch, std::string titulo);
-        int recuperar(std::string titulo, int **posArch);
+        int agregar(unsigned int posArch, std::string titulo);
+        int recuperar(std::string titulo, unsigned int* posArch);
         int eliminarTodo();
     private:
         //UN ARBOL
