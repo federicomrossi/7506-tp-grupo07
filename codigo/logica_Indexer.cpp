@@ -88,16 +88,20 @@ int Indexer::indexarAutores(std::string header, unsigned int songPosition){
     std::list<std::string>* autores = new std::list<std::string>;
     Utils::getAutoresFromHeader(header,autores);
     std::list<std::string>::iterator it;
+    IndiceAutor *indiceA = new IndiceAutor;
     for(it = autores->begin(); it != autores->end();it++){
 
     }
     delete autores;
+    delete indiceA;
     return 0;
 }
 
 int Indexer::indexarTitulo(std::string header, unsigned int songPosition){
     std::string titulo = Utils::getTituloFromHeader(header);
+    IndiceTitulo *indiceT = new IndiceTitulo;
     std::cout << "TITULO: " << titulo << endl;
+    delete indiceT;
     return 0;
 }
 
