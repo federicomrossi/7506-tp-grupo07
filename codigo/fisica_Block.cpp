@@ -70,7 +70,7 @@ int Block::redistribute(Block* aNewBlock,int tableSize){
 		for (it = this->getRegList().begin(); it != this->getRegList().end() ; it++) {
 			aHash->doHash((*it).getId(),tableSize); //SEGUIR CON ESTOOOO
 		}
-
+		return 0; //cambiar
 }
 
 /*Block::~Block() {
