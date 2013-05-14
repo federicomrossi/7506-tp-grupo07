@@ -44,14 +44,16 @@ public:
     // POST: Se escribe el contenido del objeto en el bloque elegido.
     // Este metodo no cierra el arhcivo.
     */
-    int escribirBloque(const void* registro, unsigned int numeroBloque);
+    int escribirBloque(const void* registro, unsigned int numeroBloque) 
+    { return 0; }
     
     /*
     // USO: La clase que desee utilizar el archivo por bloques debera pasar la direccion de un objeto en donde quiere que se lea la informacion.
     // POST: El metodo escribe el contenido del bloque en el objeto
     // Este metodo no cierra el archivo.
     */
-    int leerBloque(void* registro, unsigned int numeroBloque);
+    int leerBloque(void* registro, unsigned int numeroBloque)
+    { return 0; }
     
     ~ArchivoBloques();
 
