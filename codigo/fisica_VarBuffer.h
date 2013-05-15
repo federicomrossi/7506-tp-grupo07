@@ -25,8 +25,8 @@ public:
     VarBuffer(unsigned int maxSize);
     ~VarBuffer();
     void clear();
-    int read(ifstream &file);
-    int write(ofstream &file);
+    int read(fstream &file);
+    int write(fstream &file);
     int pack(const void* object, unsigned short int size);
     int unpack(void* object);
     
