@@ -10,6 +10,9 @@
 #include <fstream>
 #include "fisica_VarBuffer.h"
 
+#define BUFFSIZE 128
+#define TESTCASES 10
+
 using namespace std;
 
 struct testStruct {
@@ -26,7 +29,7 @@ int assertEquals (testStruct &unStruct, testStruct &otroStruct)
 
 int main(int argc, const char * argv[])
 {     
-    ofstream outFile("testVarBuffer.dat",ios::out|ios::binary);
+    fstream outFile("testVarBuffer.dat",ios::out|ios::binary);
     
     cout<<outFile.tellp()<<endl;
     
@@ -46,7 +49,7 @@ int main(int argc, const char * argv[])
     }
     outFile.close();
     
-    ifstream inFile("testVarBuffer.dat",ios::in|ios::binary); 
+    fstream inFile("testVarBuffer.dat",ios::in|ios::binary); 
     testStruct otroTestStruct;
     
     for (int i=0; i<TESTCASES; i++) {
