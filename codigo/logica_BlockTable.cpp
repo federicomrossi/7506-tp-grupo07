@@ -6,13 +6,13 @@
  */
 
 
-
+#include <string.h>
 #include "logica_BlockTable.h"
 #include "config.h"
 
 BlockTable::BlockTable() {
 	size=1;
-	blockReferences[0]=0;
+	blockReferences = new int [1];
 }
 
 int BlockTable::insert(Reg & aReg){
@@ -28,23 +28,28 @@ int BlockTable::insert(Reg & aReg){
 	//A este bloque lo tengo que hidratar,tener en cuenta que en un archivo se van a guardar solo los registros del bloque
 	//mientras que en otro archivo se va a guardar una tira con todas las posiciones de bloques
 
-	if (tmpBlock->easyInsert(aReg))
+	if (tmpBlock->easyInsert(aReg)){
 		tmpBlock->Insert(aReg);
+		archivo->escribirBloque((void*)tmpBlock,tmpBlock->getBlockNum(),MAX_BLOCK_SIZE);
+	}
 	else {
 		// la posicion del nuevo bloque va a ser al final del archivo
-		int lastBlockNum; //TODO: que el archivo me de el numero de bloque
+		int lastBlockNum=0; //TODO: el numero de bloque se guarda en otro archivo
+
 
 		Block * anotherBlock = new Block(tmpBlock->duplicateDispersionSize(),lastBlockNum+1); //HARDCODEADA CABEZA
 
+
+		//si no tengo referencias repetidas tengo que duplicar la tabla
 		if (! canAddBlock(tmpBlock)){
-			resizeTable();
 			duplicateTable();
-			//tmpBlock->redistribute(anotherBlock,this->getSize()); Esto no me gusta, la tabla es la que tiene q saber como redispersar
 		}
 
 		insertBlock(pos,lastBlockNum+1,tmpBlock->getDispersionSize());
 		redisperse(tmpBlock,anotherBlock);
-		//Guarda en archivo los 2 bloques
+		archivo->escribirBloque((void*)tmpBlock,tmpBlock->getBlockNum(),tmpBlock->getCurrentSize());
+		archivo->escribirBloque((void*)anotherBlock,anotherBlock->getBlockNum(),anotherBlock->getCurrentSize());
+		this->insert(aReg);
 		// Llamar recursivametne this->insert(aReg)
 	}
 	//TODO: ESTO de aca
@@ -67,7 +72,7 @@ bool BlockTable::canAddBlock(Block* aBlock){
 	return (aBlock->getDispersionSize()!=this->getSize());
 }
 
-int BlockTable::insertBlock(int blockPos,int newBlockPos,int td){
+void BlockTable::insertBlock(int blockPos,int newBlockPos,int td){
 	for (int i = blockPos; i < this->getSize(); i+=td) {
 		blockReferences[i]=newBlockPos;
 	}
@@ -76,7 +81,7 @@ int BlockTable::insertBlock(int blockPos,int newBlockPos,int td){
 	}
 }
 
-int BlockTable::redisperse(Block* anOldBlock, Block* aNewBlock){
+void BlockTable::redisperse(Block* anOldBlock, Block* aNewBlock){
 	HashExtensible* aHash= new HashExtensible();
 	list<Reg>::iterator it;
 	list<Reg> tmpList;
@@ -92,3 +97,17 @@ int BlockTable::redisperse(Block* anOldBlock, Block* aNewBlock){
 
 	anOldBlock->setList(tmpList); //cabeza
 }
+
+
+
+void BlockTable::duplicateTable(){
+	int newBlockTableSize = size *2;
+	int *tmpBlockReference = new int [newBlockTableSize];
+	for (int i = 0; i < size ; i++) {
+		tmpBlockReference[i] = blockReferences[i];
+		tmpBlockReference[2*i] = blockReferences[i];
+	}
+	delete blockReferences;
+	blockReferences=tmpBlockReference;
+}
+

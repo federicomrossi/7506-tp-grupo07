@@ -7,6 +7,7 @@
 #include "fisica_Block.h"
 #include "logica_HashExtensible.h"
 #include "logica_Reg.h"
+#include "config.h"
 
 using namespace std;
 
@@ -26,17 +27,9 @@ Block::Block(int dispersionSize,int blockAdress)/*: blockTable(aBlockTable) *///
 
 
 int Block::Insert(Reg & aReg){
-	//si puedo agregar agrego
-	/*if (blockCurrentSize + (aReg.getSize()) < maxBlockSize){
-		blockCurrentSize=blockCurrentSize+ aReg.getSize();*/  // de esto se esta ocupando el insertEasy
+		this->blockCurrentSize+=aReg.getSize();
 		this->getRegList().push_back(aReg);
 		return 0; // cambiar
-	//	return (blockTable.saveBlock(this)); //si lo pude guardar, 1;
-	/*}else {
-		this->separate();
-		return 1 ; //cambiar
-	//	return (blockTable.insert(aReg)); // Si lo puede guardar, 1
-	}*/ //														de esto tmb
 }
 
 void Block::changeDispersionSize(int newDispersionSize){
@@ -46,8 +39,26 @@ list<Reg> Block::getRegList(){
 	return this->regsList;
 }
 
+int Block::getBlockNum(){
+	return this->blockNum;
+}
+
+int Block::duplicateDispersionSize(){
+	return (this->dispersionSize*=2);
+}
+
+int Block::getDispersionSize(){
+	return dispersionSize;
+}
+
+
+// TODO: SE ELIMINA?
 int Block::separate(){
 	return 0; //hacer
+}
+
+int Block::getCurrentSize(){
+	return this->blockCurrentSize;
 }
 
 int Block::getBlockAdress(){
@@ -56,6 +67,10 @@ int Block::getBlockAdress(){
 
 bool Block::easyInsert(Reg& aReg){
 	return (aReg.getSize()+ blockCurrentSize < MAX_BLOCK_SIZE);
+}
+
+void Block::setList(list<Reg> newRegList){
+	this->regsList=newRegList;
 }
 	/*
 	Block* Block::createNew(int newDispersionSize){

@@ -51,21 +51,29 @@ class Block {
 		//Si entra el registro devuelve verdadero, si no falso
 		bool easyInsert(Reg& aReg);
 
-		int getDispersionSize(){
-			return dispersionSize;
-		}
+		//Devuelve el tamanio de dispersion del bloque
+		int getDispersionSize();
 
-		int duplicateDispersionSize(){
-			return (this->dispersionSize*=2);
-		}
+		//Cuando se agrega un nuevo bloque se tiene que duplicar el tamanio de dispersion del bloque
+		int duplicateDispersionSize();
 
+		//Devuelve el numero de bloque
+		int getBlockNum();
+
+		//Devuelve la lista de registros
 		list<Reg> getRegList();
+
+		//Devuelve la posicion del bloque en el archivo de bloques
 		int getBlockAdress();
+
+		//Devuelve el espacio ocupado dentro del bloque
+		int getCurrentSize();
+
+		void setList(list<Reg> newRegList);
 
 	protected:
 		int blockCurrentSize;
 		int maxBlockSize;
-//		BlockTable& blockTable;
 		int blockAdress;
 		int dispersionSize;
 		list<Reg> regsList;

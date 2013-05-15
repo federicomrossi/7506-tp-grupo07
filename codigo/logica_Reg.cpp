@@ -10,7 +10,7 @@
 using namespace std;
 
 Reg::Reg(int id, int fileAdress) {
-	this->size=sizeof(id)+sizeof(fileAdress);
+	this->size=sizeof(id)+sizeof(fileAdress)+sizeof(size);
 	this->id=id;
 	this->fileAdress=fileAdress;
 }
