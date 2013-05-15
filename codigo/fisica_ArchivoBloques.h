@@ -59,7 +59,7 @@ public:
 
 private:
     unsigned int blockSize;
-    unsigned short int primerBloque;
+    //unsigned short int primerBloque;
     VarBuffer IOBuffer;
     const char* filename;
     fstream file;
