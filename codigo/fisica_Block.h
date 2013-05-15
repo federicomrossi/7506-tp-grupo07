@@ -55,6 +55,10 @@ class Block {
 			return dispersionSize;
 		}
 
+		int duplicateDispersionSize(){
+			return (this->dispersionSize*=2);
+		}
+
 		list<Reg> getRegList();
 		int getBlockAdress();
 

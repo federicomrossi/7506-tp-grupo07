@@ -9,7 +9,6 @@
 #include "logica_Reg.h"
 
 using namespace std;
-const int MAX_BLOCK_SIZE = 512; // DEBE SER CONFIGURABLE DESDE AFUERA !!!
 
 Block::Block(int dispersionSize,int blockAdress)/*: blockTable(aBlockTable) *///primero tengo que llamar a este constructor
 {
@@ -28,16 +27,16 @@ Block::Block(int dispersionSize,int blockAdress)/*: blockTable(aBlockTable) *///
 
 int Block::Insert(Reg & aReg){
 	//si puedo agregar agrego
-	if (blockCurrentSize + (aReg.getSize()) < maxBlockSize){
-		blockCurrentSize=blockCurrentSize+ aReg.getSize();
+	/*if (blockCurrentSize + (aReg.getSize()) < maxBlockSize){
+		blockCurrentSize=blockCurrentSize+ aReg.getSize();*/  // de esto se esta ocupando el insertEasy
 		this->getRegList().push_back(aReg);
 		return 0; // cambiar
 	//	return (blockTable.saveBlock(this)); //si lo pude guardar, 1;
-	}else {
+	/*}else {
 		this->separate();
 		return 1 ; //cambiar
 	//	return (blockTable.insert(aReg)); // Si lo puede guardar, 1
-	}
+	}*/ //														de esto tmb
 }
 
 void Block::changeDispersionSize(int newDispersionSize){
@@ -63,15 +62,16 @@ bool Block::easyInsert(Reg& aReg){
 		Block* aNewBlock = new Block(newDispersionSize);
 	}
 	*/
-
+/*
 int Block::redistribute(Block* aNewBlock,int tableSize){
 		list<Reg>::iterator it;
 		HashExtensible *aHash= new HashExtensible();
 		for (it = this->getRegList().begin(); it != this->getRegList().end() ; it++) {
-			aHash->doHash((*it).getId(),tableSize); //SEGUIR CON ESTOOOO
+			int pos = aHash->doHash((*it).getId(),tableSize);
+			this->Insert(*it);	//SEGUIR CON ESTOOOO
 		}
 		return 0; //cambiar
-}
+}*/ //LA REDISPERSION LA TENDRIA QUE SABER HACER LA TABLA, NO EL BLOQUE
 
 /*Block::~Block() {
 }*/
