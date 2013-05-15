@@ -94,3 +94,6 @@ $(target): $(o_files)
 
 clean:
 	$(RM) $(o_files) $(VGLOGFILE) $(target)
+
+valgrind:
+	valgrind $(VGFLAGS) ./$(target) 

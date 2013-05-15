@@ -100,18 +100,22 @@ public:
 	ArbolBmas();
 
 	// Destructor
-	// ~ArbolBmas();
+	~ArbolBmas();
 
-	// Abre un arbol ya existente
+	// Abre un arbo.
 	// PRE: 'nombre_archivo' es la ruta del archivo donde se almacena el arbol.
-	// POST: si no existe el archivo se lanza una excepcion.
-	void abrir(string& nombre_archivo);
+	// POST: Si existe el archivo, se carga el arbol existente, y si no existe
+	// se crea un arbol nuevo en dicho archivo.
+	void abrir(const char* nombre_archivo);
 
 	//
 	int insertar(const unsigned int clave, RegistroGenerico *registro);
 
 	//
 	int buscar(const unsigned int clave);
+
+	// Cierra el archivo si se encuentra abierto
+	void cerrar();
 };
 
 #endif

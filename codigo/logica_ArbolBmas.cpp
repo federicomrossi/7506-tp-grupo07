@@ -34,41 +34,42 @@ namespace {
 
 
 // Constructor
-ArbolBmas::ArbolBmas() {
+ArbolBmas::ArbolBmas()
+{
 	this->contBloques = 0;
 	this->nivel = 0;
 }
 
 
 // Destructor
-// template < typename TipoClave >
-// ArbolBmas< TipoClave >::~ArbolBmas() 
-// {
-// 	// Liberamos archivo
-// 	if(this->archivo != 0) delete this->archivo;
-// }
+ArbolBmas::~ArbolBmas() 
+{
+	cerrar();
+	delete this->archivo;
+}
 
 
 // Abre un arbol ya existente
 // PRE: 'nombre_archivo' es la ruta del archivo donde se almacena el arbol.
 // POST: si no existe el archivo se crea uno nuevo y se inicializa el arbol,
-void ArbolBmas::abrir(string& nombre_archivo)
+void ArbolBmas::abrir(const char* nombre_archivo)
 {
 	// Creamos un archivo de bloques
-	this->archivo = new ArchivoBloques(sizeof(Nodo), nombre_archivo.c_str());
+	this->archivo = new ArchivoBloques(512, nombre_archivo);
 
 	// Inicializamos el archivo de bloques o lo levantamos si ya existia
 	if(this->archivo->abrirArchivo() == -1)
 	{
 		// El archivo no existe, lo creamos
 		this->archivo->crearArchivo();
+		this->archivo->abrirArchivo();
 
 		// Creamos metadata del arbol con valores iniciales
 		guardarMetadata();
 
-		// Creamos el nodo raiz
-		this->raiz = new Nodo(this->nivel, NUM_BLOQUE_RAIZ);
-		this->archivo->escribirBloque((void*) this->raiz, NUM_BLOQUE_RAIZ, sizeof(*this->raiz));
+		// // Creamos el nodo raiz
+		// this->raiz = new Nodo(this->nivel, NUM_BLOQUE_RAIZ);
+		// this->archivo->escribirBloque(&this->raiz, NUM_BLOQUE_RAIZ, sizeof(*this->raiz));
 
 		return;
 	}
@@ -76,11 +77,13 @@ void ArbolBmas::abrir(string& nombre_archivo)
 	// Cargamos metadata
 	cargarMetadata();
 
-	// Cargamos nodo raiz
-	this->archivo->leerBloque((void*) this->raiz, NUM_BLOQUE_RAIZ);
+	std::cout << this->nivel << " " << this->contBloques << std::endl;
 
-	// Apilamos puntero a nodo raiz para comenzar rama
-	this->ramaNodos.push(this->raiz);
+	// // Cargamos nodo raiz
+	// this->archivo->leerBloque(&this->raiz, NUM_BLOQUE_RAIZ);
+
+	// // Apilamos puntero a nodo raiz para comenzar rama
+	// this->ramaNodos.push(this->raiz);
 }
 
 
@@ -106,6 +109,16 @@ int ArbolBmas::buscar(const unsigned int clave)
 }
 
 
+//
+void ArbolBmas::cerrar()
+{
+	// Corroboramos que esté abierto el archivo
+	if(this->archivo->estaAbierto())
+		this->archivo->cerrarArchivo();
+
+}
+
+
 
 
 /**********************************
@@ -121,14 +134,12 @@ void ArbolBmas::cargarMetadata()
 	if(!this->archivo->estaAbierto()) return;
 
 	// Levantamos la metadata del archivo
-	Metadata *metadata = 0;
-	this->archivo->leerBloque((void*) metadata, NUM_BLOQUE_METADATA);
+	Metadata metadata;
+	this->archivo->leerBloque(&metadata, NUM_BLOQUE_METADATA);
 
 	// Cargamos datos en atributos
-	this->nivel = metadata->nivel;
-	this->contBloques = metadata->contBloques;
-
-	delete metadata;
+	this->nivel = metadata.nivel;
+	this->contBloques = metadata.contBloques;
 }
 
 
@@ -140,14 +151,13 @@ void ArbolBmas::guardarMetadata()
 	if(!this->archivo->estaAbierto()) return;
 
 	// Creamos la metadata a almacenar
-	Metadata *metadata = new Metadata();
-	metadata->nivel = this->nivel;
-	metadata->contBloques = this->contBloques;
+	Metadata metadata;
+	metadata.nivel = this->nivel;
+	metadata.contBloques = this->contBloques;
 
 	// Escribimos metadata en archivo
-	this->archivo->escribirBloque((void*) metadata, NUM_BLOQUE_METADATA, sizeof(Metadata));
-
-	delete metadata;
+	this->archivo->escribirBloque(&metadata, NUM_BLOQUE_METADATA, 
+		sizeof(Metadata));
 }
 
 

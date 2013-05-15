@@ -18,7 +18,7 @@ VarBuffer::VarBuffer(unsigned int maxSize)
 
 VarBuffer::~VarBuffer()
 {
-    delete this->buffer;
+    delete[] this->buffer;
 }
 
 void VarBuffer::clear()
