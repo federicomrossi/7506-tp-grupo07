@@ -30,6 +30,9 @@ public:
     */
     int crearArchivo();
     
+    /*Borra el contenido de un archivo*/
+    void borrarArhcivo();
+    
     /*
     // Abre el archivo con el nombre declarado en el constructor.
     // Devuelve 0 si lo abre correctamente y -1 si no existe.
