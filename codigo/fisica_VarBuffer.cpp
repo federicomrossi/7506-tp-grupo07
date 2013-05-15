@@ -33,7 +33,7 @@ void VarBuffer::clear()
  * Devuelve 0 si la operacion fue correcta, -1 si se habia alcanzado el fin de archivo, -2 si se
  * produce un problema de IO y -3 si hay buffer overflow
  */
-int VarBuffer::read(ifstream &file)
+int VarBuffer::read(fstream &file)
 {
     if (file.eof()) {
         return -1;
@@ -64,7 +64,7 @@ int VarBuffer::read(ifstream &file)
  * un registro. Para ello escibe primero el largo del buffer y luego el contenido del mismo.
  * Devuelve 0 si la operacion fue correcta, y -2 si se produce un problema de IO
  */
-int VarBuffer::write(ofstream &file)
+int VarBuffer::write(fstream &file)
 {
     file.write((char*)&this->bufferSize, sizeof(bufferSize));
     if (! file.good()) {
@@ -106,6 +106,12 @@ int VarBuffer::unpack(void *objetc)
 {
     memcpy(objetc, buffer, bufferSize);
     return 0;
+}
+
+unsigned short int VarBuffer::getBuffSize()
+{
+    return this->bufferSize;
+    
 }
 
 
