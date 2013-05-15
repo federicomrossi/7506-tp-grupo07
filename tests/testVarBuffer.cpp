@@ -15,14 +15,15 @@
 
 using namespace std;
 
-struct testStruct {
+struct testStructVarBuffer {
     int unEntero;
     char* unString;
+    bool unBool;
 };
 
-int assertEquals (testStruct &unStruct, testStruct &otroStruct)
+int assertEqualsVarBuffer (testStructVarBuffer &unStruct, testStructVarBuffer &otroStruct)
 {
-    return (unStruct.unEntero==otroStruct.unEntero && unStruct.unString==otroStruct.unString);
+    return (unStruct.unEntero==otroStruct.unEntero && unStruct.unString==otroStruct.unString && unStruct.unBool==otroStruct.unBool);
     
 }
 
@@ -33,7 +34,7 @@ int main(int argc, const char * argv[])
     
     cout<<outFile.tellp()<<endl;
     
-    testStruct unTestStruct[TESTCASES];
+    testStructVarBuffer unTestStruct[TESTCASES];
     
     VarBuffer unBuffer(BUFFSIZE);
     
@@ -50,15 +51,16 @@ int main(int argc, const char * argv[])
     outFile.close();
     
     fstream inFile("testVarBuffer.dat",ios::in|ios::binary); 
-    testStruct otroTestStruct;
+    testStructVarBuffer otroTestStruct;
     
     for (int i=0; i<TESTCASES; i++) {
         unBuffer.read(inFile);
         cout<<inFile.tellg()<<endl;
         unBuffer.unpack(&otroTestStruct);
-        cout<<assertEquals(unTestStruct[i], otroTestStruct)<<endl;
+        if(!assertEqualsVarBuffer(unTestStruct[i], otroTestStruct)) {cerr<<"Las estructuras son diferentes"<<endl; return -1;};
         };
     inFile.close();
- 
+    
+    cout<<"Prueba testVarBuffer EXITOSA"<<endl;
     return 0;
 }

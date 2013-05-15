@@ -29,6 +29,7 @@ public:
     int write(fstream &file);
     int pack(const void* object, unsigned short int size);
     int unpack(void* object);
+    unsigned short int getBuffSize();
     
 private:
     unsigned short int bufferSize;

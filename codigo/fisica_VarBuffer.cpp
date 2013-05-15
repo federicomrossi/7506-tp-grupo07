@@ -108,5 +108,11 @@ int VarBuffer::unpack(void *objetc)
     return 0;
 }
 
+unsigned short int VarBuffer::getBuffSize()
+{
+    return this->bufferSize;
+    
+}
+
 
 

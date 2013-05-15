@@ -58,3 +58,38 @@ bool ArchivoBloques::estaAbierto()
 
 
 
+int ArchivoBloques::escribirBloque(const void *registro, unsigned int numeroBloque, unsigned int size)
+{   
+    
+    unsigned short int datosEscritos=0;
+    
+    if (!this->estaAbierto()) {
+        return -1;
+    }
+        
+    file.seekp(numeroBloque*this->blockSize);
+    IOBuffer.pack(registro,size);
+    IOBuffer.write(file);
+    datosEscritos=IOBuffer.getBuffSize();
+    IOBuffer.clear();
+    
+    return datosEscritos;    
+}
+
+int ArchivoBloques::leerBloque(void *registro, unsigned int numeroBloque)
+{
+    unsigned short int datosLeidos=0;
+    
+    if (!this->estaAbierto()) {
+        return -1;
+    }
+    
+    file.seekg(numeroBloque*this->blockSize);
+    IOBuffer.read(file);
+    IOBuffer.unpack(registro);
+    datosLeidos=IOBuffer.getBuffSize();
+    IOBuffer.clear();
+    
+    return datosLeidos;    
+}
+
