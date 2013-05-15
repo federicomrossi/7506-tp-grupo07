@@ -28,7 +28,7 @@ int assertEqualsArchivoBloques (testStructArchivoBloques &unStruct, testStructAr
 }
 
 int main(int argc, const char * argv[])
-{     
+{
     testStructArchivoBloques testStruct1;
     testStruct1.unEntero=15;
     testStruct1.unString="fjlagjfldsgfd";
@@ -55,9 +55,7 @@ int main(int argc, const char * argv[])
     file.leerBloque(&testStructTemp, 7);
     if (!assertEqualsArchivoBloques(testStruct2, testStructTemp)) {cerr<<"Los struct no son iguales"<<endl; return -1;};
     
-    
-    
-    
+    file.borrarArchivo();    
     
     cout<<"Prueba testArchivosBloques EXITOSA"<<endl;
     return 0;

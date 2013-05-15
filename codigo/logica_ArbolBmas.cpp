@@ -68,7 +68,7 @@ void ArbolBmas::abrir(string& nombre_archivo)
 
 		// Creamos el nodo raiz
 		this->raiz = new Nodo(this->nivel, NUM_BLOQUE_RAIZ);
-		this->archivo->escribirBloque((void*) this->raiz, NUM_BLOQUE_RAIZ);
+		this->archivo->escribirBloque((void*) this->raiz, NUM_BLOQUE_RAIZ, sizeof(*this->raiz));
 
 		return;
 	}
@@ -145,7 +145,7 @@ void ArbolBmas::guardarMetadata()
 	metadata->contBloques = this->contBloques;
 
 	// Escribimos metadata en archivo
-	this->archivo->escribirBloque((void*) metadata, NUM_BLOQUE_METADATA);
+	this->archivo->escribirBloque((void*) metadata, NUM_BLOQUE_METADATA, sizeof(Metadata));
 
 	delete metadata;
 }

@@ -27,10 +27,7 @@ public:
 	RegistroGenerico(unsigned int clave) : clave(clave) { }
 
 	// Devuelve el identificador (clave) del registro
-	unsigned int getClave()
-	{
-		return this->clave;
-	}
+	unsigned int getClave() { return this->clave; }
 };
 
 #endif

@@ -33,6 +33,15 @@ int ArchivoBloques::crearArchivo()
 
 }
 
+void ArchivoBloques::borrarArhcivo()
+{
+    if (this->estaAbierto()) {
+        file.close();
+    }
+    file.open(this->filename,ios::trunc);
+    file.close();
+}
+
 
 int ArchivoBloques::abrirArchivo()
 {
