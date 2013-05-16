@@ -9,20 +9,14 @@
 
 
 
-
 /* ****************************************************************************
  * CONSTANTES
  * ***************************************************************************/
 
 namespace {
 
-	// Constantes para el tamaño de los bloques
-	const int CANT_REG_NODO_INTERNO = 5;
-	const int CANT_REG_NODO_HOJA = 6;
-
 	// Constantes para los numeros de bloque
-	const unsigned int NUM_BLOQUE_METADATA = 0;
-	const unsigned int NUM_BLOQUE_RAIZ = 1;
+	const uint NUM_BLOQUE_METADATA = 1;
 }
 
 
@@ -87,29 +81,36 @@ void ArbolBmas::abrir(const char* nombre_archivo)
 }
 
 
-//
-int ArbolBmas::insertar(const unsigned int clave, RegistroGenerico *registro)
+// Inserta un registro nuevo en el árbol
+// PRE: 'clave' es la clave o id con el que se identifica el registro;
+// 'registro' es el registro que se desea ingresar, el cual debe ser un
+// RegistroGenerico
+void ArbolBmas::insertar(const uint clave, RegistroGenerico& registro)
 {
 	// Corroboramos que se haya creado el arbol
 	if(!this->archivo)
 		throw "ArbolBmas::insertar() ERROR: no se ha abierto el arbol";
-
-	return 0;
 }
 
 
-//
-int ArbolBmas::buscar(const unsigned int clave)
+// Busca un registro en el arbol
+// PRE: 'clave' es la clave o id que identifica al registro a buscar;
+// 'registro' es una referencia a una almacenador en donde se insertara el
+// resultado de la busqueda
+// POST: Si se encontró el registro, se devuelve true y se almacena en
+// 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
+// en 'registro' el registro superior mas proximo al buscado.
+bool ArbolBmas::buscar(const uint clave, RegistroGenerico& registro)
 {
 	// Corroboramos que se haya creado el arbol
 	if(!this->archivo)
 		throw "ArbolBmas::buscar() ERROR: no se ha abierto el arbol";
 
-	return 0;
+	return false;
 }
 
 
-//
+// Cierra el archivo si se encuentra abierto
 void ArbolBmas::cerrar()
 {
 	// Corroboramos que esté abierto el archivo
@@ -162,20 +163,58 @@ void ArbolBmas::guardarMetadata()
 
 
 
-/**********************************
- *  ESTRUCTURAS INTERNAS
- **********************************/
+/*************************************
+ *  ESTRUCTURAS INTERNAS DE LA CLASE
+ *************************************/
 
 
-// Constructor
-ArbolBmas::Nodo::Nodo(unsigned int nivel, unsigned int numBloque)
+// Constructor Nodo Interno
+ArbolBmas::NodoInterno::NodoInterno() : ArbolBmasNodo(0,0,0)
+{
+	
+}
+
+
+// Inserta el registro en el nodo.
+// PRE: 'clave' es la clave a insertar; 'registro' es el registro
+// asociado a dicha clave.
+// POST: devuelve true si queda en overflow o false en caso contrario
+bool ArbolBmas::NodoInterno::insertar(uint clave, RegistroGenerico registro)
+{
+	return true;
+}
+
+// Reparte su contenido con su nodoHermano, pasandole la mitad.
+// PRE: 'nodoHermano' es un nodo con el que se hara la division
+// POST: devuelve la clave del registro inferior de 'nodoHermano'
+uint ArbolBmas::NodoInterno::dividir(NodoInterno& nodoHermano)
+{
+	return 0;
+}
+
+
+
+// Constructor Nodo Hoja
+ArbolBmas::NodoHoja::NodoHoja() : ArbolBmasNodo(0,0,0)
 {
 
 }
 
 
-// Constructor
-ArbolBmas::NodoInterno::NodoInterno()	
+// Inserta el registro en el nodo.
+// PRE: 'clave' es la clave a insertar; 'registro' es el registro
+// asociado a dicha clave.
+// POST: devuelve true si queda en overflow o false en caso contrario
+bool ArbolBmas::NodoHoja::insertar(uint clave, RegistroGenerico registro)
 {
+	return true;
+}
 
+
+// Reparte su contenido con su nodoHermano, pasandole la mitad.
+// PRE: 'nodoHermano' es un nodo con el que se hara la division
+// POST: devuelve la clave del registro inferior de 'nodoHermano'
+uint ArbolBmas::NodoHoja::dividir(NodoHoja& nodoHermano)
+{
+	return 0;
 }
