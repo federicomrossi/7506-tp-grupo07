@@ -18,8 +18,10 @@ protected:
 public:
 	Reg(int id, int fileAdress);
 	int getSize();
+	int getFileAdress();
 	int getId();
 	virtual ~Reg();
+	void setFileAdress(int fileAdress);
 };
 
 #endif /* REG_H_ */

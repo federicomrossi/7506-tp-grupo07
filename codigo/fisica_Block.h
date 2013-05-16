@@ -14,7 +14,6 @@ Esta informacion incluye:
 #define BLOCK_H_
 
 
-//#include "logica_BlockTable.h"
 #include "logica_Reg.h"
 #include <list>
 #include "fisica_ArchivoBloques.h"
@@ -71,16 +70,31 @@ class Block {
 
 		void setList(list<Reg> newRegList);
 
+		//Una vez que obtengo el bloque, tengo que buscar en la lista el registro que yo quiero
+		//Devuelvo el fileAdress de ese registro que es donde estara guardado el dato
+		//SI NO SE ENCUENTRA EL REGISTRO SE DEVUELVE 0
+		int search(Reg& aReg);
+
+		//TODO: solo el cierra
+		void open(const char * fileName);
+		void close();
+		ArchivoBloques* getArchivo();
+
+
 	protected:
 		int blockCurrentSize;
-		int maxBlockSize;
-		int blockAdress;
+		int maxBlockSize; //Privado? constante?
+
+		//int blockAdress; TODO: SE USA ???
 		int dispersionSize;
 		list<Reg> regsList;
-		ArchivoBloques* archivo;
+		 ArchivoBloques* archivo; //privado? constante?
+		int blockNum; //lo puedo llegar a necesitar
 
 	private:
-		static int blockNum; //lo puedo llegar a necesitar
+		struct Metadata{
+
+		};
 
 };
 #endif

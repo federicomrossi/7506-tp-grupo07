@@ -14,6 +14,8 @@
 #define CONFIG_H_
 
 #define MAX_BLOCK_SIZE (512)
+#define HASH_BLOCK_TABLE_FILE ".HashBlockTable"
+#define HASH_BLOCK_FILE  ".HashBlock"
 
 
 #endif /* CONFIG_H_ */

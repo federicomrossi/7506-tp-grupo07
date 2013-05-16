@@ -18,6 +18,13 @@ Reg::Reg(int id, int fileAdress) {
 Reg::~Reg() {
 }
 
+void Reg::setFileAdress(int fileAdress){
+	this->fileAdress=fileAdress;
+}
+
+int Reg::getFileAdress(){
+	return this->fileAdress;
+}
 int Reg:: getId(){
 	return id;
 }

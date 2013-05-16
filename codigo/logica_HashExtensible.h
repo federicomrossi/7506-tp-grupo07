@@ -17,7 +17,7 @@ class HashExtensible {
 public:
 	//HashExtensible();
 	int makeNameANumber(string name);
-	int doHash(int number, int tableSize);
+	static int doHash(int number, int tableSize);
 	virtual ~HashExtensible();
 };
 
