@@ -38,8 +38,7 @@ void ArchivoBloques::borrarArchivo()
     if (this->estaAbierto()) {
         file.close();
     }
-    file.open(this->filename,ios::trunc);
-    file.close();
+    remove(filename);
 }
 
 
