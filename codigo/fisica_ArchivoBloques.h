@@ -31,7 +31,7 @@ public:
     int crearArchivo();
     
     /*Borra el contenido de un archivo*/
-    void borrarArhcivo();
+    void borrarArchivo();
     
     /*
     // Abre el archivo con el nombre declarado en el constructor.
