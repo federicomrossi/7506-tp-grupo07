@@ -9,8 +9,9 @@
 
 
 #include <stack>
+#include <list>
 #include "fisica_ArchivoBloques.h"
-#include "logica_ArbolBmasNodo.h"
+#include "domain_RegistroGenerico.h"
 
 
 
@@ -77,11 +78,63 @@ public:
 
 private:
 
+	// Estructura con informacion del arbol. 
+	// Se utiliza solamente para almacenar o para levantar los metadatos del
+	// arbol desde un archivo
+	struct Metadata {
+		uint raiz;					// Bloque en el que se encuentra la raiz
+		uint nivel;					// Contador del nivel actual del árbol
+		uint contBloques;			// Contador de bloques existentes
+	};
+
+
+	// Clase interna que representa un nodo del arbol. Dependiendo del nivel
+	// en el que se encuentra, se comportara como un nodo hoja o como un nodo
+	// interno, es decir, sus metodos realizaran distintas acciones dependiendo
+	// de cual de los dos sea
+	class Nodo
+	{
+
+	private:
+
+		uint numBloque;							// Numero de bloque del nodo
+		uint nivel;								// Nivel en el que se 
+												// encuentra el nodo
+		uint cantClaves;						// Cantidad actual de claves
+		uint cantMaxClaves;						// Cantidad maxima de claves
+												// permitidas
+		list< uint > claves;					// Claves de registros
+		list< uint > hijos;						// Referencias a hijos (se usa
+												// si es un nodo interno)
+		list< RegistroGenerico > registros;		// Lista de registros (se usa 
+												// si es un nodo hoja)
+
+	public:
+		
+		// Constructor
+		Nodo(uint numBloque, uint nivel, uint cantMaxClaves);
+
+		// Inserta el registro en el nodo.
+		// PRE: 'clave' es la clave a insertar; 'registro' es el registro
+		// asociado a dicha clave.
+		// POST: devuelve true si queda en overflow o false en caso contrario
+		bool insertar(uint clave, RegistroGenerico registro);
+
+		// Reparte su contenido con su nodoHermano, pasandole la mitad.
+		// PRE: 'nodoHermano' es un nodo con el que se hara la division
+		// POST: devuelve la clave del registro inferior de 'nodoHermano'
+		uint dividir(Nodo& nodoHermano);
+
+		// Devuelve el numero de bloque en el que se encuentra el nodo
+		uint getNumBloque();
+	};
+
+
 	ArchivoBloques *archivo;				// Archivo donde se almacena
-	ArbolBmasNodo *raiz;					// Nodo de la raiz
+	Nodo raiz;								// Nodo de la raiz
 	uint nivel;								// Contador del nivel actual
 	uint contBloques;						// Contador de bloques existentes
-	stack<ArbolBmasNodo*> ramaNodos;		// Almacenador para rama
+	stack<Nodo> ramaNodos;					// Almacenador para rama
 
 
 	// Carga la metadata del arbol desde el archivo.
@@ -91,57 +144,6 @@ private:
 	// Guarda la metadata actual del arbol en el archivo, actualizando info.
 	// POST: si todavia no ha sido abierto o creado el archivo, no hace nada.
 	void guardarMetadata();
-
-
-	// Estructura con informacion del arbol. 
-	// Se utiliza solamente para almacenar o para levantar los metadatos del
-	// arbol desde un archivo
-	struct Metadata {
-		uint nivel;					// Contador del nivel actual del árbol
-		uint contBloques;			// Contador de bloques existentes
-	};
-
-
-	// Clase privada que representa a un nodo interno del arbol. 
-	class NodoInterno : public ArbolBmasNodo
-	{
-		list< uint > hijos;			// Referencias a hijos
-
-		// Constructor
-		NodoInterno();
-
-		// Inserta el registro en el nodo.
-		// PRE: 'clave' es la clave a insertar; 'registro' es el registro
-		// asociado a dicha clave.
-		// POST: devuelve true si queda en overflow o false en caso contrario
-		virtual bool insertar(uint clave, RegistroGenerico registro);
-
-		// Reparte su contenido con su nodoHermano, pasandole la mitad.
-		// PRE: 'nodoHermano' es un nodo con el que se hara la division
-		// POST: devuelve la clave del registro inferior de 'nodoHermano'
-		uint dividir(NodoInterno& nodoHermano);
-	};
-
-
-	// Clase privada que representa a un nodo hoja del arbol.
-	class NodoHoja : public ArbolBmasNodo 
-	{
-		list< RegistroGenerico > registros;			// Lista de registros
-
-		// Consctructor
-		NodoHoja();
-
-		// Inserta el registro en el nodo.
-		// PRE: 'clave' es la clave a insertar; 'registro' es el registro
-		// asociado a dicha clave.
-		// POST: devuelve true si queda en overflow o false en caso contrario
-		virtual bool insertar(uint clave, RegistroGenerico registro);
-
-		// Reparte su contenido con su nodoHermano, pasandole la mitad.
-		// PRE: 'nodoHermano' es un nodo con el que se hara la division
-		// POST: devuelve la clave del registro inferior de 'nodoHermano'
-		uint dividir(NodoHoja& nodoHermano);
-	};
 };
 
 #endif

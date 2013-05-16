@@ -28,11 +28,7 @@ namespace {
 
 
 // Constructor
-ArbolBmas::ArbolBmas()
-{
-	this->contBloques = 0;
-	this->nivel = 0;
-}
+ArbolBmas::ArbolBmas() : raiz(0,0,0), nivel(0), contBloques(0) { }
 
 
 // Destructor
@@ -141,6 +137,7 @@ void ArbolBmas::cargarMetadata()
 	// Cargamos datos en atributos
 	this->nivel = metadata.nivel;
 	this->contBloques = metadata.contBloques;
+	this->archivo->leerBloque(&this->raiz, metadata.raiz);
 }
 
 
@@ -153,6 +150,7 @@ void ArbolBmas::guardarMetadata()
 
 	// Creamos la metadata a almacenar
 	Metadata metadata;
+	metadata.raiz = this->raiz.getNumBloque();
 	metadata.nivel = this->nivel;
 	metadata.contBloques = this->contBloques;
 
@@ -163,23 +161,22 @@ void ArbolBmas::guardarMetadata()
 
 
 
+
 /*************************************
  *  ESTRUCTURAS INTERNAS DE LA CLASE
  *************************************/
 
 
-// Constructor Nodo Interno
-ArbolBmas::NodoInterno::NodoInterno() : ArbolBmasNodo(0,0,0)
-{
-	
-}
+// Constructor Nodo
+ArbolBmas::Nodo::Nodo(uint numBloque, uint nivel, uint cantMaxClaves) : 
+	numBloque(numBloque), nivel(nivel), cantMaxClaves(cantMaxClaves) { }
 
 
 // Inserta el registro en el nodo.
 // PRE: 'clave' es la clave a insertar; 'registro' es el registro
 // asociado a dicha clave.
 // POST: devuelve true si queda en overflow o false en caso contrario
-bool ArbolBmas::NodoInterno::insertar(uint clave, RegistroGenerico registro)
+bool ArbolBmas::Nodo::insertar(uint clave, RegistroGenerico registro)
 {
 	return true;
 }
@@ -187,34 +184,14 @@ bool ArbolBmas::NodoInterno::insertar(uint clave, RegistroGenerico registro)
 // Reparte su contenido con su nodoHermano, pasandole la mitad.
 // PRE: 'nodoHermano' es un nodo con el que se hara la division
 // POST: devuelve la clave del registro inferior de 'nodoHermano'
-uint ArbolBmas::NodoInterno::dividir(NodoInterno& nodoHermano)
+uint ArbolBmas::Nodo::dividir(Nodo& nodoHermano)
 {
 	return 0;
 }
 
 
-
-// Constructor Nodo Hoja
-ArbolBmas::NodoHoja::NodoHoja() : ArbolBmasNodo(0,0,0)
+// Devuelve el numero de bloque en el que se encuentra el nodo
+uint ArbolBmas::Nodo::getNumBloque()
 {
-
-}
-
-
-// Inserta el registro en el nodo.
-// PRE: 'clave' es la clave a insertar; 'registro' es el registro
-// asociado a dicha clave.
-// POST: devuelve true si queda en overflow o false en caso contrario
-bool ArbolBmas::NodoHoja::insertar(uint clave, RegistroGenerico registro)
-{
-	return true;
-}
-
-
-// Reparte su contenido con su nodoHermano, pasandole la mitad.
-// PRE: 'nodoHermano' es un nodo con el que se hara la division
-// POST: devuelve la clave del registro inferior de 'nodoHermano'
-uint ArbolBmas::NodoHoja::dividir(NodoHoja& nodoHermano)
-{
-	return 0;
+	return this->numBloque;
 }
