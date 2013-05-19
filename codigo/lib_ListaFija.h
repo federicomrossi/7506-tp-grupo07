@@ -9,6 +9,8 @@
 #define LISTA_FIJA_H
 
 
+#include <string>
+
 
 /* ****************************************************************************
  * DECLARACIÓN DEL TEMPLATE
@@ -123,7 +125,7 @@ void ListaFija< Tipo, Tamanio >::insertar(Tipo elemento, const size_t pos)
 		throw "ERROR: Lista llena. No puede insertarse elemento.";
 
 	Tipo b = elemento;
-	Tipo a = 0;
+	Tipo a;
 
 	for(size_t i = pos; i <= this->tamanioParcial; i++)
 	{
@@ -263,7 +265,6 @@ void ListaFija< Tipo, Tamanio >::transferir(ListaFija< Tipo, Tamanio >& lista,
 	for(size_t i = pos_ini; i <= pos_fin; i++)
 	{
 		lista.insertarUltimo(this->lista[i]);
-		this->lista[i] = 0;
 		--this->tamanioParcial;
 	}
 }
