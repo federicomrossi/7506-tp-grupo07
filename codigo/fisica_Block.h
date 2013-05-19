@@ -75,11 +75,14 @@ class Block {
 		//SI NO SE ENCUENTRA EL REGISTRO SE DEVUELVE 0
 		int search(Reg& aReg);
 
+		void read(const char* fileName);
+		void write(const char* fileName);
 		//TODO: solo el cierra
 		void open(const char * fileName);
 		void close();
 		ArchivoBloques* getArchivo();
 
+		~Block();
 
 	protected:
 		int blockCurrentSize;
@@ -88,7 +91,7 @@ class Block {
 		//int blockAdress; TODO: SE USA ???
 		int dispersionSize;
 		list<Reg> regsList;
-		 ArchivoBloques* archivo; //privado? constante?
+		//ArchivoBloques* archivo; //privado? constante?
 		int blockNum; //lo puedo llegar a necesitar
 
 	private:

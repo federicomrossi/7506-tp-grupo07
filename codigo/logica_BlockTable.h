@@ -43,6 +43,7 @@ class BlockTable{
 		bool canAddBlock(Block* aBlock); //Tengo referencias libres? true significa que no hace falta duplicar
 		void redisperse(Block* anOldBlock,Block* aNewBlock); //redisperso los registros del bloque viejo al bloque nuevo
 		void hidratateBlockTable();
+		void prueba(Block*);
 	protected:
 		int size;
 		int *blockReferences;
