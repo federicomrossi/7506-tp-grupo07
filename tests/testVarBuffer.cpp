@@ -1,61 +1,52 @@
 //
-//  main.cpp
-//  FileHandler
+//  TestVarBuffer.cpp
+//  Test2
 //
-//  Created by Federico Colangelo on 21/04/13.
+//  Created by Federico Colangelo on 18/05/13.
 //  Copyright (c) 2013 Federico Colangelo. All rights reserved.
 //
 
-#include <iostream>
-#include <fstream>
-#include "fisica_VarBuffer.h"
+#include "TestVarBuffer.h"
 
-using namespace std;
-
-struct testStruct {
-    int unEntero;
-    char* unString;
-};
-
-int assertEquals (testStruct &unStruct, testStruct &otroStruct)
+TestVarBuffer::TestVarBuffer()
 {
-    return (unStruct.unEntero==otroStruct.unEntero && unStruct.unString==otroStruct.unString);
     
 }
 
+bool TestVarBuffer::assertEquals(VarBufferTestStruct &unStruct, VarBufferTestStruct &otroStruct)
+{
+    return (unStruct.unEntero==otroStruct.unEntero && unStruct.unString==otroStruct.unString && unStruct.unBool==otroStruct.unBool);
+}
 
-int main(int argc, const char * argv[])
-{     
-    ofstream outFile("testVarBuffer.dat",ios::out|ios::binary);
-    
-    cout<<outFile.tellp()<<endl;
-    
-    testStruct unTestStruct[TESTCASES];
+int TestVarBuffer::test()
+{
+    fstream outFile("testVarBuffer.dat",ios::out|ios::binary);
+        
+    VarBufferTestStruct unTestStruct[TESTCASES];
     
     VarBuffer unBuffer(BUFFSIZE);
     
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     
     for (int i=0;i<TESTCASES;i++) {
         unTestStruct[i].unEntero=rand()%100;
         unTestStruct[i].unString=(char*)(rand()%10000);
         unBuffer.pack(&unTestStruct[i], sizeof(unTestStruct[i]));
-        unBuffer.write(outFile);
-        cout<<outFile.tellp()<<endl;
-        
+        unBuffer.write(outFile);        
     }
     outFile.close();
     
-    ifstream inFile("testVarBuffer.dat",ios::in|ios::binary); 
-    testStruct otroTestStruct;
+    fstream inFile("testVarBuffer.dat",ios::in|ios::binary);
+    VarBufferTestStruct otroTestStruct;
     
     for (int i=0; i<TESTCASES; i++) {
         unBuffer.read(inFile);
-        cout<<inFile.tellg()<<endl;
         unBuffer.unpack(&otroTestStruct);
-        cout<<assertEquals(unTestStruct[i], otroTestStruct)<<endl;
-        };
+        if(!this->assertEquals(unTestStruct[i], otroTestStruct)) {cerr<<"Las estructuras son diferentes"<<endl; return -1;};
+    };
     inFile.close();
- 
+    
+    remove("testVarBuffer.dat");
+    cout<<"Prueba testVarBuffer EXITOSA"<<endl;
     return 0;
 }

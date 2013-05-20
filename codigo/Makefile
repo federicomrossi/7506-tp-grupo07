@@ -1,18 +1,4 @@
-## Makefile para compilacion de TP Grupal realizado en lenguaje C++
-## 
-## DIRECTIVAS:
-## 
-##	- make:			Compila y linkea todo lo que encuentre en el directorio
-##	- run:			Corre el archivo ejecutable generado
-##	- valgrind:		Corre el valgrind sobre el ejecutable, generando un
-##					archivo de resultados en el directorio de compilacion
-##	- clean:		Limpia los archivos generados por la regla anterior
-##
-##
-## NOTA: Si se especifica un directorio, todos los archivos generados seran
-## almacenados alli dentro. Ademas, al invocar a clean, se eliminara todo
-## su contenido, incluyendo a estE mismo.
-##
+## Makefile TEMPORAL para compilacion de TP Grupal realizado en lenguaje C++
 
 
 
@@ -20,108 +6,94 @@
 ################
 
 # Nombre del ejecutable.
-EXEC = interfaz_main
-
-# Directorios
-BINDIR =
-
-# Compilador
-CC = g++
-
-# Flags de compilacion
-CC_FLAGS = -Wall --pedantic --std=c++98
-LD_FLAGS = -Wall --pedantic --std=c++98
+target = interfaz_main
 
 # Extensión de los archivos a compilar (c para C, cpp o cc o cxx para C++).
-EXT = cpp
+extension = cpp
 
 
 
 # CONFIGURACION "AVANZADA"
 ###########################
 
-
-
-# Opciones para el compilador C++.
+# Opciones para el compilador C/C++ en modo ansi.
 CFLAGS = -Wall -Werror -pedantic -pedantic-errors
 
+# Para que explote lo mas posible
+CFLAGS += -O3 -DNDEBUG
+
+# Para valgrind o debug
+CFLAGS += -ggdb -DDEBUG -fno-inline
+
+# Opciones del enlazador.
+#LDFLAGS =
+
+# Estandar de C a usar
+CSTD = c99
+
+# Estandar de C++ a usar
+CXXSTD = c++98
+
 # Archivo log de Valgrind.
-VGLOGFILE = $(DIR)valgrind.out
+VGLOGFILE = valgrind.out
 
 # Flags para el Valgrind
 VGFLAGS = --tool=memcheck --trace-children=yes --track-fds=yes --time-stamp=yes --num-callers=20 --error-exitcode=42 --db-attach=no --leak-check=full --leak-resolution=med --log-file=$(VGLOGFILE)
 
 
 
-# AUXILIARES
-#############
-
-MKDIR_P = mkdir -p
-LD := $(CC)
-
-
-
 # VARIABLES CALCULADAS A PARTIR DE LA CONFIGURACION
 ####################################################
+
+
+# Pongo flags de C para C++ también
+CXXFLAGS += $(CFLAGS)
+
+# Uso enlazador de c++ si es código no C.
+ifeq ($(extension), c)
+CFLAGS += -std=$(CSTD)
+LD = $(CC)
+else
+CXXFLAGS += -std=$(CXXSTD)
+LD = $(CXX)
+endif
+
+# Si no especifica archivos, tomo todos.
+fuentes ?= $(wildcard *.$(extension))
 
 occ := $(CC)
 ocxx := $(CXX)
 orm := $(RM)
 old := $(LD)
-mkd := $(MKDIR_P)
-
-CC =  @echo "  EXE  $@"; $(occ)
-CXX = @echo "  OBJ $@"; $(ocxx)
-RM =  @echo "  CLEAN"; $(orm)
-LD =  @echo "  OBJ  $@"; $(old)
-MKDIR_P = @echo "  MKD  $@"; $(mkd)
-
-
-# Corroboramos si se especifico un directorio y armamos la ruta definitiva
-ifdef BINDIR
-	DIR := $(BINDIR)/
+ifdef verbose
+RM := $(RM) -v
 else
-	DIR :=
+CC =  @echo "  CC  $@"; $(occ)
+CXX = @echo "  CXX $@"; $(ocxx)
+RM =  @echo "  CLEAN"; $(orm)
+LD =  @echo "  LD  $@"; $(old)
 endif
 
 
-# Fuentes y objetos (se toman todos los que se encuentren en el directorio)
-SRCS = $(wildcard *.$(EXT))
-OBJS = $(patsubst %.$(EXT),$(DIR)%.o,$(SRCS))
-
-
-# REGLAS GENERALES DEL MAKEFILE
-###############################
+# REGLAS
+#########
 
 .PHONY: all clean
 
-all: $(DIR) $(DIR)$(EXEC)
+all: $(target)
 
-$(DIR):
-		$(MKDIR_P) $(BINDIR)
+o_files = $(patsubst %.$(extension),%.o,$(fuentes))
 
-$(DIR)$(EXEC): $(OBJS)
-	$(CC) $(CC_FLAGS) -o $@ $^
-
-$(DIR)%.o: %.$(EXT)
-	$(LD) $(CC_FLAGS) -c -o $@ $<
-
-run:
-	./$(DIR)$(EXEC)
+$(target): $(o_files)
+	@if [ -z "$(o_files)" ]; \
+	then \
+		echo "No hay archivos de entrada, recuerde que la extensión debe ser '.$(extension)'."; \
+		false; \
+	fi >&2
+	$(LD) $(LDFLAGS) $(o_files) $(LOADLIBS) $(LDLIBS) -o $(target)
 
 clean:
-	$(RM) $(EXEC) $(OBJS) $(VGLOGFILE) -rf $(BINDIR)
-
-
-
-# REGLAS QUE INCLUYEN LA EJECUCION DEL Valgrind
-###############################################
+	$(RM) $(o_files) $(VGLOGFILE) $(target)
 
 valgrind:
-	valgrind $(VGFLAGS) ./$(DIR)$(EXEC)
-
-
-
-# REGLAS PARA LA EJECUCION DE PRUEBAS
-#####################################
-
+	valgrind $(VGFLAGS) ./$(target) 

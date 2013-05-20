@@ -25,23 +25,34 @@
 using namespace std;
 class BlockTable{
 	public:
-		BlockTable();	// Cuando se crea la tabla de bloques, se crea vacia.
+		BlockTable();	// Cuando se crea la tabla de bloques, se crea a partir del archivo.
+		~BlockTable();	// Cierro los archivos, libero la memoria pedida por blockReferences.
 		int insert(Reg&); // A su vez llama al insertar del bloque
-		int insertBlock(int blockReference);
-		int saveBlock(Block * aBlock); //Cuando agrego algo a un bloque lo tengo que guardar
-		int resizeTable(BlockTable&); //Duplica el tamanio de la tabla
-		int duplicateTable(BlockTable&); // copia la primera parte de la tabla, en la segunda
-		int search(Reg&); // Busca el registro atraves de la funcion hash
-		int open(char* fileName); //Abre el archivo donde tengo la tabla
-		int close(); // Lo cierra
-		int getSize(); //Devuelve el tamanio de la tabla
-	//	int getBlock(Block& aBlock , int blockAdress); //se copia al bloque en blockAdress en el bloque nuevo vacio aBlock
+		void insertBlock(int blockPos,int newBlockReference,int td); //En la posicion blockPos de la tabla pongo la nueva ref.
 
+		//Creo que no se usa
+		int saveBlock(Block * aBlock); //Cuando agrego algo a un bloque lo tengo que guardar
+		void duplicateTable();
+		int search(Reg&); // Busca el registro atraves de la funcion hash
+
+		//TODO:Hacer
+		int open(const char* fileName); //Abre el archivo donde tengo la tabla
+		int close(); // Lo cierra
+
+		int getSize(); //Devuelve el tamanio de la tabla
+		bool canAddBlock(Block* aBlock); //Tengo referencias libres? true significa que no hace falta duplicar
+		void redisperse(Block* anOldBlock,Block* aNewBlock); //redisperso los registros del bloque viejo al bloque nuevo
+		void hidratateBlockTable();
+		void prueba(Block*);
 	protected:
 		int size;
 		int *blockReferences;
-		const char* fileName; //El archivo va a ser siempre el mismo, configurable en momento de compilacion
-		ArchivoBloques* archivo;
+		fstream* archivo;
+
+	private:
+		struct Metadata{
+			list<Reg> regList;
+		};
 };
 
 #endif
