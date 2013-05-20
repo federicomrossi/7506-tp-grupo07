@@ -39,7 +39,7 @@ ArbolBmas::~ArbolBmas()
 	// Liberamos la memoria usada por el archivo
 	delete this->archivo;
 	// Liberamos la memoria usada para mantener la raiz en memoria
-	// delete this->raiz;
+	delete this->raiz;
 }
 
 
