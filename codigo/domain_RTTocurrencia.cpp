@@ -1,10 +1,13 @@
-#include "logica_RTTocurrencia.h"
-
+#include "domain_RTTocurrencia.h"
+#include <iostream>
 
 RTTocurrencia::RTTocurrencia(unsigned int palabraId, unsigned int documentoId, unsigned int position){
     this->palabraId=palabraId;
     this->documentoId=documentoId;
     this->position=position;
+}
+
+RTTocurrencia::RTTocurrencia(){
 }
 
 RTTocurrencia::~RTTocurrencia(){
@@ -31,4 +34,25 @@ unsigned int RTTocurrencia::getPalabraId() const{
 
 unsigned int RTTocurrencia::getPosition() const{
     return position;
+}
+
+std::ostream& operator << (std::ostream &out, RTTocurrencia &ocur){
+    unsigned int p = ocur.getPalabraId();
+    out.write((char*) &p,sizeof(unsigned int));
+    p = ocur.getDocumentoId();
+    out.write((char*) &p,sizeof(unsigned int));
+    p = ocur.getPosition();
+    out.write((char*) &p,sizeof(unsigned int));
+    return out;
+}
+
+std::istream& operator >> (std::istream &out, RTTocurrencia &ocur){
+    unsigned int p;
+    out.read((char*) &p,sizeof(unsigned int));
+    ocur.palabraId = p;
+    out.read((char*) &p,sizeof(unsigned int));
+    ocur.documentoId = p;
+    out.read((char*) &p,sizeof(unsigned int));
+    ocur.position = p;
+    return out;
 }
