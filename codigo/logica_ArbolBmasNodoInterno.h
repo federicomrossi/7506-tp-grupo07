@@ -209,7 +209,8 @@ template < size_t MAX_HOJA, size_t MAX_INTERNO >
 void NodoInterno< MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol)
 {
 	// Tabulamos de acuerdo al nivel
-	std::cout << std::string((nivelDelArbol - this->nivel), '\t');
+	int tabs = nivelDelArbol - this->nivel;
+	std::cout << std::string(tabs, '\t');
 	std::cout << this->nivel << ", " << this->numBloque << ": ";
 
 	// Iteramos sobre las claves

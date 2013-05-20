@@ -30,7 +30,7 @@ struct NodoHoja : public Nodo
 	// Referencia al nodo hermano
 	uint nodoHermano;
 	// Claves de registros
-	ListaFija< uint, MAX_INTERNO + 1 > claves;
+	ListaFija< uint, MAX_HOJA + 1 > claves;
 	// Lista de registros (se usa si es un nodo hoja)
 	ListaFija< RegistroGenerico, MAX_HOJA + 1 > registros;
 
@@ -74,6 +74,18 @@ template < size_t MAX_HOJA, size_t MAX_INTERNO >
 NodoHoja< MAX_HOJA, MAX_INTERNO >::NodoHoja()
 {
 	this->cantMaxClaves = MAX_HOJA;
+	this->nodoHermano = 0;
+
+	// // DEBUG LINES
+	// std::cout << "NODO HOJA" << std::endl;
+	// std::cout << "miembro: " << sizeof(this->numBloque) << std::endl;
+	// std::cout << "miembro: " << sizeof(this->nivel) << std::endl;
+	// std::cout << "miembro: " << sizeof(this->cantClaves) << std::endl;
+	// std::cout << "miembro: " << sizeof(this->cantMaxClaves) << std::endl;
+	// std::cout << "miembro: " << sizeof(this->nodoHermano) << std::endl;
+	// std::cout << "Lista fija 1: " << sizeof(this->claves) << std::endl;
+	// std::cout << "Lista fija 2: " << sizeof(this->registros) << std::endl;
+	// // END DEBUG LINES
 }
 
 
@@ -94,11 +106,18 @@ template < size_t MAX_HOJA, size_t MAX_INTERNO >
 bool NodoHoja< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave, 
 	RegistroGenerico& registro, ArchivoBloques *archivo, uint& contBloques)
 {
-	for(size_t i = 0; i < this->claves.tamanio(); i++)
+	for(size_t i = 0; i < this->claves.tamanio()+1; i++)
 	{
-		if(this->claves[i] == clave)
+		// Si esta vacia insertamos directamente
+		if(this->claves.estaVacia())
+		{
+			this->claves.insertarUltimo(clave);
+			this->registros.insertarUltimo(registro);
+			break;
+		}
+		// comprobamos que no hayan claves iguales
+		else if(this->claves[i] == clave)
 			throw "ERROR: Claves iguales en arbol.";
-
 		// Si la clave es mas grande que el actual, insertamos en ese lugar
 		else if(this->claves[i] > clave)
 		{
@@ -112,6 +131,7 @@ bool NodoHoja< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 		{
 			this->claves.insertarUltimo(clave);
 			this->registros.insertarUltimo(registro);
+			break;
 		}
 	}
 
@@ -144,6 +164,7 @@ uint NodoHoja< MAX_HOJA, MAX_INTERNO >::dividir(Nodo *nodoHermano)
 		this->registros.tamanio() - 1);
 
 	// Apuntamos al nodo hermano
+	nodoHojaHermano->nodoHermano = this->nodoHermano;
 	this->nodoHermano = nodoHojaHermano->numBloque;
 
 	// Actualizamos cantidad de claves en nodos
@@ -161,7 +182,8 @@ template < size_t MAX_HOJA, size_t MAX_INTERNO >
 void NodoHoja< MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol)
 {
 	// Tabulamos de acuerdo al nivel
-	std::cout << std::string((nivelDelArbol - this->nivel), '\t');
+	int tabs = nivelDelArbol - this->nivel;
+	std::cout << std::string(tabs, '\t');
 	std::cout << this->nivel << ", " << this->numBloque << ": ";
 
 	// Iteramos sobre las claves

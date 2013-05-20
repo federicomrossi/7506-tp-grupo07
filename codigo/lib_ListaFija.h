@@ -114,11 +114,8 @@ ListaFija< Tipo, Tamanio >::~ListaFija() { }
 template <typename Tipo, size_t Tamanio >
 void ListaFija< Tipo, Tamanio >::insertar(Tipo elemento, const size_t pos)
 {
-	// Corroboramos que no este vacia
-	if(this->estaVacia())
-		throw "ERROR: Lista vacia. No puede eliminarse el primer elemento.";
 	// Corroboramos que la posicion sea valida
-	else if(pos > this->tamanioParcial)
+	if(pos > this->tamanioParcial)
 		throw "ERROR: Posicion de lista inválido.";
 	// Corroboramos que no este llena
 	else if(this->estaLlena()) 
