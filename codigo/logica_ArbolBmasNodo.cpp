@@ -5,8 +5,21 @@
 
 
 #include "logica_ArbolBmasNodo.h"
-#include "domain_RegistroGenerico.h"
 #include "fisica_ArchivoBloques.h"
+#include "fisica_SerialBuffer.h"
+#include "domain_RegistroGenerico.h"
+
+
+
+/* ****************************************************************************
+ * CONSTANTES
+ * ***************************************************************************/
+
+namespace {
+
+	// Constantes para el buffer
+	const int BUFFER_TAMANIO = 512;
+}
 
 
 
@@ -16,13 +29,17 @@
 
 
 // Constructor
-Nodo::Nodo() { }
+Nodo::Nodo() 
+{
+	this->buffer = new SerialBuffer(BUFFER_TAMANIO);
+}
 
 
 // Destructor
 Nodo::~Nodo() 
 {
-
+	// Liberamos la memoria utilizada para el buffer de serializacion
+	delete this->buffer;
 }
 
 
@@ -34,6 +51,14 @@ void Nodo::inicializar(uint numBloque, uint nivel)
 	this->numBloque = numBloque;
 	this->nivel = nivel;
 	this->cantClaves = 0;
+}
+
+// Establece el numero de bloque del nodo. Se utiliza para setear
+// el numero de bloque de un nodo existente, previo a realizar la
+// carga de este a memoria.
+void Nodo::setNumBloque(uint numBloque)
+{
+	this->numBloque = numBloque;
 }
 
 

@@ -249,20 +249,36 @@ void ArbolBmas::cargarMetadata()
 	// Levantamos la metadata del archivo
 	this->archivo->leerBloque(this->buffer, NUM_BLOQUE_METADATA);
 
-	uint v1;
-	uint v2;
-	uint v3;
+	// Variables auxiliares para deserializacion
+	uint nivel;
+	uint contBloques;
+	uint bloqueRaiz;
 
 	// Deserializamos metadata del arbol
-	this->buffer->unpack(&v1);
-	this->buffer->unpack(&v2);
-	// uint bloqueRaiz;
-	this->buffer->unpack(&v3);
+	this->buffer->unpack(&nivel);
+	this->buffer->unpack(&contBloques);
+	this->buffer->unpack(&bloqueRaiz);
+
+	// Cargamos datos en atributos
+	this->nivel = nivel;
+	this->contBloques = contBloques;
+
+	// Cargamos la raiz
+	// Si el nivel es cero, la raiz es un nodo hoja, sino es nodo interno
+	if(this->nivel == 0)
+		this->raiz = new NodoHoja< CANT_REG_NODO_HOJA, CANT_REG_NODO_INTERNO >;
+	else
+		this->raiz = new NodoInterno< CANT_REG_NODO_HOJA, 
+				CANT_REG_NODO_INTERNO >;
+
+	// Seteamos el numero de bloque de la raiz y la leemos del archivo
+	this->raiz->setNumBloque(bloqueRaiz);
+	this->raiz->cargar(this->archivo);
 
 	// DEBUG LINES
-	std::cout << "UNPACK: " << v1 << " " << v2 << " " << v3 << std::endl;
+	std::cout << "UNPACK: " << nivel << " " << contBloques << " " 
+		<< bloqueRaiz << std::endl;
 	// END DEBUG LINES
-
 
 	// Cargamos datos en atributos
 	// this->nivel = metadata.nivel;
@@ -280,20 +296,21 @@ void ArbolBmas::guardarMetadata()
 	// Corroboramos que esté abierto el archivo
 	if(!this->archivo->estaAbierto()) return;
 
-	uint v1 = this->nivel;
-	uint v2 = this->contBloques;
-	uint v3 = this->raiz->getNumBloque();
+	uint nivel = this->nivel;
+	uint contBloques = this->contBloques;
+	uint bloqueRaiz = this->raiz->getNumBloque();
 
 	// Limpiamoss buffer
 	this->buffer->clear();
 
 	// Serializamos metadata del arbol
-	this->buffer->pack(&v1, sizeof(uint));
-	this->buffer->pack(&v2, sizeof(uint));
-	this->buffer->pack(&v3, sizeof(uint));
+	this->buffer->pack(&nivel, sizeof(uint));
+	this->buffer->pack(&contBloques, sizeof(uint));
+	this->buffer->pack(&bloqueRaiz, sizeof(uint));
 
 	// DEBUG LINES
-	std::cout << "PACK: " << v1 << " " << v2 << " " << v3 << std::endl;
+	std::cout << "PACK: " << nivel << " " << contBloques << " " 
+		<< bloqueRaiz << std::endl;
 	// END DEBUG LINES
 
 	// Escribimos metadata en archivo

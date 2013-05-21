@@ -10,6 +10,8 @@
 
 
 #include <string>
+#include "fisica_SerialBuffer.h"
+
 
 
 /* ****************************************************************************
@@ -87,6 +89,17 @@ public:
 	// tamaño de acuerdo a la cantidad de elementos que se transfirieron.
 	void transferir(ListaFija< Tipo, Tamanio >& lista, size_t pos_ini, 
 		size_t pos_fin);
+
+	// Serializa la lista.
+	// PRE: 'buffer' es el buffer en donde se serializara la lista para poder
+	// ser almacenada en algun medio.
+	void serializar(SerialBuffer *buffer);
+
+	// Deserializa una lista.
+	// PRE: 'buffer' es el buffer en donde se encuentra serializada la lista.
+	// POST: el estado de la lista se actualiza con los datos obtenidos del
+	// buffer.
+	void deserializar(SerialBuffer *buffer);
 };
 
 
@@ -265,5 +278,28 @@ void ListaFija< Tipo, Tamanio >::transferir(ListaFija< Tipo, Tamanio >& lista,
 		--this->tamanioParcial;
 	}
 }
+
+
+// Serializa la lista.
+// PRE: 'buffer' es el buffer en donde se serializara la lista para poder
+// ser almacenada en algun medio.
+template <typename Tipo, size_t Tamanio >
+void ListaFija< Tipo, Tamanio >::serializar(SerialBuffer *buffer)
+{
+	// Serializamos primero el tamanio y despues el arreglo
+}
+
+
+// Deserializa una lista.
+// PRE: 'buffer' es el buffer en donde se encuentra serializada la lista.
+// POST: el estado de la lista se actualiza con los datos obtenidos del
+// buffer.
+template <typename Tipo, size_t Tamanio >
+void ListaFija< Tipo, Tamanio >::deserializar(SerialBuffer *buffer)
+{
+	// deserializamos primero el tamanio para saber cuantos objetos
+	// debemos tomar del buffer
+}
+
 
 #endif
