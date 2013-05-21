@@ -29,6 +29,14 @@ Block::Block(int dispersionSize, int blockNum){
  * en un bloque yo tengo que agregar un registro, y ademas tengo que agregar ese bloque a la lista de bloques
  * */
 
+//TODO: emprolijar
+int Block::newBlockNum(const char* fileName){
+	ArchivoBloques* archivo = new ArchivoBloques(MAX_BLOCK_SIZE, fileName);
+	if (!archivo->estaAbierto())
+		archivo->abrirArchivo();
+	return archivo->ultimoBloque();
+
+}
 
 int Block::Insert(Reg & aReg){
 	//TODO: aReg.getSize() -> devuelve cualqiercosa, el size del reg es siempre REG_SIZE. DESHARDCODEAR
@@ -74,11 +82,9 @@ int Block::getBlockAdress(){
 }*/
 
 bool Block::easyInsert(Reg& aReg){
-	//TODO: aReg.getSize() -> devuelve cualqiercosa, el size del reg es siempre REG_SIZE. DESHARDCODEAR
-	cout << "\t\tregSize " << aReg.getSize() << " REG_SIZE " << REG_SIZE << " blockCurre " << this->blockCurrentSize << " MAX_BLOCK " << MAX_BLOCK_SIZE <<  endl;
-	//return (aReg.getSize()+ blockCurrentSize < MAX_BLOCK_SIZE);
+	cout << "\t\tregSize " << aReg.getSize()  << " blockCurre " << this->blockCurrentSize << " MAX_BLOCK " << MAX_BLOCK_SIZE <<  endl;
 	//TODO: tiene qeu ser menor o menor e igual?
-	return (REG_SIZE+ this->blockCurrentSize < MAX_BLOCK_SIZE);
+	return (aReg.getSize()+ this->blockCurrentSize <= MAX_BLOCK_SIZE);
 }
 
 void Block::setList(list<Reg> newRegList){

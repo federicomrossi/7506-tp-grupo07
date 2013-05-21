@@ -24,6 +24,8 @@
  #include <iostream>
  #include <fstream>
 
+using namespace std;
+
 template<class T>
 class SortExterno{
     public:
@@ -96,6 +98,7 @@ int SortExterno<T>::ordenar(){
     T** arrayPointer;
     //while (registrosCargados < num_registros)
     in.seekg(0,std::fstream::beg);
+
     while(!in.eof())
     {
         p = p + 1;

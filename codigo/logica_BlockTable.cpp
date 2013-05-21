@@ -46,9 +46,6 @@ int BlockTable::open(const char * fileName){
 	return 1;
 }
 
-void BlockTable::prueba(Block* aBlock){
-	cout<< "imprimo algo" << aBlock->getCurrentSize()<< endl;
-}
 
 //TODO: por que le paso un registro y no un id solo, osae, al crear un registro ya lo creo con un adres especifico, y si estoy buscando, no se ese adres
 int BlockTable::search(Reg& aReg){ // TODO: persistencia
@@ -66,19 +63,18 @@ int BlockTable::search(Reg& aReg){ // TODO: persistencia
 }
 
 int BlockTable::insert(Reg & aReg){
-	//TODO: ESTO ES UNA NEGRADA ! CAMBIAR -> tenes razon =D
 	//TODO: persistencia
 
 	int pos = HashExtensible::doHash(aReg.getId(),this->getSize());
-	int tmpBlockNumber = this->blockReferences[pos];
 
+	int tmpBlockNumber = this->blockReferences[pos];
 	string name=HASH_BLOCK_FILE;
 
-	cout << "\tpos "<< pos << " temp " << tmpBlockNumber << " dispersion " << this->getSize() << endl;
+	cout << "\tpos: "<< pos << " tempBlockNumber: " << tmpBlockNumber << " tamanio tabla:  " << this->getSize() << endl;
 	Block *tmpBlock = new Block(this->getSize(),tmpBlockNumber);
+	//cout << "ultimo bloque segun fede: "<< tmpBlock->newBlockNum(name.c_str())<< endl;
 
 	tmpBlock->read(name.c_str());
-
 
 	if (tmpBlock->easyInsert(aReg)){
 		cout << "\tentro al easy insert "<<endl;
@@ -87,25 +83,24 @@ int BlockTable::insert(Reg & aReg){
 	}
 	else {
 		cout << "\tNo es easyInsert " << endl;
-
-
 		if (! canAddBlock(tmpBlock)){
 			cout << "\t\tDuplico tabla" << endl;
 			duplicateTable();
 		}
-
 		// la posicion del nuevo bloque va a ser al final del archivo
-		int lastBlockNum=0; //TODO: el numero de bloque se guarda en otro archivo
 
-		cout << "\tdispersion viejo=" << tmpBlock->getDispersionSize() ;
-		Block * anotherBlock = new Block(tmpBlock->duplicateDispersionSize(),lastBlockNum+1); //HARDCODEADA CABEZA
-		cout << "dispersion new=" << tmpBlock->getDispersionSize()<<endl ;
+		//Con esto pasa las pruebas bien
+		//int lastBlockNum=0; //TODO: el numero de bloque se guarda en otro archivo
+		int lastBlockNum= tmpBlock->newBlockNum(name.c_str());
+		cout << "\tdispersion viejo= " << tmpBlock->getDispersionSize() ;
+		Block * anotherBlock = new Block(tmpBlock->duplicateDispersionSize(),lastBlockNum); //HARDCODEADA CABEZA
+		cout << "dispersion new= " << tmpBlock->getDispersionSize()<<endl ;
 
 		//si no tengo referencias repetidas tengo que duplicar la tabla
-		
-
 		cout << "\tinserto bloque" << endl;
-		insertBlock(pos,lastBlockNum+1,tmpBlock->getDispersionSize());
+		insertBlock(pos,lastBlockNum,tmpBlock->getDispersionSize());
+
+		//Estos 2 no andan...
 
 		cout << "\tredisperso" << endl;
 		redisperse(tmpBlock,anotherBlock);
@@ -127,16 +122,22 @@ int BlockTable::getSize(){
 }
 
 bool BlockTable::canAddBlock(Block* aBlock){
-	cout << "\t\t disperscionBlock=" << aBlock->getDispersionSize() << " getSize" << this->getSize() << endl;
+	cout << "\t\t disperscionBlock=" << aBlock->getDispersionSize() << "  " << this->getSize() << endl;
 	return (aBlock->getDispersionSize()!=this->getSize());
 }
 
-void BlockTable::insertBlock(int blockPos,int newBlockPos,int td){
+void BlockTable::insertBlock(int blockPos,int newBlockNum,int td){
+	cout << " estoy insertando bloque: "<<endl;
+	cout << " blockPos: "<<blockPos<<endl;
+	cout << " newBlockPos: "<<newBlockNum<<endl;
+
 	for (int i = blockPos; i < this->getSize(); i+=td) {
-		blockReferences[i]=newBlockPos;
+		blockReferences[i]=newBlockNum;
+		cout << "en la pos: "<< i<<" de blockReference tengo: "<< blockReferences[i]<<endl;
 	}
 	for (int i = blockPos-td; i >= 0; i-=td) {
-		blockReferences[i]=newBlockPos;
+		blockReferences[i]=newBlockNum;
+		cout << "en la pos: "<< i<<" de blockReference tengo: "<< blockReferences[i]<<endl;
 	}
 }
 
@@ -166,7 +167,7 @@ void BlockTable::redisperse(Block* anOldBlock, Block* aNewBlock){
 void BlockTable::duplicateTable(){
 	int newBlockTableSize = size *2;
 	int *tmpBlockReference = new int [newBlockTableSize];
-	for (int i = 0; i < size ; i++) {
+	for (int i = 0; i <= size ; i++) {
 		tmpBlockReference[i] = blockReferences[i];
 		tmpBlockReference[2*i] = blockReferences[i];
 	}

@@ -8,8 +8,9 @@
 #define ARBOLBMAS_NODO_H
 
 
-class RegistroGenerico;
 class ArchivoBloques;
+class SerialBuffer;
+class RegistroGenerico;
 
 // Definicion de tipo uint para utilizar nombre mas corto
 typedef unsigned int uint; 
@@ -24,12 +25,11 @@ typedef unsigned int uint;
 
 struct Nodo
 {
-	uint numBloque;							// Numero de bloque del nodo
-	uint nivel;								// Nivel en el que se 
-											// encuentra el nodo
-	uint cantClaves;						// Cantidad actual de claves
-	uint cantMaxClaves;						// Cantidad maxima de claves
-											// permitidas
+	SerialBuffer *buffer;			// Buffer utilizado para serializacion
+	uint numBloque;					// Numero de bloque del nodo
+	uint nivel;						// Nivel en el que se encuentra el nodo
+	uint cantClaves;				// Cantidad actual de claves
+	uint cantMaxClaves;				// Cantidad maxima de claves permitidas
 
 	// Constructor
 	Nodo();
@@ -42,7 +42,12 @@ struct Nodo
 	// almacenado; 'nivel' es el nivel en el que se encuentra el nodo.
 	void inicializar(uint numBloque, uint nivel);
 
-	// Devuelve el numero de bloque en el que se encuentra el nodo
+	// Establece el numero de bloque del nodo. Se utiliza para setear
+	// el numero de bloque de un nodo existente, previo a realizar la
+	// carga de este a memoria.
+	void setNumBloque(uint numBloque);
+
+	// Devuelve el numero de bloque en el que se encuentra el nodo.
 	uint getNumBloque();
 
 	// Inserta el registro en el nodo.
@@ -59,6 +64,17 @@ struct Nodo
 	// POST: devuelve la clave del registro inferior de 'nodoHermano'
 	virtual uint dividir(Nodo *nodoHermano) = 0;
 
+	// Carga el nodo desde un archivo.
+	// PRE: 'archivo' es donde se almacena el nodo que se desea cargar, el
+	// cual se encuentra en el numero de bloque con el que fue inicializado.
+	// POST: se han cargado todos los atributos internos del nodo
+	virtual void cargar(ArchivoBloques *archivo) = 0;
+
+	// Guarda el nodo en un archivo.
+	// PRE: 'archivo' es donde se almacenaran los datos del nodo, los cuales
+	// se guardaran en el numero de bloque con el cual fue inicializado.
+	// POST: se guardo el estado del nodo en el archivo.
+	virtual void guardar(ArchivoBloques *archivo) = 0;
 
 	// Se imprime el nodo en la salida estandar con su contenido
 	virtual void imprimir(uint& nivelDelArbol) = 0;

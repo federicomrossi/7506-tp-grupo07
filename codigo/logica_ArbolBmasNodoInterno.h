@@ -56,6 +56,17 @@ struct NodoInterno : public Nodo
 	// POST: devuelve la clave del registro inferior de 'nodoHermano'
 	virtual uint dividir(Nodo *nodoHermano);
 
+	// Carga el nodo desde un archivo.
+	// PRE: 'archivo' es donde se almacena el nodo que se desea cargar, el
+	// cual se encuentra en el numero de bloque con el que fue inicializado.
+	// POST: se han cargado todos los atributos internos del nodo
+	virtual void cargar(ArchivoBloques *archivo);
+
+	// Guarda el nodo en un archivo.
+	// PRE: 'archivo' es donde se almacenaran los datos del nodo, los cuales
+	// se guardaran en el numero de bloque con el cual fue inicializado.
+	// POST: se guardo el estado del nodo en el archivo.
+	virtual void guardar(ArchivoBloques *archivo);
 
 	// Se imprime el nodo en la salida estandar con su contenido
 	// FORMATO: "[nivel], [numero_bloque]: [hijo1]([clave1])..[hijoN]([claveN])
@@ -202,6 +213,28 @@ uint NodoInterno< MAX_HOJA, MAX_INTERNO >::dividir(Nodo *nodoHermano)
 }
 
 
+// Carga el nodo desde un archivo.
+// PRE: 'archivo' es donde se almacena el nodo que se desea cargar, el
+// cual se encuentra en el numero de bloque con el que fue inicializado.
+// POST: se han cargado todos los atributos internos del nodo
+template < size_t MAX_HOJA, size_t MAX_INTERNO >
+void NodoInterno< MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
+{
+
+}
+
+
+// Guarda el nodo en un archivo.
+// PRE: 'archivo' es donde se almacenaran los datos del nodo, los cuales
+// se guardaran en el numero de bloque con el cual fue inicializado.
+// POST: se guardo el estado del nodo en el archivo.
+template < size_t MAX_HOJA, size_t MAX_INTERNO >
+void NodoInterno< MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
+{
+
+}
+
+
 // Se imprime el nodo en la salida estandar con su contenido
 // FORMATO: "[nivel], [numero_bloque]: [hijo1]([clave1])...[hijoN]([claveN])
 // [hijoN+1] 
@@ -209,7 +242,8 @@ template < size_t MAX_HOJA, size_t MAX_INTERNO >
 void NodoInterno< MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol)
 {
 	// Tabulamos de acuerdo al nivel
-	std::cout << std::string((nivelDelArbol - this->nivel), '\t');
+	int tabs = nivelDelArbol - this->nivel;
+	std::cout << std::string(tabs, '\t');
 	std::cout << this->nivel << ", " << this->numBloque << ": ";
 
 	// Iteramos sobre las claves
