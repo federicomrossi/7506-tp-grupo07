@@ -9,15 +9,9 @@
 
 
 class SerialBuffer;
-#include <stack>
-#include "fisica_ArchivoBloques.h"
-#include "logica_ArbolBmasNodo.h"
-#include "logica_ArbolBmasNodoHoja.h"
-#include "logica_ArbolBmasNodoInterno.h"
-#include "domain_RegistroGenerico.h"
-#include "lib_ListaFija.h"
-
-
+class ArchivoBloques;
+class Nodo;
+class RegistroGenerico;
 
 // Definicion de tipo uint para utilizar nombre mas corto
 typedef unsigned int uint; 
@@ -48,16 +42,6 @@ class ArbolBmas
 {
 
 private:
-
-	// Estructura con informacion del arbol. 
-	// Se utiliza solamente para almacenar o para levantar los metadatos del
-	// arbol desde un archivo
-	struct Metadata {
-		uint raiz;					// Bloque en el que se encuentra la raiz
-		uint nivel;					// Contador del nivel actual del árbol
-		uint contBloques;			// Contador de bloques existentes
-	};
-
 
 	ArchivoBloques *archivo;		// Archivo donde se almacena
 	SerialBuffer *buffer;			// Buffer utilizado para serializacion

@@ -4,9 +4,14 @@
 //
 
 
-
 #include "logica_ArbolBmas.h"
 #include "fisica_SerialBuffer.h"
+#include "fisica_ArchivoBloques.h"
+#include "logica_ArbolBmasNodo.h"
+#include "logica_ArbolBmasNodoHoja.h"
+#include "logica_ArbolBmasNodoInterno.h"
+#include "domain_RegistroGenerico.h"
+
 
 
 
@@ -254,8 +259,9 @@ void ArbolBmas::cargarMetadata()
 	// uint bloqueRaiz;
 	this->buffer->unpack(&v3);
 
-
+	// DEBUG LINES
 	std::cout << "UNPACK: " << v1 << " " << v2 << " " << v3 << std::endl;
+	// END DEBUG LINES
 
 
 	// Cargamos datos en atributos
@@ -273,12 +279,6 @@ void ArbolBmas::guardarMetadata()
 {
 	// Corroboramos que esté abierto el archivo
 	if(!this->archivo->estaAbierto()) return;
-
-	// // Creamos la metadata a almacenar
-	// Metadata metadata;
-	// metadata.raiz = this->raiz->getNumBloque();
-	// metadata.nivel = this->nivel;
-	// metadata.contBloques = this->contBloques;
 
 	uint v1 = this->nivel;
 	uint v2 = this->contBloques;
@@ -299,16 +299,4 @@ void ArbolBmas::guardarMetadata()
 	// Escribimos metadata en archivo
 	this->archivo->escribirBloque(this->buffer, NUM_BLOQUE_METADATA, 
 		sizeof(*buffer));
-
-	
-
-	// this->archivo->leerBloque(this->buffer, NUM_BLOQUE_METADATA);
-
-	// uint v4, v5, v6;
-
-	// this->buffer->unpack(&v4);
-	// this->buffer->unpack(&v5);
-	// this->buffer->unpack(&v6);
-
-	// std::cout << "UNPACK: " << v4 << " " << v5 << " " << v6 << std::endl;
 }

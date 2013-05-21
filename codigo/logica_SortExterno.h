@@ -23,6 +23,8 @@
  #include <sstream>
  #include <iostream>
 
+using namespace std;
+
 template<class T>
 class SortExterno{
     public:
@@ -56,7 +58,7 @@ int SortExterno<T>::ordenar(){
     in.open((this->file).c_str(), std::ios::binary);
     if(in.fail())
     {
-       std::cout << "Error al abrir el archivo desordenado." << endl;
+       std::cout << "Error al abrir el archivo desordenado." << std::endl;
        return 1;
     }
 
@@ -67,7 +69,7 @@ int SortExterno<T>::ordenar(){
 
     //long posicion;
     //calculamos el número de registros
-    in.seekg(0,ios::end); //nos posicionamos al final del fichero
+    in.seekg(0,std::ios::end); //nos posicionamos al final del fichero
 
     unsigned int cant_registros;
     //unsigned int totalbytes;
@@ -94,7 +96,7 @@ int SortExterno<T>::ordenar(){
     T *array;
     T** arrayPointer;
     //while (registrosCargados < num_registros)
-    in.seekg(0,ios::beg);
+    in.seekg(0,std::ios::beg);
     while(!in.eof())
     {
         p = p + 1;
@@ -106,7 +108,7 @@ int SortExterno<T>::ordenar(){
         //data = new char[tamanyo*cant_registros];
         if(array == NULL)
         {
-           cout << "Error en la asignación de memoria\n";
+           std::cout << "Error en la asignación de memoria\n";
            return 1;
         }
 
@@ -153,7 +155,7 @@ int SortExterno<T>::ordenar(){
         out.open(s2.str().c_str(), std::fstream::app);
         if(out.fail())
         {
-           std::cout << "Error al crear el archivo de salida." << endl;
+           std::cout << "Error al crear el archivo de salida." << std::endl;
            return 1;
         }
 
