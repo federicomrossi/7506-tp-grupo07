@@ -31,7 +31,7 @@ public:
     int unpack(void* object);
     unsigned short int getBuffSize();
     
-private:
+protected:
     unsigned short int bufferSize;
     unsigned short int maxSize;
     char* buffer;
