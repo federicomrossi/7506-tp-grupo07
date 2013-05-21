@@ -12,10 +12,14 @@ Indexer::Indexer(){
     fromPath="/home/pablo/tpDatos/7506-tp-grupo07/temas";
     destPath="/home/pablo/tpDatos/dest/";
     rtt = new RTTgenerator(destPath);
+    autores = new IndiceAutor(destPath);
+    titulos =  new IndiceTitulo(destPath);
 }
 
 Indexer::~Indexer(){
     delete rtt;
+    delete autores;
+    delete titulos;
 }
 
 int Indexer::eliminarTodo(){
@@ -48,6 +52,8 @@ int Indexer::indexarCancionesDesde(int mode){
             }
         }
     }
+    autores->pack();
+    titulos->pack();
     rtt->pack();
     if(mode){
         //COSAS DE APPEND
@@ -84,23 +90,19 @@ int Indexer::copyToMaster(std::string from, std::string to){
 }
 
 int Indexer::indexarAutores(std::string header, unsigned int songPosition){
-    std::list<std::string>* autores = new std::list<std::string>;
-    Utils::getAutoresFromHeader(header,autores);
+    std::list<std::string>* autoresLista = new std::list<std::string>;
+    Utils::getAutoresFromHeader(header,autoresLista);
     std::list<std::string>::iterator it;
-    IndiceAutor *indiceA = new IndiceAutor;
-    for(it = autores->begin(); it != autores->end();it++){
-        indiceA->agregar(songPosition,*it);
+    for(it = autoresLista->begin(); it != autoresLista->end();it++){
+        this->autores->agregar(songPosition,*it);
     }
-    delete autores;
-    delete indiceA;
+    delete autoresLista;
     return 0;
 }
 
 int Indexer::indexarTitulo(std::string header, unsigned int songPosition){
     std::string titulo = Utils::getTituloFromHeader(header);
-    IndiceTitulo *indiceT = new IndiceTitulo;
-    indiceT->agregar(songPosition,titulo);
-    delete indiceT;
+    titulos->agregar(songPosition,titulo);
     return 0;
 }
 

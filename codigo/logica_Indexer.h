@@ -20,8 +20,8 @@ class Indexer{
         int indexarTitulo(std::string header, unsigned int songPosition);
         int generateRTT(std::string songPath, unsigned int songPosition);
         IndicePrimario *primario;
-        IndiceAutor *indiceAutor;
-        IndiceTitulo *indiceTitulo;
+        IndiceAutor *autores;
+        IndiceTitulo *titulos;
         RTTgenerator *rtt;
         std::string fromPath;
         std::string destPath;

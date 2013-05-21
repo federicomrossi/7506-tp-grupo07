@@ -6,13 +6,13 @@ using namespace std;
 
 int main()
 {
-    ArbolBmas arbol;
-    arbol.abrir("aaa");
+    //ArbolBmas arbol;
+    //arbol.abrir("aaa");
     std::cout << "Volvio" << std::endl;
-    arbol.cerrar();
+    //arbol.cerrar();
 
-    // Menu *m = new Menu;
-    // while(m->start());
-    // delete m;
+    Menu *m = new Menu;
+    while(m->start());
+    delete m;
     return 0;
 }

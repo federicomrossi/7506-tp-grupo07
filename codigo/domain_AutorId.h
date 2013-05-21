@@ -6,8 +6,9 @@
 
 class AutorId : public Comparable {
     public:
-        AutorId(char* autor, unsigned int id);
-        ~AutorId();
+        AutorId(const char* autor, unsigned int id);
+        AutorId();
+        virtual ~AutorId();
         virtual int comparar(Comparable *c) const;
         unsigned int getId() const;
         const char* getAutor() const;
