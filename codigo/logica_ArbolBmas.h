@@ -77,7 +77,7 @@ public:
 	// PRE: 'clave' es la clave o id con el que se identifica el registro;
 	// 'registro' es el registro que se desea ingresar, el cual debe ser un
 	// RegistroGenerico
-	void insertar(const uint clave, RegistroGenerico& registro);
+	void insertar(uint clave, RegistroGenerico& registro);
 
 	// Busca un registro en el arbol
 	// PRE: 'clave' es la clave o id que identifica al registro a buscar;
@@ -87,6 +87,11 @@ public:
 	// 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
 	// en 'registro' el registro superior mas proximo al buscado.
 	bool buscar(const uint clave, RegistroGenerico& registro);
+
+	// Imprime el arbol sobre la salida estandar. Las tabulaciones indican
+	// el nivel, siendo el nivel cero aquel que se encuentra con la mayor
+	// tabulacion.
+	void imprimir();
 
 	// Cierra el archivo si se encuentra abierto
 	void cerrar();

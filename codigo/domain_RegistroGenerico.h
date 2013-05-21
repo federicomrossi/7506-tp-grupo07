@@ -8,6 +8,9 @@
 #define REGISTRO_BENERICO_H
 
 
+#include "fisica_SerialBuffer.h"
+
+
 
 /* ****************************************************************************
  * DEFINICION DE LA CLASE
@@ -31,6 +34,17 @@ public:
 
 	// Devuelve el identificador (clave) del registro
 	unsigned int getClave() { return this->clave; }
+
+	// Serializa el registro.
+	// PRE: 'buffer' es el buffer en donde se serializara el registro para 
+	// poder ser almacenada en algun medio.
+	void serializar(SerialBuffer *buffer);
+
+	// Deserializa una lista.
+	// PRE: 'buffer' es el buffer en donde se encuentra serializado el registro
+	// POST: el estado del registro se actualiza con los datos obtenidos del
+	// buffer.
+	void deserializar(SerialBuffer *buffer);
 };
 
 #endif

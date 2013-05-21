@@ -191,15 +191,55 @@ void ArbolBmas::abrir(const char* nombre_archivo)
 // PRE: 'clave' es la clave o id con el que se identifica el registro;
 // 'registro' es el registro que se desea ingresar, el cual debe ser un
 // RegistroGenerico
-void ArbolBmas::insertar(const uint clave, RegistroGenerico& registro)
+void ArbolBmas::insertar(uint clave, RegistroGenerico& registro)
 {
 	// Corroboramos que se haya creado el arbol
 	if(!this->archivo)
 		throw "ArbolBmas::insertar() ERROR: no se ha abierto el arbol";
 
-	// if(!this->raiz->insertar(clave, registro, this->archivo, 
-	// 	this->contBloques)) return;
+	// Insertamos. Si no hubo overflow, retornamos
+	if(!this->raiz->insertar(clave, registro, this->archivo, 
+		this->contBloques)) return;
 
+	// Hubo overflow, pasamos a partir la raiz y generar una nueva raiz.
+	Nodo *nuevoHermano;
+
+	if(this->nivel == 0)
+		nuevoHermano = new NodoHoja< CANT_REG_NODO_HOJA, 
+			CANT_REG_NODO_INTERNO >;
+	else
+		nuevoHermano = new NodoInterno< CANT_REG_NODO_HOJA, 
+			CANT_REG_NODO_INTERNO >;
+
+	NodoInterno< CANT_REG_NODO_HOJA, CANT_REG_NODO_INTERNO > *nuevaRaiz = 
+		new NodoInterno< CANT_REG_NODO_HOJA, CANT_REG_NODO_INTERNO >;
+
+	// Inicializamos al nuevo hermano
+	this->contBloques++;
+	nuevoHermano->inicializar(this->contBloques, this->nivel);
+
+	// Inicializamos a la nueva raiz
+	this->contBloques++;
+	this->nivel++;
+	nuevaRaiz->inicializar(this->contBloques, this->nivel);
+
+	// Dividimos al nodo
+	uint claveQueSube = this->raiz->dividir(nuevoHermano);
+
+	// Insertamos clave e hijos en la nueva raiz
+	nuevaRaiz->insertarHijosIniciales(claveQueSube, 
+		this->raiz->getNumBloque(), nuevoHermano->getNumBloque());
+
+	// Escribimos los nodos
+	nuevaRaiz->guardar(this->archivo);
+	nuevoHermano->guardar(this->archivo);
+	this->raiz->guardar(this->archivo);
+
+	delete this->raiz;
+	delete nuevoHermano;
+	
+	// Guardamos en el arbol la nueva raiz
+	this->raiz = nuevaRaiz;
 }
 
 
@@ -218,6 +258,15 @@ void ArbolBmas::insertar(const uint clave, RegistroGenerico& registro)
 
 // 	return false;
 // }
+
+
+// Imprime el arbol sobre la salida estandar. Las tabulaciones indican
+// el nivel, siendo el nivel cero aquel que se encuentra con la mayor
+// tabulacion.
+void ArbolBmas::imprimir()
+{
+	this->raiz->imprimir(this->nivel, this->archivo);
+}
 
 
 // Cierra el archivo si se encuentra abierto

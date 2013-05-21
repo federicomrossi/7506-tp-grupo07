@@ -77,7 +77,7 @@ struct Nodo
 	virtual void guardar(ArchivoBloques *archivo) = 0;
 
 	// Se imprime el nodo en la salida estandar con su contenido
-	virtual void imprimir(uint& nivelDelArbol) = 0;
+	virtual void imprimir(uint& nivelDelArbol, ArchivoBloques *archivo) = 0;
 };
 
 #endif

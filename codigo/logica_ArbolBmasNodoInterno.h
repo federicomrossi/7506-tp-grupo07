@@ -51,6 +51,13 @@ struct NodoInterno : public Nodo
 	virtual bool insertar(uint& clave, RegistroGenerico& registro, 
 		ArchivoBloques *archivo, uint& contBloques);
 
+	// Agrega una primer clave al nodo con sus respectivos hijos. Sirve
+	// para inicializar un nuevo nodo luego de dividir nodos hijos.
+	// PRE: 'clave' es la clave que tendra los hijos; 
+	// POST: Se agregaron la clave y los hijos al nodo.
+	void insertarHijosIniciales(uint clave, uint numBloqueIzq, 
+		uint numBloqueDer);
+
 	// Reparte su contenido con su nodoHermano, pasandole la mitad.
 	// PRE: 'nodoHermano' es un nodo con el que se hara la division
 	// POST: devuelve la clave del registro inferior de 'nodoHermano'
@@ -71,7 +78,7 @@ struct NodoInterno : public Nodo
 	// Se imprime el nodo en la salida estandar con su contenido
 	// FORMATO: "[nivel], [numero_bloque]: [hijo1]([clave1])..[hijoN]([claveN])
 	// [hijoN+1] 
-	virtual void imprimir(uint& nivelDelArbol);
+	virtual void imprimir(uint& nivelDelArbol, ArchivoBloques *archivo);
 };
 
 
@@ -180,6 +187,20 @@ bool NodoInterno< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 }
 
 
+// Agrega una primer clave al nodo con sus respectivos hijos. Sirve
+// para inicializar un nuevo nodo luego de dividir nodos hijos.
+// PRE: 'clave' es la clave que tendra los hijos; 
+// POST: Se agregaron la clave y los hijos al nodo.
+template < size_t MAX_HOJA, size_t MAX_INTERNO >
+void NodoInterno< MAX_HOJA, MAX_INTERNO >::insertarHijosIniciales(uint clave,
+		uint numBloqueIzq, uint numBloqueDer)
+{
+	this->claves.insertarUltimo(clave);
+	this->hijos.insertarUltimo(numBloqueIzq);
+	this->hijos.insertarUltimo(numBloqueDer);
+}
+
+
 // Reparte su contenido con su nodoHermano, pasandole la mitad.
 // PRE: 'nodoHermano' es un nodo con el que se hara la division
 // POST: devuelve la clave del registro inferior de 'nodoHermano'
@@ -239,7 +260,8 @@ void NodoInterno< MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
 // FORMATO: "[nivel], [numero_bloque]: [hijo1]([clave1])...[hijoN]([claveN])
 // [hijoN+1] 
 template < size_t MAX_HOJA, size_t MAX_INTERNO >
-void NodoInterno< MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol)
+void NodoInterno< MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol, 
+	ArchivoBloques *archivo)
 {
 	// Tabulamos de acuerdo al nivel
 	int tabs = nivelDelArbol - this->nivel;
@@ -249,11 +271,28 @@ void NodoInterno< MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol)
 	// Iteramos sobre las claves
 	for(size_t i = 0; i < this->claves.tamanio(); i++)
 	{
+		std::cout << this->hijos[i];
 		std::cout << "(" << this->claves[i] << ")";
-		std::cout << this->hijos[i] << "(" << this->claves[i] << ")";
 	}
 
-	std::cout << this->hijos[this->hijos.tamanio() - 1] << std::endl; 
+	std::cout << this->hijos[this->hijos.tamanio() - 1] << std::endl;
+
+	// Imprimimos hijos
+	for(size_t i = 0; i < this->hijos.tamanio(); i++)
+	{
+		Nodo* hijo = 0;
+
+		if(this->nivel == 1)
+			hijo = new NodoHoja< MAX_HOJA, MAX_INTERNO >;
+		else
+			hijo = new NodoInterno< MAX_HOJA, MAX_INTERNO >;
+
+		hijo->setNumBloque(this->hijos[i]);
+		hijo->cargar(archivo);
+		hijo->imprimir(nivelDelArbol, archivo);
+
+		delete hijo;
+	}
 }
 
 #endif

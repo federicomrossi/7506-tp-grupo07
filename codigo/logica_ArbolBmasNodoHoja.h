@@ -69,7 +69,7 @@ struct NodoHoja : public Nodo
 
 	// Se imprime el nodo en la salida estandar con su contenido.
 	// FORMATO: "[nivel], [numero_bloque]: ([clave1])..([claveN])[nodo_hermano]
-	virtual void imprimir(uint& nivelDelArbol);
+	virtual void imprimir(uint& nivelDelArbol, ArchivoBloques *archivo);
 };
 
 
@@ -201,7 +201,8 @@ void NodoHoja< MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
 // Se imprime el nodo en la salida estandar con su contenido.
 // FORMATO: "[nivel], [numero_bloque]: ([clave1])...([claveN])[nodo_hermano] 
 template < size_t MAX_HOJA, size_t MAX_INTERNO >
-void NodoHoja< MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol)
+void NodoHoja< MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol, 
+	ArchivoBloques *archivo)
 {
 	// Tabulamos de acuerdo al nivel
 	int tabs = nivelDelArbol - this->nivel;
