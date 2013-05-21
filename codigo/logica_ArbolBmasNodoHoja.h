@@ -75,17 +75,6 @@ NodoHoja< MAX_HOJA, MAX_INTERNO >::NodoHoja()
 {
 	this->cantMaxClaves = MAX_HOJA;
 	this->nodoHermano = 0;
-
-	// // DEBUG LINES
-	// std::cout << "NODO HOJA" << std::endl;
-	// std::cout << "miembro: " << sizeof(this->numBloque) << std::endl;
-	// std::cout << "miembro: " << sizeof(this->nivel) << std::endl;
-	// std::cout << "miembro: " << sizeof(this->cantClaves) << std::endl;
-	// std::cout << "miembro: " << sizeof(this->cantMaxClaves) << std::endl;
-	// std::cout << "miembro: " << sizeof(this->nodoHermano) << std::endl;
-	// std::cout << "Lista fija 1: " << sizeof(this->claves) << std::endl;
-	// std::cout << "Lista fija 2: " << sizeof(this->registros) << std::endl;
-	// // END DEBUG LINES
 }
 
 

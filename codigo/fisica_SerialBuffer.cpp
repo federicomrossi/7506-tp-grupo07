@@ -6,7 +6,10 @@
 //  Copyright (c) 2013 Federico Colangelo. All rights reserved.
 //
 
+
 #include "fisica_SerialBuffer.h"
+#include <string.h>
+
 
 SerialBuffer::SerialBuffer(unsigned int maxSize) : VarBuffer(maxSize)
 {

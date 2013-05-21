@@ -8,6 +8,7 @@
 #define ARBOLBMAS_H
 
 
+class SerialBuffer;
 #include <stack>
 #include "fisica_ArchivoBloques.h"
 #include "logica_ArbolBmasNodo.h"
@@ -58,10 +59,11 @@ private:
 	};
 
 
-	ArchivoBloques *archivo;				// Archivo donde se almacena
-	Nodo *raiz;								// Nodo de la raiz
-	uint nivel;								// Contador del nivel actual
-	uint contBloques;						// Contador de bloques existentes
+	ArchivoBloques *archivo;		// Archivo donde se almacena
+	SerialBuffer *buffer;			// Buffer utilizado para serializacion
+	Nodo *raiz;						// Nodo de la raiz
+	uint nivel;						// Contador del nivel actual
+	uint contBloques;				// Contador de bloques existentes
 
 
 	// Carga la metadata del arbol desde el archivo.
