@@ -7,6 +7,7 @@ using namespace std;
 
 int main()
 {
+<<<<<<< HEAD
     ArbolBmas arbol;
     arbol.abrir("aaa");
 
@@ -32,11 +33,15 @@ int main()
     	std::cout << e << std::endl;
     }
 
+=======
+    //ArbolBmas arbol;
+    //arbol.abrir("aaa");
+>>>>>>> 7f70581c25e38c7da24a315ae01546e33faa1f8b
     std::cout << "Volvio" << std::endl;
-    arbol.cerrar();
+    //arbol.cerrar();
 
-    // Menu *m = new Menu;
-    // while(m->start());
-    // delete m;
+    Menu *m = new Menu;
+    while(m->start());
+    delete m;
     return 0;
 }

@@ -69,10 +69,10 @@ int RTTgenerator::guardarOcurrencia(RTTocurrencia* ocur){
 
 int RTTgenerator::pack(){
     SortExterno<RTTocurrencia>* sort = new SortExterno<RTTocurrencia>(this->temporalOcurrencias,4096);
-    this->printOcurrencias();
-    std::cout << "ORDENANDO" << endl;
+    //this->printOcurrencias();
+    //std::cout << "ORDENANDO" << endl;
     sort->ordenar();
-    this->printOcurrencias();
+    //this->printOcurrencias();
     return  0;
 }
 
@@ -80,9 +80,10 @@ int RTTgenerator::printOcurrencias(){
     std::ifstream file;
     file.open(temporalOcurrencias.c_str(), std::fstream::binary);
     RTTocurrencia* o = new RTTocurrencia;
+    file >> *o;
     while(!file.eof()){
-        file >> *o;
         std::cout << "(" << o->getPalabraId() << "," << o->getDocumentoId() << "," << o->getPosition() << ")";
+        file >> *o;
     }
     file.close();
     return 0;
