@@ -43,3 +43,26 @@ int ArchivoBloques::leerBloque(char *buffer, unsigned int numeroBloque)
     return 0;
 }
 
+bool ArchivoBloques::existe()
+{
+    std::ifstream file;
+    file.open(this->filename.c_str());
+    bool existe = file.good();
+    file.close();
+    return existe;
+}
+
+int ArchivoBloques::ultimoBloque()
+{
+    std::ifstream file;
+    if (!this->existe()) {
+        std::cerr<<"El arhcivo no existe"<<std::endl;
+        return -1;
+    }
+    
+    file.open(this->filename.c_str());
+    file.seekg(0,std::ios_base::end);
+    int ultimoBloque=(file.tellg()/this->blockSize)-1;
+    return ultimoBloque;
+}
+
