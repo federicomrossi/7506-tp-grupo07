@@ -30,6 +30,7 @@ public:
     int pack(const void* object, unsigned short int size);
     int unpack(void* object);
     unsigned short int getBuffSize();
+    char* getBuffer();
     
 protected:
     unsigned short int bufferSize;

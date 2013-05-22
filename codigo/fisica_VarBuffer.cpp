@@ -114,5 +114,7 @@ unsigned short int VarBuffer::getBuffSize()
     
 }
 
-
-
+char* VarBuffer::getBuffer()
+{
+    return this->buffer;
+}
