@@ -40,6 +40,10 @@ public:
      */
     int leerBloque(char* buffer, unsigned int numeroBloque);
     
+    bool existe();
+    
+    int ultimoBloque();
+    
     
     
 private:
