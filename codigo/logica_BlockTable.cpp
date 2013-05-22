@@ -56,16 +56,16 @@ void BlockTable::write(){
 }
 
 //TODO: por que le paso un registro y no un id solo, osae, al crear un registro ya lo creo con un adres especifico, y si estoy buscando, no se ese adress!
-int BlockTable::search(Reg& aReg){ // TODO: persistencia
+int BlockTable::search(Reg& aReg){
 	int pos=HashExtensible::doHash(aReg.getId(),this->getSize());
 	
 	int blockNumber=this->blockReferences[pos];
 
-	cout << "\tSearch doHash(regId=" << aReg.getId() << ", size=" << this->getSize() <<") = "<< pos << endl; 
-	PRINT_REF("\t\t (" << blockNumber << ")");
+//1	cout << "\tSearch doHash(regId=" << aReg.getId() << ", size=" << this->getSize() <<") = "<< pos << endl;
+//1	PRINT_REF("\t\t (" << blockNumber << ")");
 
 	Block aBlock(this->getSize(), blockNumber, this->blockPath, this->blockSize);
-	cout << "\t\t\t Read";
+//1	cout << "\t\t\t Read";
 	aBlock.read();
 
 	return aBlock.search(aReg);
@@ -76,29 +76,29 @@ int BlockTable::insert(Reg & aReg){
 
 	int tmpBlockNumber = this->blockReferences[pos];
 
-	cout << "\tInserto doHash(regId=" << aReg.getId() << ", size=" << this->getSize() <<") = "<< pos << endl; 
-	PRINT_REF("\t\t (" << tmpBlockNumber << ")");
+//1	cout << "\tInserto doHash(regId=" << aReg.getId() << ", size=" << this->getSize() <<") = "<< pos << endl;
+//1	PRINT_REF("\t\t (" << tmpBlockNumber << ")");
 
 	Block tmpBlock(this->getSize(), tmpBlockNumber, this->blockPath, this->blockSize);
-	cout << "\t\t\t tmpBlock";
+//1	cout << "\t\t\t tmpBlock";
 	tmpBlock.read();
 
 	if (tmpBlock.easyInsert(aReg)){
 		tmpBlock.Insert(aReg);
-		cout << "\t\t\t\teasyInsert ";
+//1		cout << "\t\t\t\teasyInsert ";
 		tmpBlock.write();
 	} else {
 		if (! this->canAddBlock(&tmpBlock)){
 			this->duplicateTable();
-			PRINT_REF("\t\t afterDuplicate:");
+//1			PRINT_REF("\t\t afterDuplicate:");
 		}
 		int lastBlockNum = tmpBlock.newBlockNum();
 		Block anotherBlock(tmpBlock.duplicateDispersionSize(), lastBlockNum, this->blockPath, this->blockSize);
-		cout << "\t\t anotherBlock(TD="<< anotherBlock.getDispersionSize() << ", lastBlockNum=" << lastBlockNum << ", path=" << this->blockPath << ", size="<< this->blockSize << ")" << endl;
+//1		cout << "\t\t anotherBlock(TD="<< anotherBlock.getDispersionSize() << ", lastBlockNum=" << lastBlockNum << ", path=" << this->blockPath << ", size="<< this->blockSize << ")" << endl;
 
 		this->insertBlock(pos, lastBlockNum, tmpBlock.getDispersionSize());
-		cout << "\t\tinsertBlock(pos=" << pos << ", lastBlockNum=" << lastBlockNum << ", TD=" << tmpBlock.getDispersionSize() << ")" << endl;
-		PRINT_REF("\t\t after insertBlock:");
+//1		cout << "\t\tinsertBlock(pos=" << pos << ", lastBlockNum=" << lastBlockNum << ", TD=" << tmpBlock.getDispersionSize() << ")" << endl;
+//1		PRINT_REF("\t\t after insertBlock:");
 
 		this->redisperse(&tmpBlock, &anotherBlock);
 
@@ -112,7 +112,7 @@ int BlockTable::getSize(){
 }
 
 bool BlockTable::canAddBlock(Block* aBlock){
-	cout << "\t\t TT:" << this->getSize() << " TD:" << aBlock->getDispersionSize() << endl;
+//1	cout << "\t\t TT:" << this->getSize() << " TD:" << aBlock->getDispersionSize() << endl;
 	return (aBlock->getDispersionSize()!=this->getSize());
 }
 
@@ -140,9 +140,9 @@ void BlockTable::redisperse(Block* anOldBlock, Block* aNewBlock){
 			aNewBlock->Insert((*it));
 	}
 
-	cout << "\t\t\t\t(" << newAnOldBlock.getBlockNum() <<", TD:" <<  newAnOldBlock.getDispersionSize() << ") newAnOldBlock.write() ";
+//1	cout << "\t\t\t\t(" << newAnOldBlock.getBlockNum() <<", TD:" <<  newAnOldBlock.getDispersionSize() << ") newAnOldBlock.write() ";
 	newAnOldBlock.write();
-	cout << "\t\t\t\t(" << aNewBlock->getBlockNum() <<", TD:" <<  aNewBlock->getDispersionSize() << ") aNewBlock.write() ";
+//1	cout << "\t\t\t\t(" << aNewBlock->getBlockNum() <<", TD:" <<  aNewBlock->getDispersionSize() << ") aNewBlock.write() ";
 	aNewBlock->write();
 }
 

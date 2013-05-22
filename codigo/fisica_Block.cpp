@@ -8,9 +8,6 @@
 
 using namespace std;
 
-//TODO: hidratar bloque
-//TODO: deshardcodear!!!
-#define REG_SIZE (sizeof(int)*2)
 
 Block::Block(int dispersionSize, int blockNum, char* filePath, int blockSize){
 	//TODO:revisar que se use all lo que esta aca
@@ -30,7 +27,8 @@ Block::Block(int dispersionSize, int blockNum, char* filePath, int blockSize){
  * en un bloque yo tengo que agregar un registro, y ademas tengo que agregar ese bloque a la lista de bloques
  * */
 
-//TODO: emprolijar
+//TODO: XQ NO ESTA MAS ESTOOOOOOOOO ????????
+
 int Block::newBlockNum(){
 	ArchivoBloques archivo(this->maxBlockSize, this->filePath);
 	if (!archivo.estaAbierto())
@@ -44,7 +42,7 @@ int Block::newBlockNum(){
 int Block::Insert(Reg & aReg){
 	//TODO: aReg.getSize() -> devuelve cualqiercosa, el size del reg es siempre REG_SIZE. DESHARDCODEAR
 	//this->blockCurrentSize+=aReg.getSize();
-	this->blockCurrentSize+=REG_SIZE;
+	this->blockCurrentSize+=aReg.getSize();
 	this->regsList.push_back(aReg);
 	return 0;
 
@@ -89,8 +87,7 @@ bool Block::easyInsert(Reg& aReg){
 	return (aReg.getSize()+ this->blockCurrentSize <= this->maxBlockSize);
 }
 
-//  Devuelve el addres si lo encuentra, sino -1, no ponog 0 por qe puede qe el addres sea 0, no? TODO: Checkear si esto es verdad
-//  TODO: Andar anda, pero no se por qe le pasamos un registro, se tendria qe pasar solo el ID
+//  Devuelve el addres si lo encuentra, sino -1, no ponog 0 por qe puede qe el addres
 int Block::search(Reg& regToLook){
 	list<Reg>::iterator it;
 	for (it = regsList.begin(); it != regsList.end(); it++){
@@ -145,13 +142,13 @@ void Block::write(){
 	int i=0;
 
 	list<Reg>::iterator it;
-	cout << " Write -> " ;
+//1	cout << " Write -> " ;
 	for(it = regsList.begin(); it!= regsList.end(); it++){
 		Buf[i++] = it->getId();
 		Buf[i++] = it->getFileAdress();
-		cout << " '" << it->getId() << "' '" << it->getFileAdress() << "'";
+//1		cout << " '" << it->getId() << "' '" << it->getFileAdress() << "'";
 	}
-	cout << endl;
+//1	cout << endl;
 
 	archivo.seekg(0,archivo.beg);
 	archivo.seekg(this->maxBlockSize*this->getBlockNum());
@@ -180,7 +177,6 @@ void Block::write(){
 //	cout << "Read ->" ;
 //	//for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int) && buf[i]!=0; i++){ //Cuando viene un id =0 significa qe ya no hay mas info TODO: controlar qe no se pase del buffer
 //	for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int); i+=2){
-//		//TODO: donde libera los registros?
 //		cout << " '" << buf[i] << "' '" << buf[i+1] << "'";
 //		if(buf[i]!=0){
 //			Reg* aReg= new Reg(buf[i],buf[i+1]);
@@ -207,14 +203,14 @@ void Block::read(){
 	archivo.seekg(this->maxBlockSize*this->getBlockNum());
 	archivo.read((char*)buf, this->maxBlockSize);
 
-	cout << "Read ->" ;
+//1	cout << "Read ->" ;
 	//for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int) && buf[i]!=0; i++){ //Cuando viene un id =0 significa qe ya no hay mas info TODO: controlar qe no se pase del buffer
 	for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int); i+=2){
-		//TODO: donde libera los registros?
-		cout << " '" << buf[i] << "' '" << buf[i+1] << "'";
+//1		cout << " '" << buf[i] << "' '" << buf[i+1] << "'";
 		if(buf[i]!=0){
 			Reg* aReg= new Reg(buf[i],buf[i+1]);
 			this->Insert(*aReg);
+			delete aReg;
 		}
 	}
 	cout << endl;
