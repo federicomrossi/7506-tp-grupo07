@@ -14,34 +14,16 @@
 
 #include <iostream>
 #include <fstream>
-#include "fisica_VarBuffer.h"
+//#include <string>
 
 class ArchivoBloques
 {
 public:
     
-    ArchivoBloques(unsigned int blockSize, const char* filename);
+    ArchivoBloques(unsigned int blockSize, std::string filename);
     
-    //~ArchivoBloques();
-    
-    /*
-     // Crea un archivo de bloques con el nombre definido en el constructor de la clase.
-     // Devuelve 0 si lo crea exitosamente y 1 si ya existia un archivo con ese nombre, en cuyo caso lo deja creado pero elimina todo su contenido.
-     */
-    int crearArchivo();
-    
-    /*Borra el contenido de un archivo*/
+    /*Borra el archivo*/
     void borrarArchivo();
-    
-    /*
-     // Abre el archivo con el nombre declarado en el constructor.
-     // Devuelve 0 si lo abre correctamente y -1 si no existe.
-     */
-    int abrirArchivo();
-    
-    void cerrarArchivo();
-    
-    bool estaAbierto();
     
     /*
      // PRE: El archivo debe estar abierto y el tamaño de registro debe ser menor al del bloque-2bytes.
@@ -49,28 +31,20 @@ public:
      // POST: Se escribe el contenido del objeto en el bloque elegido. Devuelve -1 si el archivo no estaba abierto y <datosEscritos> en caso de haber escrito a disco.
      // Este metodo no cierra el arhcivo.
      */
-    int escribirBloque(const void* registro, unsigned int numeroBloque, unsigned int size);
+    int escribirBloque(const char* buffer, unsigned int numeroBloque);
     
     /*
      // USO: La clase que desee utilizar el archivo por bloques debera pasar la direccion de un objeto en donde quiere que se lea la informacion.
      // POST: El metodo escribe el contenido del bloque en el objeto. Devuelve -1 si el archivo no estaba abierto y <datosLeidos> en caso de cargar el registro.
      // Este metodo no cierra el archivo.
      */
-    int leerBloque(void* registro, unsigned int numeroBloque);
-    
-    unsigned int ultimoBloque();
+    int leerBloque(char* buffer, unsigned int numeroBloque);
     
     
     
 private:
     unsigned int blockSize;
-    //unsigned short int primerBloque;
-    VarBuffer IOBuffer;
-    const char* filename;
-    fstream file;
-    
-    //char* mapaOcupacion;
-    //int extenderMapaOcupacion();
+    std::string filename;
     
 };
 

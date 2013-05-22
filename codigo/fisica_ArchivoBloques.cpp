@@ -8,115 +8,38 @@
 
 #include "fisica_ArchivoBloques.h"
 
-ArchivoBloques::ArchivoBloques(unsigned int blockSize,const char* filename) : IOBuffer(blockSize)
+ArchivoBloques::ArchivoBloques(unsigned int blockSize, std::string filename)
 {
     this->filename=filename;
     this->blockSize=blockSize;
 }
 
 
-int ArchivoBloques::crearArchivo()
-{
-    this->file.open(this->filename, ios::in|ios::binary);
-    
-    if (this->file.good()) {
-        this->file.close();
-        this->file.open(this->filename,ios::trunc|ios::binary);
-        this->file.close();
-        return 1;
-    } else {
-        this->file.close();
-        this->file.open(this->filename, ios::out|ios::binary);
-        this->file.close();
-        return 0;
-    }
-    
-}
-
 void ArchivoBloques::borrarArchivo()
 {
-    if (this->estaAbierto()) {
-        file.close();
-    }
-    remove(filename);
+    remove(filename.c_str());
 }
 
 
-int ArchivoBloques::abrirArchivo()
+int ArchivoBloques::escribirBloque(const char *buffer, unsigned int numeroBloque)
 {
-    this->file.open(this->filename, ios::in|ios::binary);
-    
-    if (this->file.good()) {
-        this->file.close();
-        this->file.open(this->filename,ios::in|ios::out|ios::binary);
-        return 0;
-    } else return -1;
+    std::ofstream file;
+    file.open(this->filename.c_str(),std::ios::out|std::ios::binary|std::ios::app);
+    file.seekp(numeroBloque*this->blockSize,file.beg);
+    file.write(buffer, this->blockSize);
+    std::cout<<"Escribi hasta el "<<file.tellp()<<std::endl;
+    file.close();
+    return 0;
 }
 
 
-void ArchivoBloques::cerrarArchivo()
+int ArchivoBloques::leerBloque(char *buffer, unsigned int numeroBloque)
 {
-    this->file.close();
+    std::ifstream file;
+    file.open(this->filename.c_str(),std::ios::in|std::ios::binary);
+    file.seekg(numeroBloque*this->blockSize,file.beg);
+    file.read(buffer, this->blockSize);
+    file.close();
+    return 0;
 }
-
-bool ArchivoBloques::estaAbierto()
-{
-    return this->file.is_open();
-}
-
-
-
-int ArchivoBloques::escribirBloque(const void *registro, unsigned int numeroBloque, unsigned int size)
-{
-    
-    unsigned short int datosEscritos=0;
-    
-    if (!this->estaAbierto()) {
-        return -1;
-    }
-    
-    file.seekp(numeroBloque*this->blockSize);
-    IOBuffer.pack(registro,size);
-    IOBuffer.write(file);
-    datosEscritos=IOBuffer.getBuffSize();
-    IOBuffer.clear();
-    
-    return datosEscritos;
-}
-
-int ArchivoBloques::leerBloque(void *registro, unsigned int numeroBloque)
-{
-    unsigned short int datosLeidos=0;
-    
-    if (!this->estaAbierto()) {
-        return -1;
-    }
-    
-    file.seekg(numeroBloque*this->blockSize);
-    IOBuffer.read(file);
-    IOBuffer.unpack(registro);
-    datosLeidos=IOBuffer.getBuffSize();
-    IOBuffer.clear();
-    
-    return datosLeidos;
-}
-
-unsigned int ArchivoBloques::ultimoBloque()
-{
-    file.seekg(0,file.end);
-    unsigned int numBloque = file.tellg()/this->blockSize;
-    return numBloque;    
-}
-
-
-
-
-
-
-
-
-
-
-
-
 
