@@ -31,10 +31,10 @@ Block::Block(int dispersionSize, int blockNum, char* filePath, int blockSize){
 
 int Block::newBlockNum(){
 	ArchivoBloques archivo(this->maxBlockSize, this->filePath);
-	if (!archivo.estaAbierto())
-		archivo.abrirArchivo();
+	if (!archivo.existe())
+		return -1;
 	int ultimoBloque = archivo.ultimoBloque();
-	archivo.cerrarArchivo();
+	//La api no lo cierra
 	return ultimoBloque;
 
 }
