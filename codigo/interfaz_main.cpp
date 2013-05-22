@@ -37,8 +37,8 @@ int main()
     std::cout << "Volvio" << std::endl;
     //arbol.cerrar();
 
-    Menu *m = new Menu;
-    while(m->start());
-    delete m;
+    // Menu *m = new Menu;
+    // while(m->start());
+    // delete m;
     return 0;
 }

@@ -130,7 +130,7 @@ bool NodoInterno< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 		if(i == (this->hijos.tamanio()-1) || clave < this->claves[i])
 		{
 			// Cargamos el nodo en memoria
-			archivo->leerBloque(nodo, this->hijos[i]);
+			//archivo->leerBloque(nodo, this->hijos[i]);
 
 			// Insertamos la clave y el registro en el nodo, y verificamos
 			// si se produjo overflow en este, en cual caso, accionaremos
@@ -161,10 +161,10 @@ bool NodoInterno< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 				this->hijos.insertar(nodoHermano->getNumBloque(), i);
 
 				// Escribimos los nodos en el archivo
-				archivo->escribirBloque(nodo, nodo->getNumBloque(), 
-					sizeof(*nodo));
-				archivo->escribirBloque(nodoHermano, 
-					nodoHermano->getNumBloque(), sizeof(*nodoHermano));
+				// archivo->escribirBloque(nodo, nodo->getNumBloque(), 
+				// 	sizeof(*nodo));
+				// archivo->escribirBloque(nodoHermano, 
+				// 	nodoHermano->getNumBloque(), sizeof(*nodoHermano));
 
 				delete nodo;
 				delete nodoHermano;
@@ -175,8 +175,8 @@ bool NodoInterno< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 			}
 
 			// Escribimos el nodo en el archivo
-			archivo->escribirBloque(nodo, nodo->getNumBloque(), 
-				sizeof(*nodo));
+			// archivo->escribirBloque(nodo, nodo->getNumBloque(), 
+			// 	sizeof(*nodo));
 
 			break;
 		}
