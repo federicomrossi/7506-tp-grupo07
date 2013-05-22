@@ -5,24 +5,25 @@
  *      Author: rburdet
  */
 #include "fisica_Block.h"
-#include "logica_HashExtensible.h"
-#include "logica_Reg.h"
-#include "config.h"
 
 using namespace std;
 
 //TODO: hidratar bloque
-
 //TODO: deshardcodear!!!
 #define REG_SIZE (sizeof(int)*2)
 
-Block::Block(int dispersionSize, int blockNum){
+Block::Block(int dispersionSize, int blockNum, char* filePath, int blockSize){
 	//TODO:revisar que se use all lo que esta aca
-	blockCurrentSize=0;
+	this->blockCurrentSize=0;
 	this->dispersionSize=dispersionSize;
-	//this->blockAdress=blockAdress; TODO: Como hago para laburar con el num de bloque?
-	maxBlockSize=MAX_BLOCK_SIZE;
+
+	this->maxBlockSize=blockSize;
+
 	this->blockNum = blockNum;
+
+	//this->filePath = (char*) calloc(strlen(filePath)+1, sizeof(char));
+	this->filePath = new char[strlen(filePath)+1]();
+	strcpy(this->filePath, filePath);
 }
 
 /*
@@ -30,11 +31,13 @@ Block::Block(int dispersionSize, int blockNum){
  * */
 
 //TODO: emprolijar
-int Block::newBlockNum(const char* fileName){
-	ArchivoBloques* archivo = new ArchivoBloques(MAX_BLOCK_SIZE, fileName);
-	if (!archivo->estaAbierto())
-		archivo->abrirArchivo();
-	return archivo->ultimoBloque();
+int Block::newBlockNum(){
+	ArchivoBloques archivo(this->maxBlockSize, this->filePath);
+	if (!archivo.estaAbierto())
+		archivo.abrirArchivo();
+	int ultimoBloque = archivo.ultimoBloque();
+	archivo.cerrarArchivo();
+	return ultimoBloque;
 
 }
 
@@ -67,7 +70,7 @@ int Block::getDispersionSize(){
 }
 
 
-// TODO: SE ELIMINA?
+// TODO: SE ELIMINA? -> Si
 int Block::separate(){
 	return 0; //hacer
 }
@@ -76,22 +79,18 @@ int Block::getCurrentSize(){
 	return this->blockCurrentSize;
 }
 
-/* TODO: SE USA  ? ? ?
+/* TODO: SE USA  ? ? ? -> no, borrar
 int Block::getBlockAdress(){
 	return blockAdress;
 }*/
 
 bool Block::easyInsert(Reg& aReg){
-	cout << "\t\tregSize " << aReg.getSize()  << " blockCurre " << this->blockCurrentSize << " MAX_BLOCK " << MAX_BLOCK_SIZE <<  endl;
 	//TODO: tiene qeu ser menor o menor e igual?
-	return (aReg.getSize()+ this->blockCurrentSize <= MAX_BLOCK_SIZE);
-}
-
-void Block::setList(list<Reg> newRegList){
-	this->regsList=newRegList;
+	return (aReg.getSize()+ this->blockCurrentSize <= this->maxBlockSize);
 }
 
 //  Devuelve el addres si lo encuentra, sino -1, no ponog 0 por qe puede qe el addres sea 0, no? TODO: Checkear si esto es verdad
+//  TODO: Andar anda, pero no se por qe le pasamos un registro, se tendria qe pasar solo el ID
 int Block::search(Reg& regToLook){
 	list<Reg>::iterator it;
 	for (it = regsList.begin(); it != regsList.end(); it++){
@@ -104,105 +103,127 @@ int Block::search(Reg& regToLook){
 	return -1;
 }
 
-//void Block::open(const char* fileName){
+// Implementacion con clase de archivo -> No anda
+//void Block::write(){
+//	ArchivoBloques archivo(this->maxBlockSize, this->filePath);
+//	// Inicializamos el archivo de bloques o lo levantamos si ya existia
+//	if(archivo.abrirArchivo() == -1){
+//		// El archivo no existe, lo creamos
+//		archivo.crearArchivo();
+//		archivo.abrirArchivo();
+//	}
+//	//Si existe pero esta cerrado, lo abrimos
+//	if (!archivo.estaAbierto()){
+//		archivo.abrirArchivo();
+//	}
+//
+//	int *Buf = (int*) calloc(this->maxBlockSize, 1);
+//	int i=0;
+//
+//	list<Reg>::iterator it;
+//	cout << " Write -> " ;
+//	for(it = regsList.begin(); it!= regsList.end(); it++){
+//		Buf[i++] = it->getId();
+//		Buf[i++] = it->getFileAdress();
+//		cout << " '" << it->getId() << "' '" << it->getFileAdress() << "'";
+//	}
+//	cout << endl;
+//
+//	archivo.escribirBloque((void*) Buf, this->getBlockNum(), this->maxBlockSize);
+//	archivo.cerrarArchivo();
+//	free(Buf);
+//}
 
+// Implementacion abriendo archivo de manera cabeza -> Anda =D
+void Block::write(){
+	fstream archivo(this->filePath,ios::in|ios::out|ios::binary);
+	if (!archivo.is_open())
+		archivo.open(this->filePath,ios::out|ios::binary);
 
-//esto que voy a hacer esta mal peor solo para ver si falla por lo de
-//fede o por lo mio
-/*
-void Block::write(const char*fileName){
-	fstream out(fileName, ios :: out | ios :: binary) ;
-	//char Buf[2*MAX_BLOCK_SIZE];
-	//int i=0;
-	//list<Reg>::iterator it; Primero ver si lo puedo tirar cabeza
-	//for (it = this->r)
-	list<Reg>aList;
-	aList = this->getRegList();
-	out.write((char*)&aList,120); // 120 = 4 * 3 * 10
-	out.close();
-	ifstream in(fileName);
-	in.read((char*)&aList,120);
-	list<Reg>::iterator it;
-	for (it=aList.begin(); it!=aList.end();it ++)
-	{
-			cout << "elemento: "<< (*it).getId();
-	}
-
-}
-*/
-/*void Block::read(const char* fileName){
-	ifstream in(fileName);
-	in.seekg(0,in.end);
-	int length = in.tellg();
-	length /= sizeof(int);
-	in.seekg(0,in.beg);
-	list<Reg>aList;
-	cout << "el archivo tiene "<< length << " elementos"<< endl;
-	in.read((char*)&aList,length);
-	this->setList(aList);
-	list <Reg>::iterator it;
-	for (it=this->getRegList().begin(); it!=this->getRegList().end();it ++)
-		cout << "elemento: "<< (*it).getId();
-}
-*/
-
-void Block::write(const char* fileName){ // TODO: pasar a .h
-	ArchivoBloques* archivo = new ArchivoBloques(MAX_BLOCK_SIZE, fileName);
-	// Inicializamos el archivo de bloques o lo levantamos si ya existia
-	if(archivo->abrirArchivo() == -1){
-		// El archivo no existe, lo creamos
-		archivo->crearArchivo();
-		archivo->abrirArchivo();
-	}
-	//Si existe pero esta cerrado, lo abrimos
-	if (!archivo->estaAbierto()){
-		archivo->abrirArchivo();
-	}
-	//cout << " Max Block Size " << MAX_BLOCK_SIZE << endl;
-	int Buf[MAX_BLOCK_SIZE / sizeof(int)] = {0};
+	//int *Buf = (int*) calloc(this->maxBlockSize, 1);
+	int * Buf = new int[this->maxBlockSize]();
 	int i=0;
+
 	list<Reg>::iterator it;
+	cout << " Write -> " ;
 	for(it = regsList.begin(); it!= regsList.end(); it++){
-		//cout << "Voy a guardar esto i=" << i << " id: " << it->getId()  << " add: " << it->getFileAdress() << endl;
 		Buf[i++] = it->getId();
 		Buf[i++] = it->getFileAdress();
+		cout << " '" << it->getId() << "' '" << it->getFileAdress() << "'";
 	}
+	cout << endl;
 
-	//Imprimo para debuggear
-	//for(unsigned int i=0; i < (MAX_BLOCK_SIZE / sizeof(int) ) ; i+=2)
-	//	printf("i= %d id= %d ad=%d \n", i, Buf[i],  Buf[i+1]);
-	//--
-
-	//cout << "num block " << this->getBlockNum() << endl;
-	archivo->escribirBloque((void*) Buf, this->getBlockNum(), MAX_BLOCK_SIZE);
-	archivo->cerrarArchivo();
+	archivo.seekg(0,archivo.beg);
+	archivo.seekg(this->maxBlockSize*this->getBlockNum());
+	archivo.write((char*)Buf,this->maxBlockSize);
+	archivo.close();
+	//free(Buf);
+	delete [] Buf;
 }
 
-void Block::read(const char* fileName){
-	ArchivoBloques* archivo = new ArchivoBloques(MAX_BLOCK_SIZE, fileName);
-	// Inicializamos el archivo de bloques o lo levantamos si ya existia
-	if(archivo->abrirArchivo() == -1){
-		// El archivo no existe, lo creamos, TODO: EL WRITE LO CREA
-	//	//archivo->crearArchivo();
-		//archivo->abrirArchivo();
+// Implementacion con clase de archivo -> No anda
+//void Block::read(){
+//	ArchivoBloques archivo(this->maxBlockSize, this->filePath);
+//	// Inicializamos el archivo de bloques o lo levantamos si ya existia
+//	if(archivo.abrirArchivo() == -1){
+//		//TODO: Error
+//		cout << "Error Abrir archivo!!!!! ***** " << endl;
+//		return;
+//	}
+//	//Si existe pero esta cerrado, lo abrimos -> al pedo
+//	if (!archivo.estaAbierto()){
+//		archivo.abrirArchivo();
+//	}
+//	int *buf = (int*) calloc(this->maxBlockSize, 1);
+//
+//	archivo.leerBloque( (void*)buf, this->getBlockNum());
+//	cout << "Read ->" ;
+//	//for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int) && buf[i]!=0; i++){ //Cuando viene un id =0 significa qe ya no hay mas info TODO: controlar qe no se pase del buffer
+//	for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int); i+=2){
+//		//TODO: donde libera los registros?
+//		cout << " '" << buf[i] << "' '" << buf[i+1] << "'";
+//		if(buf[i]!=0){
+//			Reg* aReg= new Reg(buf[i],buf[i+1]);
+//			this->Insert(*aReg);
+//		}
+//	}
+//	cout << endl;
+//	archivo.cerrarArchivo();
+//	free(buf);
+//	
+//}
+
+// Implementacion abriendo archivo de manera cabeza -> Anda =D
+void Block::read(){
+	fstream archivo(this->filePath,ios::in|ios::out|ios::binary);
+	if (!archivo.is_open()){
+		cout << "Error Abrir archivo!!!!! ***** " << endl;
 		return;
+		archivo.open(this->filePath,ios::out|ios::binary);
 	}
-	//Si existe pero esta cerrado, lo abrimos -> al pedo
-	if (!archivo->estaAbierto()){
-		archivo->abrirArchivo();
+
+	int * buf = new int[this->maxBlockSize]();
+	archivo.seekg(0,archivo.beg);
+	archivo.seekg(this->maxBlockSize*this->getBlockNum());
+	archivo.read((char*)buf, this->maxBlockSize);
+
+	cout << "Read ->" ;
+	//for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int) && buf[i]!=0; i++){ //Cuando viene un id =0 significa qe ya no hay mas info TODO: controlar qe no se pase del buffer
+	for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int); i+=2){
+		//TODO: donde libera los registros?
+		cout << " '" << buf[i] << "' '" << buf[i+1] << "'";
+		if(buf[i]!=0){
+			Reg* aReg= new Reg(buf[i],buf[i+1]);
+			this->Insert(*aReg);
+		}
 	}
-	int buf[MAX_BLOCK_SIZE/sizeof(int)] = {0};
+	cout << endl;
+	archivo.close();
+	delete[] buf;
+	//free(buf);
+}
 
-	archivo->leerBloque((void*)buf,this->getBlockNum());
-	for (int i=0; ((unsigned int) i)<MAX_BLOCK_SIZE/sizeof(int) && buf[i]!=0; i++){ //Cuando viene un id =0 significa qe ya no hay mas info TODO: controlar qe no se pase del buffer
-		Reg* aReg= new Reg(buf[i],buf[i++]);
-		this->Insert(*aReg);
-		//cout << i << ") id= " << aReg->getId() << " add=" << aReg->getFileAdress() << endl;
-
-	}
-	archivo->cerrarArchivo();
-
-}/**/
+/**/
 /*
 ArchivoBloques* Block::getArchivo(){
 	return this->archivo;
@@ -225,5 +246,6 @@ int Block::redistribute(Block* aNewBlock,int tableSize){
 }*/ //LA REDISPERSION LA TENDRIA QUE SABER HACER LA TABLA, NO EL BLOQUE
 
 Block::~Block() {
-
+	delete []this->filePath;
+	//free(this->filePath);
 }
