@@ -92,9 +92,6 @@ public:
 	// el nivel, siendo el nivel cero aquel que se encuentra con la mayor
 	// tabulacion.
 	void imprimir();
-
-	// Cierra el archivo si se encuentra abierto
-	void cerrar();
 };
 
 #endif
