@@ -83,26 +83,31 @@ int BlockTable::insert(Reg & aReg){
 //1	cout << "\t\t\t tmpBlock";
 	tmpBlock.read();
 
-	if (tmpBlock.easyInsert(aReg)){
-		tmpBlock.Insert(aReg);
-//1		cout << "\t\t\t\teasyInsert ";
-		tmpBlock.write();
-	} else {
-		if (! this->canAddBlock(&tmpBlock)){
-			this->duplicateTable();
-//1			PRINT_REF("\t\t afterDuplicate:");
+	//Antes de hacer el insert me tengo que fijar si el registro que estoy insertando no fue agregado ya.
+
+	if (this->search(aReg)==-1){
+
+		if (tmpBlock.easyInsert(aReg)){
+			tmpBlock.Insert(aReg);
+	//1		cout << "\t\t\t\teasyInsert ";
+			tmpBlock.write();
+		} else {
+			if (! this->canAddBlock(&tmpBlock)){
+				this->duplicateTable();
+	//1			PRINT_REF("\t\t afterDuplicate:");
+			}
+			int lastBlockNum = tmpBlock.newBlockNum();
+			Block anotherBlock(tmpBlock.duplicateDispersionSize(), lastBlockNum, this->blockPath, this->blockSize);
+	//1		cout << "\t\t anotherBlock(TD="<< anotherBlock.getDispersionSize() << ", lastBlockNum=" << lastBlockNum << ", path=" << this->blockPath << ", size="<< this->blockSize << ")" << endl;
+
+			this->insertBlock(pos, lastBlockNum, tmpBlock.getDispersionSize());
+	//1		cout << "\t\tinsertBlock(pos=" << pos << ", lastBlockNum=" << lastBlockNum << ", TD=" << tmpBlock.getDispersionSize() << ")" << endl;
+	//1		PRINT_REF("\t\t after insertBlock:");
+
+			this->redisperse(&tmpBlock, &anotherBlock);
+
+			this->insert(aReg);
 		}
-		int lastBlockNum = tmpBlock.newBlockNum();
-		Block anotherBlock(tmpBlock.duplicateDispersionSize(), lastBlockNum, this->blockPath, this->blockSize);
-//1		cout << "\t\t anotherBlock(TD="<< anotherBlock.getDispersionSize() << ", lastBlockNum=" << lastBlockNum << ", path=" << this->blockPath << ", size="<< this->blockSize << ")" << endl;
-
-		this->insertBlock(pos, lastBlockNum, tmpBlock.getDispersionSize());
-//1		cout << "\t\tinsertBlock(pos=" << pos << ", lastBlockNum=" << lastBlockNum << ", TD=" << tmpBlock.getDispersionSize() << ")" << endl;
-//1		PRINT_REF("\t\t after insertBlock:");
-
-		this->redisperse(&tmpBlock, &anotherBlock);
-
-		this->insert(aReg);
 	}
 	return 0;
 }

@@ -177,6 +177,7 @@ void Block::write(){
 //	cout << "Read ->" ;
 //	//for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int) && buf[i]!=0; i++){ //Cuando viene un id =0 significa qe ya no hay mas info TODO: controlar qe no se pase del buffer
 //	for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int); i+=2){
+//		//TODO: donde libera los registros?
 //		cout << " '" << buf[i] << "' '" << buf[i+1] << "'";
 //		if(buf[i]!=0){
 //			Reg* aReg= new Reg(buf[i],buf[i+1]);
