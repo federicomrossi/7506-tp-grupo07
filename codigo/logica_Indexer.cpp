@@ -59,6 +59,7 @@ int Indexer::indexarCancionesDesde(int mode){
         //COSAS DE APPEND
     }
     delete dirH;
+    delete fileH;
     return 0;
 }
 
@@ -69,8 +70,10 @@ int Indexer::estaIndexado(std::string header){
     s = Utils::getClaveFromHeader(header);
     std::cout << s << endl;
     if(ind->recuperar(s)){
+        delete ind;
         return 1;
     }
+    delete ind;
     return 0;
 }
 
