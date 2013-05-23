@@ -31,14 +31,14 @@ int main()
 		tmpBlock->Insert(*regs[i]);
 		delete regs[i];
 	}
-
 	tmpBlock->write();
 	//tmpBlock->read(TEST_FILE);
 
 	delete tmpBlock;
-	for(int i=0;i<5;i++)
-		delete regs[i];
 
+/*	for(int i=0;i<5;i++)
+		delete regs[i];
+*/
 	tmpBlock = new Block(dispersion, blockN, path, BLOCK_SIZE);
 	tmpBlock->read();
 

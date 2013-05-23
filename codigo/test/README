@@ -9,3 +9,6 @@ BlockTable -> Genera datos de prueba y prubea el hash entero en memoria
 BlockTable_con_archivo -> Levanta los datos que dejo BlockTable y prueba qe sigan siendo coherentes.
 
 Todos los tests si causan algun error imprimen al final que sale con error. No setean exitcode.
+
+Para que todo esto tenga gracia, los tests deberian imprimir lo que van haciedno, es por eso que estan comentadas en los archivos : fisica_Block.cpp y logica_BlockTable.cpp las salidas por consola; Antes de ejecutar los tests se recomienda hacer un Find & Replace de estos 2 archivos, las lineas estan comentadas como:
+" //1 " asi que haciendo find "//1" y replacer por " " tendrian las pruebas funcionando con mucho mas sentido

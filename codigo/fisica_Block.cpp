@@ -21,7 +21,8 @@ Block::Block(int dispersionSize, int blockNum, char* filePath, int blockSize){
 
 	this->blockNum = blockNum;
 
-	this->filePath = (char*) calloc(strlen(filePath)+1, sizeof(char));
+	//this->filePath = (char*) calloc(strlen(filePath)+1, sizeof(char));
+	this->filePath=new char[strlen(filePath)+1]();
 	strcpy(this->filePath, filePath);
 }
 
@@ -136,7 +137,8 @@ void Block::write(){
 	if (!archivo.is_open())
 		archivo.open(this->filePath,ios::out|ios::binary);
 
-	int *Buf = (int*) calloc(this->maxBlockSize, 1);
+	//2int *Buf = (int*) calloc(this->maxBlockSize, 1);
+	int * Buf = new int[this->maxBlockSize]();
 	int i=0;
 
 	list<Reg>::iterator it;
@@ -152,7 +154,8 @@ void Block::write(){
 	archivo.seekg(this->maxBlockSize*this->getBlockNum());
 	archivo.write((char*)Buf,this->maxBlockSize);
 	archivo.close();
-	free(Buf);
+	//2free(Buf);
+	delete[]Buf;
 }
 
 // Implementacion con clase de archivo -> No anda
@@ -196,7 +199,8 @@ void Block::read(){
 		archivo.open(this->filePath,ios::out|ios::binary);
 	}
 
-	int *buf = (int*) calloc(this->maxBlockSize, 1);
+	//2int *buf = (int*) calloc(this->maxBlockSize, 1);
+	int * buf = new int [this->maxBlockSize]();
 	archivo.seekg(0,archivo.beg);
 	archivo.seekg(this->maxBlockSize*this->getBlockNum());
 	archivo.read((char*)buf, this->maxBlockSize);
@@ -213,7 +217,8 @@ void Block::read(){
 	}
 	//1	cout << endl;
 	archivo.close();
-	free(buf);
+	//2free(buf);
+	delete[] buf;
 }
 
 /**/
@@ -239,5 +244,6 @@ int Block::redistribute(Block* aNewBlock,int tableSize){
 }*/ //LA REDISPERSION LA TENDRIA QUE SABER HACER LA TABLA, NO EL BLOQUE
 
 Block::~Block() {
-	free(this->filePath);
+	//2free(this->filePath);
+	delete [] this->filePath;
 }

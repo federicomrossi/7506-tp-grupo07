@@ -11,9 +11,11 @@ using namespace std;
 
 BlockTable::BlockTable(string path, string blockPath, int blockSize) {
 	// TODO: exepcion si path == NULL
-	this->filePath = (char*) calloc(strlen(path.c_str()) +1, sizeof(char));
+	this->filePath= new char[strlen(path.c_str())+1]();
+	//this->filePath = (char*) calloc(strlen(path.c_str()) +1, sizeof(char));
 	strcpy(this->filePath, path.c_str());
-	this->blockPath = (char*) calloc(strlen(blockPath.c_str()) +1, sizeof(char));
+	this->blockPath = new char[strlen(blockPath.c_str())+1]();
+	//this->blockPath = (char*) calloc(strlen(blockPath.c_str()) +1, sizeof(char));
 	strcpy(this->blockPath, blockPath.c_str());
 	this->blockReferences = NULL;
 	this->blockSize = blockSize;
@@ -30,15 +32,18 @@ void BlockTable::read(){
 	this->size = archivo.tellg() / sizeof(int);
 
 	if(this->blockReferences)
-		free(this->blockReferences);
+		//free(this->blockReferences);
+		delete [] this->blockReferences;
 
 	if(this->size){ //TODO: revisar que esto ande bien!
 		archivo.seekg(0,archivo.beg);
-		this->blockReferences = (int*) calloc(this->size, sizeof(int));
+		//this->blockReferences = (int*) calloc(this->size, sizeof(int));
+		this->blockReferences= new int[this->size]();
 		archivo.read((char*)this->blockReferences, this->size * sizeof(int));
 	}else{
 		this->size = 1;
-		this->blockReferences = (int*) calloc(this->size, sizeof(int));;
+		//this->blockReferences = (int*) calloc(this->size, sizeof(int));;
+		this->blockReferences = new int[this->size]();
 	}
 
 	archivo.close();
@@ -174,6 +179,8 @@ void BlockTable::duplicateTable(){
 BlockTable::~BlockTable(){
 	this->write();
 	free(this->blockReferences);
-	free(this->blockPath);
-	free(this->filePath);
+	delete [] this->blockPath;
+	//free(this->blockPath);
+	delete [] this->filePath;
+	//free(this->filePath);
 }
