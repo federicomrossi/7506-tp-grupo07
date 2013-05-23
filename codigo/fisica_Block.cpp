@@ -158,39 +158,38 @@ void Block::write(){
 	delete[]Buf;
 }
 
-// Implementacion con clase de archivo -> No anda
-//void Block::read(){
-//	ArchivoBloques archivo(this->maxBlockSize, this->filePath);
-//	// Inicializamos el archivo de bloques o lo levantamos si ya existia
-//	if(archivo.abrirArchivo() == -1){
-//		//TODO: Error
-//		cout << "Error Abrir archivo!!!!! ***** " << endl;
-//		return;
-//	}
-//	//Si existe pero esta cerrado, lo abrimos -> al pedo
-//	if (!archivo.estaAbierto()){
-//		archivo.abrirArchivo();
-//	}
-//	int *buf = (int*) calloc(this->maxBlockSize, 1);
-//
-//	archivo.leerBloque( (void*)buf, this->getBlockNum());
-//	cout << "Read ->" ;
-//	//for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int) && buf[i]!=0; i++){ //Cuando viene un id =0 significa qe ya no hay mas info TODO: controlar qe no se pase del buffer
-//	for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int); i+=2){
-//		//TODO: donde libera los registros?
-//		cout << " '" << buf[i] << "' '" << buf[i+1] << "'";
-//		if(buf[i]!=0){
-//			Reg* aReg= new Reg(buf[i],buf[i+1]);
-//			this->Insert(*aReg);
-//		}
-//	}
-//	cout << endl;
-//	archivo.cerrarArchivo();
-//	free(buf);
-//	
-//}
+
+///ESTOY SEGURO QUE ESTO NO VA A ANDAR
+// NO SE COMO FUNCIONA
+// TODO: FEDEEEEEEEEEE
+// XXX : FEDEEEEEEE
+// FIXME: FEDEEEEEEE
+// ****************************************************************************************************************************
+// ****************************************************************************************************************************
+// ****************************************************************************************************************************
+// ****************************************************************************************************************************
+// *************************************************************							 **********************************
+// ************************************************************* 		MIRAD ESTO			 **********************************
+// *************************************************************							 **********************************
+// ****************************************************************************************************************************
+// ****************************************************************************************************************************
+// ****************************************************************************************************************************
+// ****************************************************************************************************************************
+// ****************************************************************************************************************************
+
+/*void Block::read(){ //
+	ArchivoBloques archivo(maxBlockSize,this->filePath);
+	SerialBuffer aSerialBuffer(maxBlockSize);
+	int id,adress;
+	archivo.leerBloque(aSerialBuffer.getBuffer(),this->getBlockNum());
+	aSerialBuffer.unpack(&id);
+	aSerialBuffer.unpack(&adress);
+	Reg* aReg=new Reg(id,adress);
+	this->Insert(*aReg);
+}*/
 
 // Implementacion abriendo archivo de manera cabeza -> Anda =D
+
 void Block::read(){
 	fstream archivo(this->filePath,ios::in|ios::out|ios::binary);
 	if (!archivo.is_open()){

@@ -21,6 +21,9 @@ Esta informacion incluye:
 #include "fisica_ArchivoBloques.h"
 #include "logica_HashExtensible.h"
 
+
+//Probando a las 6:17 de la maniana si puedo hacer andar las clases de fede
+#include "fisica_SerialBuffer.h"
 using namespace std;
 /*
  * El tamanio de registros en un bloque debe poder ser configurable desde afuera

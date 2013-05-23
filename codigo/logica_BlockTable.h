@@ -23,6 +23,7 @@
 #include "logica_Reg.h"
 #include <string.h>
 
+
 using namespace std;
 class BlockTable{
 	public:
