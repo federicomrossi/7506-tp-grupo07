@@ -13,9 +13,13 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#define MAX_BLOCK_SIZE (512)
-#define HASH_BLOCK_TABLE_FILE ".HashBlockTable"
-#define HASH_BLOCK_FILE  ".HashBlock"
+//Archivo para guardar los bloques
+#define TEST_FILE "./test_file_TESTBLOCKFILE"
+// Archivo para guardar la tabla de referencia
+#define TEST_FILE_TABLE "./test_file_TESTTABLEFILE"
+// Tama~no del bloque
+
+#define MAX_BLOCK_SIZE (10)
 
 
 #endif /* CONFIG_H_ */

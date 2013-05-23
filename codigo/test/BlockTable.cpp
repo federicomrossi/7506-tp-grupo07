@@ -29,6 +29,7 @@ int main()
 		delete aReg;
 	}
 
+
 	//Busco
 	for(int i=0;i<DATA_LENGTH;i++){
 		Reg* myReg = new Reg(DATA[i][0], 1);

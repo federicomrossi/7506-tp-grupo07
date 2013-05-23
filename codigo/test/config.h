@@ -3,7 +3,7 @@
 // Archivo para guardar la tabla de referencia
 #define TEST_FILE_TABLE "./test_file_TESTTABLEFILE"
 // Tama~no del bloque
-#define BLOCK_SIZE 20
+#define BLOCK_SIZE 32
 
 // Cantidad de registros qe se van a insertar para hacer prueba
-#define DATA_LENGTH 50
+#define DATA_LENGTH 3

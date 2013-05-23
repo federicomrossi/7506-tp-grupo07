@@ -59,10 +59,10 @@ int ArchivoBloques::ultimoBloque()
         std::cerr<<"El arhcivo no existe"<<std::endl;
         return -1;
     }
-    
-    file.open(this->filename.c_str());
-    file.seekg(0,std::ios_base::end);
-    int ultimoBloque=(file.tellg()/this->blockSize)-1;
-    return ultimoBloque;
-}
+   	file.open(this->filename.c_str());
+    file.seekg(0,file.end);
+    unsigned int numBloque = file.tellg()/this->blockSize;
+    file.close();
+    return numBloque;
+  }
 

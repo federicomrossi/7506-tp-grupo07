@@ -31,6 +31,7 @@ class BlockTable{
 		~BlockTable();	// Cierro los archivos, libero la memoria pedida por blockReferences.
 		int insert(Reg&); // A su vez llama al insertar del bloque
 		void insertBlock(int blockPos,int newBlockReference,int td); //En la posicion blockPos de la tabla pongo la nueva ref.
+		int countNumberOfReferences(int blockNumber);
 
 		//Creo que no se usa
 		int saveBlock(Block * aBlock); //Cuando agrego algo a un bloque lo tengo que guardar

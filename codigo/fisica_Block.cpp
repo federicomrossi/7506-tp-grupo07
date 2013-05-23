@@ -8,6 +8,9 @@
 
 using namespace std;
 
+//TODO: hidratar bloque
+//TODO: deshardcodear!!!
+#define REG_SIZE (sizeof(int)*2)
 
 Block::Block(int dispersionSize, int blockNum, char* filePath, int blockSize){
 	//TODO:revisar que se use all lo que esta aca
@@ -18,8 +21,7 @@ Block::Block(int dispersionSize, int blockNum, char* filePath, int blockSize){
 
 	this->blockNum = blockNum;
 
-	//this->filePath = (char*) calloc(strlen(filePath)+1, sizeof(char));
-	this->filePath = new char[strlen(filePath)+1]();
+	this->filePath = (char*) calloc(strlen(filePath)+1, sizeof(char));
 	strcpy(this->filePath, filePath);
 }
 
@@ -27,22 +29,18 @@ Block::Block(int dispersionSize, int blockNum, char* filePath, int blockSize){
  * en un bloque yo tengo que agregar un registro, y ademas tengo que agregar ese bloque a la lista de bloques
  * */
 
-//TODO: XQ NO ESTA MAS ESTOOOOOOOOO ????????
-
+//TODO: emprolijar
 int Block::newBlockNum(){
 	ArchivoBloques archivo(this->maxBlockSize, this->filePath);
-	if (!archivo.existe())
-		return -1;
-	int ultimoBloque = archivo.ultimoBloque();
-	//La api no lo cierra
-	return ultimoBloque;
-
+	
+	return  archivo.ultimoBloque();
+	
 }
 
 int Block::Insert(Reg & aReg){
 	//TODO: aReg.getSize() -> devuelve cualqiercosa, el size del reg es siempre REG_SIZE. DESHARDCODEAR
 	//this->blockCurrentSize+=aReg.getSize();
-	this->blockCurrentSize+=aReg.getSize();
+	this->blockCurrentSize+=REG_SIZE;
 	this->regsList.push_back(aReg);
 	return 0;
 
@@ -87,7 +85,8 @@ bool Block::easyInsert(Reg& aReg){
 	return (aReg.getSize()+ this->blockCurrentSize <= this->maxBlockSize);
 }
 
-//  Devuelve el addres si lo encuentra, sino -1, no ponog 0 por qe puede qe el addres
+//  Devuelve el addres si lo encuentra, sino -1, no ponog 0 por qe puede qe el addres sea 0, no? TODO: Checkear si esto es verdad
+//  TODO: Andar anda, pero no se por qe le pasamos un registro, se tendria qe pasar solo el ID
 int Block::search(Reg& regToLook){
 	list<Reg>::iterator it;
 	for (it = regsList.begin(); it != regsList.end(); it++){
@@ -137,25 +136,23 @@ void Block::write(){
 	if (!archivo.is_open())
 		archivo.open(this->filePath,ios::out|ios::binary);
 
-	//int *Buf = (int*) calloc(this->maxBlockSize, 1);
-	int * Buf = new int[this->maxBlockSize]();
+	int *Buf = (int*) calloc(this->maxBlockSize, 1);
 	int i=0;
 
 	list<Reg>::iterator it;
-//1	cout << " Write -> " ;
+	//1	cout << " Write -> " ;
 	for(it = regsList.begin(); it!= regsList.end(); it++){
 		Buf[i++] = it->getId();
 		Buf[i++] = it->getFileAdress();
-//1		cout << " '" << it->getId() << "' '" << it->getFileAdress() << "'";
+		//1	cout << " '" << it->getId() << "' '" << it->getFileAdress() << "'";
 	}
-//1	cout << endl;
+	//1cout << endl;
 
 	archivo.seekg(0,archivo.beg);
 	archivo.seekg(this->maxBlockSize*this->getBlockNum());
 	archivo.write((char*)Buf,this->maxBlockSize);
 	archivo.close();
-	//free(Buf);
-	delete [] Buf;
+	free(Buf);
 }
 
 // Implementacion con clase de archivo -> No anda
@@ -194,30 +191,29 @@ void Block::write(){
 void Block::read(){
 	fstream archivo(this->filePath,ios::in|ios::out|ios::binary);
 	if (!archivo.is_open()){
-		cout << "Error Abrir archivo!!!!! ***** " << endl;
+		//1		cout << "Error Abrir archivo!!!!! ***** " << endl;
 		return;
 		archivo.open(this->filePath,ios::out|ios::binary);
 	}
 
-	int * buf = new int[this->maxBlockSize]();
+	int *buf = (int*) calloc(this->maxBlockSize, 1);
 	archivo.seekg(0,archivo.beg);
 	archivo.seekg(this->maxBlockSize*this->getBlockNum());
 	archivo.read((char*)buf, this->maxBlockSize);
 
-//1	cout << "Read ->" ;
+	//1cout << "Read ->" ;
 	//for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int) && buf[i]!=0; i++){ //Cuando viene un id =0 significa qe ya no hay mas info TODO: controlar qe no se pase del buffer
 	for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int); i+=2){
-//1		cout << " '" << buf[i] << "' '" << buf[i+1] << "'";
+		//TODO: donde libera los registros?
+		//1	cout << " '" << buf[i] << "' '" << buf[i+1] << "'";
 		if(buf[i]!=0){
 			Reg* aReg= new Reg(buf[i],buf[i+1]);
 			this->Insert(*aReg);
-			delete aReg;
 		}
 	}
-	cout << endl;
+	//1	cout << endl;
 	archivo.close();
-	delete[] buf;
-	//free(buf);
+	free(buf);
 }
 
 /**/
@@ -243,6 +239,5 @@ int Block::redistribute(Block* aNewBlock,int tableSize){
 }*/ //LA REDISPERSION LA TENDRIA QUE SABER HACER LA TABLA, NO EL BLOQUE
 
 Block::~Block() {
-	delete []this->filePath;
-	//free(this->filePath);
+	free(this->filePath);
 }
