@@ -56,34 +56,46 @@ ArbolBmas::~ArbolBmas()
 }
 
 
-// Abre un arbol ya existente
+// Abre un arbol.
 // PRE: 'nombre_archivo' es la ruta del archivo donde se almacena el arbol.
-// POST: si no existe el archivo se crea uno nuevo y se inicializa el arbol,
+// POST: Si existe el archivo, se carga el arbol existente, y si no existe
+// se crea un arbol nuevo en dicho archivo.
 void ArbolBmas::abrir(const char* nombre_archivo)
 {
 	// Creamos un archivo de bloques
 	this->archivo = new ArchivoBloques(512, nombre_archivo);
 
 	// Inicializamos el archivo de bloques o lo levantamos si ya existia
-	// if(this->archivo->abrirArchivo() == -1)
-	if(true)
+	if(!this->archivo->existe())
 	{
-		// El archivo no existe, lo creamos
-		// this->archivo->crearArchivo();
-		// this->archivo->abrirArchivo();
+		// Seteamos valores iniciales
+		this->nivel = 0;
+		this->contBloques = NUM_BLOQUE_RAIZ_INICIAL;
 
 		// Creamos el nodo raiz
 		this->raiz = new NodoHoja< CANT_REG_NODO_HOJA, CANT_REG_NODO_INTERNO >;
 		this->raiz->inicializar(NUM_BLOQUE_RAIZ_INICIAL, 0);
 
-		// Creamos metadata del arbol con valores iniciales
+		// Guardamos metadata del arbol con valores iniciales
 		guardarMetadata();
+
+		// Guardamos la raiz inicial
+		this->raiz->guardar(this->archivo);
 
 		return;
 	}
 	
 	// Cargamos metadata
 	cargarMetadata();
+}
+
+
+// Cierra el arbol
+// POST: se guardo en el archivo con el que fue abierto la informacion
+// actual del arbol.
+void ArbolBmas::cerrar()
+{
+	this->guardarMetadata();
 }
 
 
@@ -160,6 +172,14 @@ void ArbolBmas::insertar(uint clave, RegistroGenerico& registro)
 // }
 
 
+// Elimina un arbol por completo.
+// POST: se borro el archivo almacenado en disco con los datos del arbol. 
+void ArbolBmas::eliminar()
+{
+	this->archivo->borrarArchivo();
+}
+
+
 // Imprime el arbol sobre la salida estandar. Las tabulaciones indican
 // el nivel, siendo el nivel cero aquel que se encuentra con la mayor
 // tabulacion.
@@ -184,7 +204,6 @@ void ArbolBmas::cargarMetadata()
 
 	// Levantamos la metadata del archivo
 	this->archivo->leerBloque(this->buffer->getBuffer(), NUM_BLOQUE_METADATA);
-
 	// Variables auxiliares para deserializacion
 	uint nivel;
 	uint contBloques;
@@ -207,21 +226,9 @@ void ArbolBmas::cargarMetadata()
 		this->raiz = new NodoInterno< CANT_REG_NODO_HOJA, 
 				CANT_REG_NODO_INTERNO >;
 
-	// Seteamos el numero de bloque de la raiz y la leemos del archivo
+	// Seteamos el numero de bloque de la raiz y cargamos la raiz
 	this->raiz->setNumBloque(bloqueRaiz);
 	this->raiz->cargar(this->archivo);
-
-	// DEBUG LINES
-	std::cout << "UNPACK: " << nivel << " " << contBloques << " " 
-		<< bloqueRaiz << std::endl;
-	// END DEBUG LINES
-
-	// Cargamos datos en atributos
-	// this->nivel = metadata.nivel;
-	// this->contBloques = metadata.contBloques;
-
-	// Cargamos la raiz
-	// this->archivo->leerBloque(this->raiz, metadata.raiz);
 }
 
 
@@ -240,11 +247,6 @@ void ArbolBmas::guardarMetadata()
 	this->buffer->pack(&nivel, sizeof(uint));
 	this->buffer->pack(&contBloques, sizeof(uint));
 	this->buffer->pack(&bloqueRaiz, sizeof(uint));
-
-	// DEBUG LINES
-	std::cout << "PACK: " << nivel << " " << contBloques << " " 
-		<< bloqueRaiz << std::endl;
-	// END DEBUG LINES
 
 	// Escribimos metadata en archivo
 	this->archivo->escribirBloque(this->buffer->getBuffer(), 

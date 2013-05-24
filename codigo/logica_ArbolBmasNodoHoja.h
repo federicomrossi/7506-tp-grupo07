@@ -30,7 +30,7 @@ struct NodoHoja : public Nodo
 	// Referencia al nodo hermano
 	uint nodoHermano;
 	// Claves de registros
-	ListaFija< uint, MAX_HOJA + 1 > claves;
+	ListaFija< unsigned int, MAX_HOJA + 1 > claves;
 	// Lista de registros (se usa si es un nodo hoja)
 	ListaFija< RegistroGenerico, MAX_HOJA + 1 > registros;
 
@@ -127,7 +127,7 @@ bool NodoHoja< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 		}
 		// Si llegamos a la ultima posicion y no hubo elemento mayor,
 		// insertamos clave y registro al final de las listas.
-		else if(i == (claves.tamanio() - 1))
+		else if(i == (this->claves.tamanio() - 1))
 		{
 			this->claves.insertarUltimo(clave);
 			this->registros.insertarUltimo(registro);
@@ -137,8 +137,8 @@ bool NodoHoja< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 
 	this->cantClaves++;
 
-	// Corroboramos si entro en overflow y devolvemos de acuerdo a esto
-	if(this->cantClaves > this->cantMaxClaves) return true;
+	// Verificamos si entro en overflow y devolvemos de acuerdo a esto
+	if(this->claves.tamanio() > this->cantMaxClaves) return true;
 	return false;
 }
 
@@ -183,7 +183,27 @@ uint NodoHoja< MAX_HOJA, MAX_INTERNO >::dividir(Nodo *nodoHermano)
 template < size_t MAX_HOJA, size_t MAX_INTERNO >
 void NodoHoja< MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
 {
+	this->buffer->clear();
+	archivo->leerBloque(this->buffer->getBuffer(), this->numBloque);
 
+	uint numBloque, nivel, cantClaves, cantMaxClaves, nodoHermano;
+
+	this->buffer->unpack(&numBloque);
+	this->buffer->unpack(&nivel);
+	this->buffer->unpack(&cantClaves);
+	this->buffer->unpack(&cantMaxClaves);
+	this->buffer->unpack(&nodoHermano);
+
+	this->numBloque = numBloque;
+	this->nivel = nivel;
+	this->cantClaves = cantClaves;
+	this->cantMaxClaves = cantMaxClaves;
+	this->nodoHermano = nodoHermano;
+
+	// Deserializamos las claves
+	this->claves.deserializar(buffer);
+	// Deserializamos los registros
+	this->registros.deserializar(buffer);
 }
 
 
@@ -194,7 +214,29 @@ void NodoHoja< MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
 template < size_t MAX_HOJA, size_t MAX_INTERNO >
 void NodoHoja< MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
 {
+	this->buffer->clear();
 
+	uint numBloque = this->numBloque;
+	uint nivel = this->nivel;
+	uint cantClaves = this->cantClaves;
+	uint cantMaxClaves = this->cantMaxClaves;
+	uint nodoHermano = this->nodoHermano;
+
+	// Serializamos atributos
+	this->buffer->pack(&numBloque, sizeof(uint));
+	this->buffer->pack(&nivel, sizeof(uint));
+	this->buffer->pack(&cantClaves, sizeof(uint));
+	this->buffer->pack(&cantMaxClaves, sizeof(uint));
+	this->buffer->pack(&nodoHermano, sizeof(uint));
+
+	// Serializamos las claves
+	this->claves.serializar(buffer);
+	// Serializamos los registros
+	this->registros.serializar(buffer);
+
+	// Escribimos bloque y limpiamos buffer
+	archivo->escribirBloque(this->buffer->getBuffer(), this->numBloque);
+	this->buffer->clear();
 }
 
 

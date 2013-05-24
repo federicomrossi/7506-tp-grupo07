@@ -67,11 +67,16 @@ public:
 	// Destructor
 	~ArbolBmas();
 
-	// Abre un arbo.
+	// Abre un arbol.
 	// PRE: 'nombre_archivo' es la ruta del archivo donde se almacena el arbol.
 	// POST: Si existe el archivo, se carga el arbol existente, y si no existe
 	// se crea un arbol nuevo en dicho archivo.
 	void abrir(const char* nombre_archivo);
+
+	// Cierra el arbol
+	// POST: se guardo en el archivo con el que fue abierto la informacion
+	// actual del arbol.
+	void cerrar();
 
 	// Inserta un registro nuevo en el árbol
 	// PRE: 'clave' es la clave o id con el que se identifica el registro;
@@ -87,6 +92,10 @@ public:
 	// 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
 	// en 'registro' el registro superior mas proximo al buscado.
 	bool buscar(const uint clave, RegistroGenerico& registro);
+
+	// Elimina un arbol por completo.
+	// POST: se borro el archivo almacenado en disco con los datos del arbol. 
+	void eliminar();
 
 	// Imprime el arbol sobre la salida estandar. Las tabulaciones indican
 	// el nivel, siendo el nivel cero aquel que se encuentra con la mayor

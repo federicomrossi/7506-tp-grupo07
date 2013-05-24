@@ -99,10 +99,8 @@ NodoInterno< MAX_HOJA, MAX_INTERNO >::NodoInterno()
 
 // Destructor
 template < size_t MAX_HOJA, size_t MAX_INTERNO >
-NodoInterno< MAX_HOJA, MAX_INTERNO >::~NodoInterno() 
-{
+NodoInterno< MAX_HOJA, MAX_INTERNO >::~NodoInterno() { }
 
-}
 
 // Inserta el registro en el nodo.
 // PRE: 'clave' es la clave a insertar; 'registro' es el registro
@@ -119,7 +117,7 @@ bool NodoInterno< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 	if(this->nivel == 1)
 		nodo = new NodoHoja< MAX_HOJA, MAX_INTERNO >;
 	else
-		nodo = new NodoInterno< MAX_INTERNO, MAX_INTERNO >;
+		nodo = new NodoInterno< MAX_HOJA, MAX_INTERNO >;
 
 	// Iteramos sobre los hijos
 	for(size_t i = 0; i < this->hijos.tamanio(); i++)
@@ -130,7 +128,8 @@ bool NodoInterno< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 		if(i == (this->hijos.tamanio()-1) || clave < this->claves[i])
 		{
 			// Cargamos el nodo en memoria
-			//archivo->leerBloque(nodo, this->hijos[i]);
+			nodo->setNumBloque(this->hijos[i]);
+			nodo->cargar(archivo);
 
 			// Insertamos la clave y el registro en el nodo, y verificamos
 			// si se produjo overflow en este, en cual caso, accionaremos
@@ -146,43 +145,42 @@ bool NodoInterno< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 				else
 					nodoHermano = new NodoInterno< MAX_HOJA, MAX_INTERNO >;
 				
-				// Inicializamos los datos del nodo hermano
-				nodoHermano->inicializar(contBloques, nodo->nivel);
-
 				// Incrementamos el contador de bloques del arbol
 				contBloques++;
+				// Inicializamos los datos del nodo hermano
+				nodoHermano->inicializar(contBloques, nodo->nivel);
 
 				// Dividimos el contenido entre nodo y nodo hermano e
 				// insertamos la clave retornada a la lista de claves
 				this->claves.insertar(nodo->dividir(nodoHermano), i);
+				this->cantClaves++;
 
 				// Agregamos el numero de bloque del nodo hermano a la lista
 				// de hijos
-				this->hijos.insertar(nodoHermano->getNumBloque(), i);
+				this->hijos.insertar(nodoHermano->getNumBloque(), i+1);
 
-				// Escribimos los nodos en el archivo
-				// archivo->escribirBloque(nodo, nodo->getNumBloque(), 
-				// 	sizeof(*nodo));
-				// archivo->escribirBloque(nodoHermano, 
-				// 	nodoHermano->getNumBloque(), sizeof(*nodoHermano));
+				nodo->guardar(archivo);
+				nodoHermano->guardar(archivo);
 
 				delete nodo;
 				delete nodoHermano;
 
 				// Verificamos si hay overblow y devolvemos true o false
-				if(this->cantClaves > this->cantMaxClaves) return true;
+				if(this->claves.tamanio() > this->cantMaxClaves) return true;
 				return false;
 			}
 
 			// Escribimos el nodo en el archivo
-			// archivo->escribirBloque(nodo, nodo->getNumBloque(), 
-			// 	sizeof(*nodo));
+			nodo->guardar(archivo);
 
 			break;
 		}
 	}
 
 	delete nodo;
+
+	// Verificamos si entro en overflow y devolvemos de acuerdo a esto
+	if(this->cantClaves > this->cantMaxClaves) return true;
 	return false;
 }
 
@@ -241,7 +239,25 @@ uint NodoInterno< MAX_HOJA, MAX_INTERNO >::dividir(Nodo *nodoHermano)
 template < size_t MAX_HOJA, size_t MAX_INTERNO >
 void NodoInterno< MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
 {
+	this->buffer->clear();
+	archivo->leerBloque(this->buffer->getBuffer(), this->numBloque);
 
+	uint numBloque, nivel, cantClaves, cantMaxClaves;
+
+	this->buffer->unpack(&numBloque);
+	this->buffer->unpack(&nivel);
+	this->buffer->unpack(&cantClaves);
+	this->buffer->unpack(&cantMaxClaves);
+
+	this->numBloque = numBloque;
+	this->nivel = nivel;
+	this->cantClaves = cantClaves;
+	this->cantMaxClaves = cantMaxClaves;
+
+	// Deserializamos las claves
+	this->claves.deserializar(buffer);
+	// Deserializamos los registros
+	this->hijos.deserializar(buffer);
 }
 
 
@@ -252,7 +268,27 @@ void NodoInterno< MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
 template < size_t MAX_HOJA, size_t MAX_INTERNO >
 void NodoInterno< MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
 {
+	this->buffer->clear();
 
+	uint numBloque = this->numBloque;
+	uint nivel = this->nivel;
+	uint cantClaves = this->cantClaves;
+	uint cantMaxClaves = this->cantMaxClaves;
+
+	// Serializamos atributos
+	this->buffer->pack(&numBloque, sizeof(uint));
+	this->buffer->pack(&nivel, sizeof(uint));
+	this->buffer->pack(&cantClaves, sizeof(uint));
+	this->buffer->pack(&cantMaxClaves, sizeof(uint));
+
+	// Serializamos las claves
+	this->claves.serializar(buffer);
+	// Serializamos los registros
+	this->hijos.serializar(buffer);
+
+	// Escribimos bloque y limpiamos buffer
+	archivo->escribirBloque(this->buffer->getBuffer(), this->numBloque);
+	this->buffer->clear();
 }
 
 

@@ -1,7 +1,16 @@
 //
 //  ListaFija.h
-//	Implementación de una lista de tamaño máximo fijo, la cual imita las
-//  funcionalidades de la librería list de la STL. 
+//	Implementacion de una lista de tamanio maximo fijo, la cual imita las
+//  funcionalidades de la libreria list de la STL.
+//
+//  RESTRICCIONES: Para la utilizacion de la lista es necesario que, de
+//  almacenarse tipos no primitivos, se defina dentro de este ultimo los
+//  siguientes metodos:
+//   
+//  	- serializar(SerialBuffer *buffer),
+//  	- deserializar(SerialBuffer *buffer).
+//
+//  Esto le permitira a la lista ser serializable y persistible.
 //
 
 
@@ -11,6 +20,12 @@
 
 #include <string>
 #include "fisica_SerialBuffer.h"
+
+
+// Definicion de tipo uint para utilizar nombre mas corto
+typedef unsigned int uint; 
+
+
 
 
 
@@ -108,6 +123,83 @@ public:
 /* ****************************************************************************
  * DEFINICIÓN DEL TEMPLATE
  * ***************************************************************************/
+
+
+
+/* PRIVADO
+ * Utilizado para serializar dependiendo de si se esta conteniendo elementos de
+ * tipo primitivo o no.
+ */
+namespace {
+
+	// Serializacion de tipos no primitivos
+	template <typename Tipo, size_t Tamanio >
+	struct Serializacion
+	{
+		// Serializacion
+		void serializar(SerialBuffer *buffer, Tipo lista[], 
+			size_t tamanioParcial)
+		{
+			// Iteramos sobre cada elemento y los vamos serializando en orden
+			for(size_t i = 0; i < tamanioParcial; i++)
+				lista[i].serializar(buffer);
+		}
+
+		// Deserializacion
+		void deserializar(SerialBuffer *buffer, 
+			ListaFija< Tipo, Tamanio> *estaLista)
+		{
+			size_t tamanioParcial;
+
+			// Tomamos el tamanio parcial de la lista
+			buffer->unpack(&tamanioParcial);
+
+			// Cargamos los elementos
+			for(size_t i = 0; i < tamanioParcial; i++)
+			{
+				Tipo e;
+				e.deserializar(buffer);
+				estaLista->insertarUltimo(e);
+			}
+		}
+	};
+
+
+	// Serializacion del tipo primitivo UNSIGNED INT
+	template < size_t Tamanio >
+	struct Serializacion< uint, Tamanio > 
+	{
+		// Serializacion
+		void serializar(SerialBuffer *buffer, uint lista[], 
+			size_t tamanioParcial)
+		{
+			// Iteramos sobre cada elemento y los vamos serializando en orden
+			for(size_t i = 0; i < tamanioParcial; i++)
+				buffer->pack(&(lista[i]), sizeof(unsigned int));
+		}
+
+		// Deserializacion
+		void deserializar(SerialBuffer *buffer, 
+			ListaFija< uint, Tamanio> *estaLista)
+		{
+			size_t tamanioParcial;
+
+			// Tomamos el tamanio parcial de la lista
+			buffer->unpack(&tamanioParcial);
+
+			// Cargamos los elementos
+			for(size_t i = 0; i < tamanioParcial; i++)
+			{
+				uint e;
+				buffer->unpack(&e);
+				estaLista->insertarUltimo(e);
+			}
+		}
+	};
+}
+/* FIN PRIVADO */
+
+
 
 
 // Constructor
@@ -286,7 +378,13 @@ void ListaFija< Tipo, Tamanio >::transferir(ListaFija< Tipo, Tamanio >& lista,
 template <typename Tipo, size_t Tamanio >
 void ListaFija< Tipo, Tamanio >::serializar(SerialBuffer *buffer)
 {
+	size_t tamanioParcial = this->tamanioParcial;
+
 	// Serializamos primero el tamanio y despues el arreglo
+	buffer->pack(&tamanioParcial, sizeof(tamanioParcial));
+
+	Serializacion< Tipo, Tamanio > s;
+	s.serializar(buffer, this->lista, tamanioParcial);
 }
 
 
@@ -297,8 +395,8 @@ void ListaFija< Tipo, Tamanio >::serializar(SerialBuffer *buffer)
 template <typename Tipo, size_t Tamanio >
 void ListaFija< Tipo, Tamanio >::deserializar(SerialBuffer *buffer)
 {
-	// deserializamos primero el tamanio para saber cuantos objetos
-	// debemos tomar del buffer
+	Serializacion< Tipo, Tamanio > s;
+	s.deserializar(buffer, this);
 }
 
 
