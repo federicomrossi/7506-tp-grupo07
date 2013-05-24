@@ -155,21 +155,22 @@ void ArbolBmas::insertar(uint clave, RegistroGenerico& registro)
 }
 
 
-// // Busca un registro en el arbol
-// // PRE: 'clave' es la clave o id que identifica al registro a buscar;
-// // 'registro' es una referencia a una almacenador en donde se insertara el
-// // resultado de la busqueda
-// // POST: Si se encontró el registro, se devuelve true y se almacena en
-// // 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
-// // en 'registro' el registro superior mas proximo al buscado.
-// bool ArbolBmas::buscar(const uint clave, RegistroGenerico& registro)
-// {
-// 	// Corroboramos que se haya creado el arbol
-// 	if(!this->archivo)
-// 		throw "ArbolBmas::buscar() ERROR: no se ha abierto el arbol";
+// Busca un registro en el arbol
+// PRE: 'clave' es la clave o id que identifica al registro a buscar;
+// 'registro' es un puntero a un almacenador en donde se insertara el
+// resultado de la busqueda
+// POST: Si se encontró el registro, se devuelve true y se almacena en
+// 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
+// en 'registro' el registro superior mas proximo al buscado.
+bool ArbolBmas::buscar(const uint clave, RegistroGenerico & registro)
+{
+	// Corroboramos que se haya creado el arbol
+	if(!this->archivo)
+		throw "ArbolBmas::buscar() ERROR: no se ha abierto el arbol";
 
-// 	return false;
-// }
+	// Buscamos a partir del nodo raiz y devolvemos resultado
+	return this->raiz->buscar(clave, registro, this->archivo);
+}
 
 
 // Elimina un arbol por completo.

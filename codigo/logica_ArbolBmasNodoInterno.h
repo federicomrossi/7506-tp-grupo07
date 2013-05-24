@@ -58,6 +58,16 @@ struct NodoInterno : public Nodo
 	void insertarHijosIniciales(uint clave, uint numBloqueIzq, 
 		uint numBloqueDer);
 
+	// Busca un registro.
+	// PRE: 'clave' es la clave o id asociado al registro a buscar; 'registro'
+	// es un puntero a un almacenador en donde se insertara el resultado de la
+	// busqueda.
+	// POST: Si se encontró el registro, se devuelve true y se almacena en
+	// 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
+	// en 'registro' el registro superior mas proximo al buscado.
+	virtual bool buscar(const uint clave, RegistroGenerico & registro, 
+		ArchivoBloques *archivo);
+
 	// Reparte su contenido con su nodoHermano, pasandole la mitad.
 	// PRE: 'nodoHermano' es un nodo con el que se hara la division
 	// POST: devuelve la clave del registro inferior de 'nodoHermano'
@@ -153,7 +163,6 @@ bool NodoInterno< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 				// Dividimos el contenido entre nodo y nodo hermano e
 				// insertamos la clave retornada a la lista de claves
 				this->claves.insertar(nodo->dividir(nodoHermano), i);
-				this->cantClaves++;
 
 				// Agregamos el numero de bloque del nodo hermano a la lista
 				// de hijos
@@ -180,7 +189,7 @@ bool NodoInterno< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 	delete nodo;
 
 	// Verificamos si entro en overflow y devolvemos de acuerdo a esto
-	if(this->cantClaves > this->cantMaxClaves) return true;
+	if(this->claves.tamanio() > this->cantMaxClaves) return true;
 	return false;
 }
 
@@ -196,6 +205,46 @@ void NodoInterno< MAX_HOJA, MAX_INTERNO >::insertarHijosIniciales(uint clave,
 	this->claves.insertarUltimo(clave);
 	this->hijos.insertarUltimo(numBloqueIzq);
 	this->hijos.insertarUltimo(numBloqueDer);
+}
+
+
+// Busca un registro.
+// PRE: 'clave' es la clave o id asociado al registro a buscar; 'registro'
+// es un puntero a un almacenador en donde se insertara el resultado de la
+// busqueda.
+// POST: Si se encontró el registro, se devuelve true y se almacena en
+// 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
+// en 'registro' el registro superior mas proximo al buscado.
+template < size_t MAX_HOJA, size_t MAX_INTERNO >
+bool NodoInterno< MAX_HOJA, MAX_INTERNO >::buscar(const uint clave,
+	RegistroGenerico & registro, ArchivoBloques *archivo)
+{
+	Nodo *nodo;
+
+	if(this->nivel == 1)
+		nodo = new NodoHoja< MAX_HOJA, MAX_INTERNO >;
+	else
+		nodo = new NodoInterno< MAX_HOJA, MAX_INTERNO >;
+
+	// Iteramos sobre los hijos
+	for(size_t i = 0; i < this->hijos.tamanio(); i++)
+	{
+		if(i == (this->hijos.tamanio()-1) || clave < this->claves[i])
+		{
+			// Cargamos el nodo en memoria
+			nodo->setNumBloque(this->hijos[i]);
+			nodo->cargar(archivo);
+
+			// Buscamos en nodos inferiores
+			bool resBusqueda = nodo->buscar(clave, registro, archivo);
+			delete nodo;
+
+			// Retornamos el resultado de la busqueda en nodos inferiores
+			return resBusqueda;
+		}
+	}
+
+	return false;
 }
 
 
@@ -224,10 +273,6 @@ uint NodoInterno< MAX_HOJA, MAX_INTERNO >::dividir(Nodo *nodoHermano)
 	uint clave_subir = this->claves.verUltimo();
 	this->claves.eliminarUltimo();
 
-	// Actualizamos cantidad de claves en nodos
-	this->cantClaves = this->claves.tamanio();
-	nodoInternoHermano->cantClaves = nodoInternoHermano->claves.tamanio();
-
 	return clave_subir;
 }
 
@@ -242,16 +287,14 @@ void NodoInterno< MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
 	this->buffer->clear();
 	archivo->leerBloque(this->buffer->getBuffer(), this->numBloque);
 
-	uint numBloque, nivel, cantClaves, cantMaxClaves;
+	uint numBloque, nivel, cantMaxClaves;
 
 	this->buffer->unpack(&numBloque);
 	this->buffer->unpack(&nivel);
-	this->buffer->unpack(&cantClaves);
 	this->buffer->unpack(&cantMaxClaves);
 
 	this->numBloque = numBloque;
 	this->nivel = nivel;
-	this->cantClaves = cantClaves;
 	this->cantMaxClaves = cantMaxClaves;
 
 	// Deserializamos las claves
@@ -268,17 +311,16 @@ void NodoInterno< MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
 template < size_t MAX_HOJA, size_t MAX_INTERNO >
 void NodoInterno< MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
 {
+	// Necesitamos un buffer vacio, por lo que lo limpiamos
 	this->buffer->clear();
 
 	uint numBloque = this->numBloque;
 	uint nivel = this->nivel;
-	uint cantClaves = this->cantClaves;
 	uint cantMaxClaves = this->cantMaxClaves;
 
 	// Serializamos atributos
 	this->buffer->pack(&numBloque, sizeof(uint));
 	this->buffer->pack(&nivel, sizeof(uint));
-	this->buffer->pack(&cantClaves, sizeof(uint));
 	this->buffer->pack(&cantMaxClaves, sizeof(uint));
 
 	// Serializamos las claves

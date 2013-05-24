@@ -50,6 +50,21 @@ struct NodoHoja : public Nodo
 	virtual bool insertar(uint& clave, RegistroGenerico& registro, 
 		ArchivoBloques *archivo, uint& contBloques);
 
+	// Busca un registro.
+	// PRE: 'clave' es la clave o id asociado al registro a buscar; 'registro'
+	// es un puntero a un almacenador en donde se insertara el resultado de la
+	// busqueda.
+	// POST: Si se encontró el registro, se devuelve true y se almacena en
+	// 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
+	// en 'registro' el registro superior mas proximo al buscado.
+	virtual bool buscar(const uint clave, RegistroGenerico & registro, 
+		ArchivoBloques *archivo);
+
+	// Obtiene el menor de los registros contenido en el nodo.
+	// PRE: 'registro' es donde se almacena el registro menor.
+	// POST: si se encuentra vacio el nodo se lanza una excepcion.
+	void obtenerMenorRegistro(RegistroGenerico & registro);
+
 	// Reparte su contenido con su nodoHermano, pasandole la mitad.
 	// PRE: 'nodoHermano' es un nodo con el que se hara la division
 	// POST: devuelve la clave del registro inferior de 'nodoHermano'
@@ -91,10 +106,8 @@ NodoHoja< MAX_HOJA, MAX_INTERNO >::NodoHoja()
 
 // Destructo
 template < size_t MAX_HOJA, size_t MAX_INTERNO >
-NodoHoja< MAX_HOJA, MAX_INTERNO >::~NodoHoja() 
-{
+NodoHoja< MAX_HOJA, MAX_INTERNO >::~NodoHoja() { }
 
-}
 
 // Inserta el registro en el nodo.
 // PRE: 'clave' es la clave a insertar; 'registro' es el registro
@@ -115,7 +128,7 @@ bool NodoHoja< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 			this->registros.insertarUltimo(registro);
 			break;
 		}
-		// comprobamos que no hayan claves iguales
+		// Comprobamos que no hayan claves iguales
 		else if(this->claves[i] == clave)
 			throw "ERROR: Claves iguales en arbol.";
 		// Si la clave es mas grande que el actual, insertamos en ese lugar
@@ -135,11 +148,70 @@ bool NodoHoja< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 		}
 	}
 
-	this->cantClaves++;
-
 	// Verificamos si entro en overflow y devolvemos de acuerdo a esto
 	if(this->claves.tamanio() > this->cantMaxClaves) return true;
 	return false;
+}
+
+
+// Busca un registro.
+// PRE: 'clave' es la clave o id asociado al registro a buscar; 'registro'
+// es un puntero a un almacenador en donde se insertara el resultado de la
+// busqueda.
+// POST: Si se encontró el registro, se devuelve true y se almacena en
+// 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
+// en 'registro' el registro superior mas proximo al buscado.
+template < size_t MAX_HOJA, size_t MAX_INTERNO >
+bool NodoHoja< MAX_HOJA, MAX_INTERNO >::buscar(const uint clave,
+	RegistroGenerico & registro, ArchivoBloques *archivo)
+{
+	// Iteramos sobre las claves del nodo
+	for(size_t i = 0; i < this->claves.tamanio(); i++)
+	{
+		// Caso en que esta vacia la lista de claves
+		if(this->claves.estaVacia())
+			return false;
+
+		// Caso en que coincide la clave buscada con una clave del nodo
+		else if(this->claves[i] == clave)
+		{
+			// Devolvemos la clave asociada al registro.
+			registro = this->registros[i];
+			return true;
+		}
+		else if(this->claves[i] > clave)
+		{
+			registro = this->registros[i];
+			return false;
+		}
+	}
+
+	// Si no tiene hermano derecho, devolvemos false sin cargar registro
+	if(this->nodoHermano == 0) return false;
+
+	// Cargamos nodo hermano y devolvemos el primero de sus registros
+	NodoHoja< MAX_HOJA, MAX_INTERNO > nodoHermano;
+	nodoHermano.setNumBloque(this->nodoHermano);
+	nodoHermano.cargar(archivo);
+	nodoHermano.obtenerMenorRegistro(registro);
+
+	// Retornamos false por no haber encontrado el registro buscado
+	return false;
+}
+
+
+// Obtiene el menor de los registros contenido en el nodo.
+// PRE: 'registro' es donde se almacena el registro menor.
+// POST: si se encuentra vacio el nodo se lanza una excepcion.
+template < size_t MAX_HOJA, size_t MAX_INTERNO >
+void NodoHoja< MAX_HOJA, MAX_INTERNO >::obtenerMenorRegistro(
+	RegistroGenerico & registro)
+{
+	// Corroboramos que no este vacia
+	if(this->registros.estaVacia())
+		throw "ERROR: El nodo no contiene elementos.";
+
+	registro = this->registros[0];
 }
 
 
@@ -167,10 +239,6 @@ uint NodoHoja< MAX_HOJA, MAX_INTERNO >::dividir(Nodo *nodoHermano)
 	nodoHojaHermano->nodoHermano = this->nodoHermano;
 	this->nodoHermano = nodoHojaHermano->numBloque;
 
-	// Actualizamos cantidad de claves en nodos
-	this->cantClaves = this->claves.tamanio();
-	nodoHojaHermano->cantClaves = nodoHojaHermano->claves.tamanio();
-
 	// Retornamos la clave menor del nodo hermano
 	return nodoHojaHermano->claves.verPrimero();
 }
@@ -186,17 +254,15 @@ void NodoHoja< MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
 	this->buffer->clear();
 	archivo->leerBloque(this->buffer->getBuffer(), this->numBloque);
 
-	uint numBloque, nivel, cantClaves, cantMaxClaves, nodoHermano;
+	uint numBloque, nivel, cantMaxClaves, nodoHermano;
 
 	this->buffer->unpack(&numBloque);
 	this->buffer->unpack(&nivel);
-	this->buffer->unpack(&cantClaves);
 	this->buffer->unpack(&cantMaxClaves);
 	this->buffer->unpack(&nodoHermano);
 
 	this->numBloque = numBloque;
 	this->nivel = nivel;
-	this->cantClaves = cantClaves;
 	this->cantMaxClaves = cantMaxClaves;
 	this->nodoHermano = nodoHermano;
 
@@ -218,14 +284,12 @@ void NodoHoja< MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
 
 	uint numBloque = this->numBloque;
 	uint nivel = this->nivel;
-	uint cantClaves = this->cantClaves;
 	uint cantMaxClaves = this->cantMaxClaves;
 	uint nodoHermano = this->nodoHermano;
 
 	// Serializamos atributos
 	this->buffer->pack(&numBloque, sizeof(uint));
 	this->buffer->pack(&nivel, sizeof(uint));
-	this->buffer->pack(&cantClaves, sizeof(uint));
 	this->buffer->pack(&cantMaxClaves, sizeof(uint));
 	this->buffer->pack(&nodoHermano, sizeof(uint));
 

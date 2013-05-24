@@ -50,7 +50,6 @@ void Nodo::inicializar(uint numBloque, uint nivel)
 {
 	this->numBloque = numBloque;
 	this->nivel = nivel;
-	this->cantClaves = 0;
 }
 
 // Establece el numero de bloque del nodo. Se utiliza para setear

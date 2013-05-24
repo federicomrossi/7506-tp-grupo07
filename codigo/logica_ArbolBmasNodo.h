@@ -28,7 +28,6 @@ struct Nodo
 	SerialBuffer *buffer;			// Buffer utilizado para serializacion
 	uint numBloque;					// Numero de bloque del nodo
 	uint nivel;						// Nivel en el que se encuentra el nodo
-	uint cantClaves;				// Cantidad actual de claves
 	uint cantMaxClaves;				// Cantidad maxima de claves permitidas
 
 	// Constructor
@@ -58,6 +57,16 @@ struct Nodo
 	// POST: devuelve true si queda en overflow o false en caso contrario
 	virtual bool insertar(uint& clave, RegistroGenerico& registro, 
 		ArchivoBloques *archivo, uint& contBloques) = 0;
+
+	// Busca un registro.
+	// PRE: 'clave' es la clave o id asociado al registro a buscar; 'registro'
+	// es un puntero a un almacenador en donde se insertara el resultado de la
+	// busqueda.
+	// POST: Si se encontró el registro, se devuelve true y se almacena en
+	// 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
+	// en 'registro' el registro superior mas proximo al buscado.
+	virtual bool buscar(const uint clave, RegistroGenerico & registro, 
+		ArchivoBloques *archivo) = 0;
 
 	// Reparte su contenido con su nodoHermano, pasandole la mitad.
 	// PRE: 'nodoHermano' es un nodo con el que se hara la division

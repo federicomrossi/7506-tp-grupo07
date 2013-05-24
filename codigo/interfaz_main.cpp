@@ -6,7 +6,7 @@
 
 int main()
 {  
-    prueba_ArbolBmas();
+    prueba_ArbolBmas_1();
 
     // Menu *m = new Menu;
     // while(m->start());

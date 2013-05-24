@@ -86,12 +86,12 @@ public:
 
 	// Busca un registro en el arbol
 	// PRE: 'clave' es la clave o id que identifica al registro a buscar;
-	// 'registro' es una referencia a una almacenador en donde se insertara el
+	// 'registro' es un puntero a un almacenador en donde se insertara el
 	// resultado de la busqueda
 	// POST: Si se encontró el registro, se devuelve true y se almacena en
 	// 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
 	// en 'registro' el registro superior mas proximo al buscado.
-	bool buscar(const uint clave, RegistroGenerico& registro);
+	bool buscar(const uint clave, RegistroGenerico & registro);
 
 	// Elimina un arbol por completo.
 	// POST: se borro el archivo almacenado en disco con los datos del arbol. 
