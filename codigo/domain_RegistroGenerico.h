@@ -38,8 +38,8 @@ public:
 	// Serializa el registro.
 	// PRE: 'buffer' es el buffer en donde se serializara el registro para 
 	// poder ser almacenada en algun medio.
-	void serializar(SerialBuffer *buffer) {
-
+	virtual void serializar(SerialBuffer *buffer)
+	{
 		unsigned int clv = this->clave;
 		buffer->pack(&clv, sizeof(unsigned int));
 	}
@@ -48,8 +48,8 @@ public:
 	// PRE: 'buffer' es el buffer en donde se encuentra serializado el registro
 	// POST: el estado del registro se actualiza con los datos obtenidos del
 	// buffer.
-	void deserializar(SerialBuffer *buffer) { 
-
+	virtual void deserializar(SerialBuffer *buffer)
+	{ 
 		unsigned int clv;
 		buffer->unpack(&clv);
 		this->clave = clv;

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "domain_RegistroGenerico.h"
+#include "prueba_UnRegistroGenerico.h"
 #include "logica_ArbolBmas.h"
 
 
@@ -56,31 +56,38 @@ void prueba_ArbolBmas_2()
     ArbolBmas arbol;
     arbol.abrir(".arbol.prueba.2");
 
-    RegistroGenerico r1;
+    UnRegistroGenerico r1;
     r1.setClave(1);
-    RegistroGenerico r2;
-    r2.setClave(2);
-    RegistroGenerico r3;
-    r3.setClave(3);
-    RegistroGenerico r4;
-    r4.setClave(4);
-    RegistroGenerico r5;
-    r5.setClave(5);
-    RegistroGenerico r6;
-    r6.setClave(6);
-    RegistroGenerico r7;
-    r7.setClave(7);
+    r1.setAtributo(8);
+    // UnRegistroGenerico r2;
+    // r2.setClave(2);
+    // r2.setAtributo(22);
+    // UnRegistroGenerico r3;
+    // r3.setClave(3);
+    // r3.setAtributo(33);
+    // UnRegistroGenerico r4;
+    // r4.setClave(4);
+    // r4.setAtributo(44);
+    // UnRegistroGenerico r5;
+    // r5.setClave(5);
+    // r5.setAtributo(55);
+    // UnRegistroGenerico r6;
+    // r6.setClave(6);
+    // r6.setAtributo(66);
+    // UnRegistroGenerico r7;
+    // r7.setClave(7);
+    // r7.setAtributo(77);
 
     try {
         
         // Insertamos pares (clave, valor) de prueba para armado del arbol
         arbol.insertar(r1.getClave(), r1);
-        arbol.insertar(r2.getClave(), r2);
-        arbol.insertar(r3.getClave(), r3);
-        arbol.insertar(r4.getClave(), r4);
-        arbol.insertar(r5.getClave(), r5);
-        arbol.insertar(r6.getClave(), r6);
-        arbol.insertar(r7.getClave(), r7);
+        // arbol.insertar(r2.getClave(), r2);
+        // arbol.insertar(r3.getClave(), r3);
+        // arbol.insertar(r4.getClave(), r4);
+        // arbol.insertar(r5.getClave(), r5);
+        // arbol.insertar(r6.getClave(), r6);
+        // arbol.insertar(r7.getClave(), r7);
         arbol.imprimir();
 
         // Realizamos la busqueda de un registro
@@ -88,17 +95,19 @@ void prueba_ArbolBmas_2()
 
         for(unsigned int i = 0; i <= 10; i++)
         { 
-            RegistroGenerico rb;
+            UnRegistroGenerico rb;
 
             if(arbol.buscar(i, rb))
             {
                 std::cout << "ENCONTRO EL REGISTRO " << i << std::endl;
                 std::cout << "CLAVE: " << rb.getClave() << std::endl;
+                std::cout << "ATTR: " << rb.getAtributo() << std::endl;
             }
             else
             {
                 std::cout << "NO ENCONTRO EL REGISTRO " << i << std::endl;
                 std::cout << "CLAVE: " << rb.getClave() << std::endl;
+                std::cout << "ATTR: " << rb.getAtributo() << std::endl;
             }
             std::cout << std::endl;
         }
