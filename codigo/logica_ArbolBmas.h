@@ -78,6 +78,7 @@ private:
 	Nodo< Tipo > *raiz;				// Nodo de la raiz
 	uint nivel;						// Contador del nivel actual
 	uint contBloques;				// Contador de bloques existentes
+	bool estaAbierto;				// Flag para sensar si se abrio el arbol
 
 	uint maxRegNH;
 	uint maxRegNI;
@@ -148,17 +149,13 @@ public:
 // Constructor
 template < typename Tipo >
 ArbolBmas< Tipo >::ArbolBmas() : nivel(0),
-	contBloques(NUM_BLOQUE_RAIZ_INICIAL)
+	contBloques(NUM_BLOQUE_RAIZ_INICIAL), estaAbierto(false)
 {
 	this->buffer = new SerialBuffer(BUFFER_TAMANIO);
 
 	// this->maxRegNI = (TAMANIO_BLOQUE - attrNodo) / (sizeof(uint) + sizeof(Tipo));
 	this->maxRegNI = ((TAMANIO_BLOQUE - 12) / (2 * 4)) - 3;
 	this->maxRegNH = ((TAMANIO_BLOQUE - 16) / (4 + (4+4)));
-
-    this->archivo = 0;
-    this->raiz = 0;
-    this->buffer = 0;
 
 	std::cout << "REG INT: " << this->maxRegNI << std::endl;
 	std::cout << "REG HOJA: " << this->maxRegNH << std::endl;
@@ -169,10 +166,14 @@ ArbolBmas< Tipo >::ArbolBmas() : nivel(0),
 template < typename Tipo >
 ArbolBmas< Tipo >::~ArbolBmas()
 {
-	// Liberamos la memoria utilizada por el archivo
-	delete this->archivo;
 	// Liberamos la memoria utilizada para el buffer de serializacion
 	delete this->buffer;
+
+	// Si no esta abierto no hay mas nada que liberar
+	if(!this->estaAbierto) return;
+
+	// Liberamos la memoria utilizada por el archivo
+	delete this->archivo;
 	// Liberamos la memoria utilizada para mantener la raiz en memoria
 	delete this->raiz;
 }
@@ -185,6 +186,8 @@ ArbolBmas< Tipo >::~ArbolBmas()
 template < typename Tipo >
 void ArbolBmas< Tipo >::abrir(const char* nombre_archivo)
 {
+	this->estaAbierto = true;
+
 	// Creamos un archivo de bloques
 	this->archivo = new ArchivoBloques(TAMANIO_BLOQUE, nombre_archivo);
 

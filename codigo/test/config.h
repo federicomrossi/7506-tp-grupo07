@@ -6,4 +6,4 @@
 #define BLOCK_SIZE 32
 
 // Cantidad de registros qe se van a insertar para hacer prueba
-#define DATA_LENGTH 20
+#define DATA_LENGTH 5000

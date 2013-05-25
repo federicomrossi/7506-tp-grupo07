@@ -1,9 +1,8 @@
 #include <iostream>
-#include "../interfaz_Menu.h"
 #include "../logica_BlockTable.h"
-#include "../logica_Reg.h"
+#include "../domain_RegistroGenerico.h"
 #include "config.h"
-
+#include "../prueba_UnRegistroGenerico.h"
 using namespace std;
 
 int DATA[DATA_LENGTH][2];
@@ -17,30 +16,33 @@ void fillData(){
 
 int main()
 {
-	BlockTable* aBlockTable = new BlockTable(TEST_FILE_TABLE, TEST_FILE, BLOCK_SIZE);
+	BlockTable<UnRegistroGenerico> aBlockTable(TEST_FILE_TABLE, TEST_FILE, BLOCK_SIZE);
 	int error=0;
 
 	//Inserto
 	fillData();
 	for(int i=0;i<DATA_LENGTH;i++){
 		cout << "** Agregando registro "<< i  << endl;
-		Reg *aReg= new Reg(DATA[i][0],DATA[i][0]);
-		aBlockTable->insert(*aReg);
-		delete aReg;
+		UnRegistroGenerico aReg;
+		aReg.setClave(DATA[i][0]);
+		aBlockTable.insert(aReg);
 	}
+
+	cout << "Despues de insertar" << endl;
 
 
 	//Busco
 	for(int i=0;i<DATA_LENGTH;i++){
-		Reg* myReg = new Reg(DATA[i][0], 1);
-		int ad = aBlockTable->search(*myReg);
-		if( ad != DATA[i][1]){
+		UnRegistroGenerico* aReg = new UnRegistroGenerico();
+		aReg->setClave(DATA[i][0]);
+		int ad = aBlockTable.search(aReg);
+		if( ! ( ad && aReg->getClave() ==  DATA[i][0])){
 			cout << " \t ** Error i=" << i << " id=" << DATA[i][0] << " ad=" << DATA[i][1] << " ret_val=" << ad << endl;
 			error++;
 		}
-		delete myReg;
+		cout << "Claveeee" <<aReg->getClave()  << endl;
+		delete aReg;
 	}
-
 
 	cout << "fin " ;
 	if(error)
@@ -48,9 +50,6 @@ int main()
 	else
 		cout << " No Hay errores =D";
 	cout << endl;
-
-
-	delete aBlockTable;
 
     return 0;
 }
