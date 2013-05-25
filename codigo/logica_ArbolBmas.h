@@ -79,6 +79,9 @@ private:
 	uint nivel;						// Contador del nivel actual
 	uint contBloques;				// Contador de bloques existentes
 
+	uint maxRegNH;
+	uint maxRegNI;
+
 
 	// Carga la metadata del arbol desde el archivo.
 	// POST: si todavia no ha sido abierto o creado el archivo, no hace nada.
@@ -148,6 +151,13 @@ ArbolBmas< Tipo >::ArbolBmas() : nivel(0),
 	contBloques(NUM_BLOQUE_RAIZ_INICIAL) 
 {
 	this->buffer = new SerialBuffer(BUFFER_TAMANIO);
+
+	// this->maxRegNI = (TAMANIO_BLOQUE - attrNodo) / (sizeof(uint) + sizeof(Tipo));
+	this->maxRegNI = ((TAMANIO_BLOQUE - 12) / (2 * 4)) - 3;
+	this->maxRegNH = ((TAMANIO_BLOQUE - 16) / (4 + (4+4)));
+	
+	std::cout << "REG INT: " << this->maxRegNI << std::endl;
+	std::cout << "REG HOJA: " << this->maxRegNH << std::endl;
 }
 
 
@@ -223,7 +233,11 @@ void ArbolBmas< Tipo >::insertar(uint clave, Tipo & registro)
 
 	// Insertamos. Si no hubo overflow, retornamos
 	if(!this->raiz->insertar(clave, registro, this->archivo, 
-		this->contBloques)) return;
+		this->contBloques))
+	{
+		if(this->nivel == 0) this->raiz->guardar(this->archivo);
+		return;
+	}
 
 	// Hubo overflow, pasamos a partir la raiz y generar una nueva raiz.
 	Nodo< Tipo > *nuevoHermano;

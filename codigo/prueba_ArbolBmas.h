@@ -132,6 +132,7 @@ void prueba_ArbolBmas_3()
     arbol.abrir(".arbol.prueba.3");
 
     AutorReferencias r1(0);
+    
     r1.setCant(1);
     r1.setRef1(2);
     r1.setRef2(3);
@@ -140,74 +141,88 @@ void prueba_ArbolBmas_3()
     r1.setRef5(6);
     r1.setRefLista(7);
     arbol.insertar(0,r1);
+    
     AutorReferencias* a = new AutorReferencias();
     bool b = arbol.buscar(0,*a);
+    
     if(b){
-        std::cout << "encontrado";
+        std::cout << "encontrado" << std::endl;
     }else{
-        std::cout<< "No encontrado";
+        std::cout<< "No encontrado" << std::endl;
     }
+    
+    arbol.imprimir();
     arbol.cerrar();
+
+    std::string comando;
+    while(comando != "s")
+        getline(std::cin, comando);
+
+
     arbol.abrir(".arbol.prueba.3");
+    arbol.imprimir();
+    
     AutorReferencias* a2 = new AutorReferencias();
-    b = arbol.buscar(0,*a2);
-    if(b){
-        std::cout << "encontrado";
+    bool c = arbol.buscar(0,*a2);
+    
+    if(c){
+        std::cout << "encontrado" << std::endl;
     }else{
-        std::cout<< "No encontrado";
+        std::cout<< "No encontrado" << std::endl;
     }
+
     delete a;
     delete a2;
 
-    try {
+    // try {
 
-        for(int i = 1; i <= 2; i++)
-        {
-            AutorReferencias r(i);
-            arbol.insertar(r.getClave(), r);
-        }
+    //     for(int i = 1; i <= 2; i++)
+    //     {
+    //         AutorReferencias r(i);
+    //         arbol.insertar(r.getClave(), r);
+    //     }
 
 
-        for(int i = 30; i <= 60; i++)
-        {
-            AutorReferencias r(i);
-            arbol.insertar(r.getClave(), r);
-        }
+    //     for(int i = 30; i <= 60; i++)
+    //     {
+    //         AutorReferencias r(i);
+    //         arbol.insertar(r.getClave(), r);
+    //     }
 
-        arbol.insertar(r1.getClave(), r1);
+    //     arbol.insertar(r1.getClave(), r1);
 
-        arbol.imprimir();
+    //     arbol.imprimir();
 
-        for(unsigned int i = 25; i < 30; i++)
-        {
-            AutorReferencias rb;
+    //     for(unsigned int i = 25; i < 30; i++)
+    //     {
+    //         AutorReferencias rb;
 
-            if(arbol.buscar(i, rb))
-            {
-                std::cout << std::endl << "ENCONTRO EL REGISTRO " << i << std::endl;
-                std::cout << "CLAVE: " << rb.getClave() << std::endl;
-                std::cout << "ATTR: " << rb.getCant() << std::endl;
-                std::cout << "ATTR: " << rb.getRef1() << std::endl;
-                std::cout << "ATTR: " << rb.getRef2() << std::endl;
-                std::cout << "ATTR: " << rb.getRef3() << std::endl;
-                std::cout << "ATTR: " << rb.getRef4() << std::endl;
-                std::cout << "ATTR: " << rb.getRef5() << std::endl;
-                std::cout << "ATTR: " << rb.getRefLista() << std::endl;
-                std::cout << std::endl;
-            }
-            // else
-            // {
-            //     std::cout << "NO ENCONTRO EL REGISTRO " << i << std::endl;
-            //     std::cout << "CLAVE: " << rb.getClave() << std::endl;
-            //     std::cout << "ATTR: " << rb.getAtributo() << std::endl;
-            // }
-        }
-    }
-    catch(char const * e){
-        std::cout << e << std::endl;
-    }
+    //         if(arbol.buscar(i, rb))
+    //         {
+    //             std::cout << std::endl << "ENCONTRO EL REGISTRO " << i << std::endl;
+    //             std::cout << "CLAVE: " << rb.getClave() << std::endl;
+    //             std::cout << "ATTR: " << rb.getCant() << std::endl;
+    //             std::cout << "ATTR: " << rb.getRef1() << std::endl;
+    //             std::cout << "ATTR: " << rb.getRef2() << std::endl;
+    //             std::cout << "ATTR: " << rb.getRef3() << std::endl;
+    //             std::cout << "ATTR: " << rb.getRef4() << std::endl;
+    //             std::cout << "ATTR: " << rb.getRef5() << std::endl;
+    //             std::cout << "ATTR: " << rb.getRefLista() << std::endl;
+    //             std::cout << std::endl;
+    //         }
+    //         // else
+    //         // {
+    //         //     std::cout << "NO ENCONTRO EL REGISTRO " << i << std::endl;
+    //         //     std::cout << "CLAVE: " << rb.getClave() << std::endl;
+    //         //     std::cout << "ATTR: " << rb.getAtributo() << std::endl;
+    //         // }
+    //     }
+    // }
+    // catch(char const * e){
+    //     std::cout << e << std::endl;
+    // }
 
 
     arbol.cerrar();
-    arbol.eliminar();
+    // arbol.eliminar();
 }
