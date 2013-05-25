@@ -38,7 +38,7 @@ class BlockTable{
 		//Creo que no se usa
 		int saveBlock(Block<T> * aBlock); //Cuando agrego algo a un bloque lo tengo que guardar
 		void duplicateTable();
-		bool search(T**); // Busca el registro atraves de la funcion hash
+		bool search(T*&); // Busca el registro atraves de la funcion hash
 
 		void write(); //Escribe tabla a disco
 		void read(); //Lee tabla de disco
@@ -107,8 +107,8 @@ void BlockTable<T>::write(){
 
 //TODO: por que le paso un registro y no un id solo, osae, al crear un registro ya lo creo con un adres especifico, y si estoy buscando, no se ese adress!
 template <class T>
-bool BlockTable<T>::search(T** aReg){ // TODO: persistencia
-	int pos=HashExtensible::doHash((**aReg).getClave(),this->getSize());
+bool BlockTable<T>::search(T*& aReg){ // TODO: persistencia
+	int pos=HashExtensible::doHash(aReg->getClave(),this->getSize());
 	
 	int blockNumber=this->blockReferences[pos];
 
@@ -153,7 +153,7 @@ int BlockTable<T>::insert(T & aReg){
 
 	T *searchReg = new T();
 	searchReg->setClave(aReg.getClave());
-	if(! tmpBlock.search(&searchReg)){
+	if(! tmpBlock.search(searchReg)){
 		//1cout << "agrego xq no esta"<<endl;
 		if (tmpBlock.easyInsert(aReg)){
 			tmpBlock.Insert(aReg);

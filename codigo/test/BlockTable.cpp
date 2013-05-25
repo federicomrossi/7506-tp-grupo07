@@ -2,7 +2,7 @@
 #include "../logica_BlockTable.h"
 #include "../domain_RegistroGenerico.h"
 #include "config.h"
-
+#include "../prueba_UnRegistroGenerico.h"
 using namespace std;
 
 int DATA[DATA_LENGTH][2];
@@ -16,29 +16,29 @@ void fillData(){
 
 int main()
 {
-	BlockTable<RegistroGenerico> aBlockTable(TEST_FILE_TABLE, TEST_FILE, BLOCK_SIZE);
+	BlockTable<UnRegistroGenerico> aBlockTable(TEST_FILE_TABLE, TEST_FILE, BLOCK_SIZE);
 	int error=0;
 
 	//Inserto
 	fillData();
 	for(int i=0;i<DATA_LENGTH;i++){
 		cout << "** Agregando registro "<< i  << endl;
-		RegistroGenerico *aReg= new RegistroGenerico();
-		aReg->setClave(DATA[i][0]);
-		aBlockTable.insert(*aReg);
-		delete aReg;
+		UnRegistroGenerico aReg;
+		aReg.setClave(DATA[i][0]);
+		aBlockTable.insert(aReg);
 	}
 
 
 	//Busco
 	for(int i=0;i<DATA_LENGTH;i++){
-		RegistroGenerico *aReg= new RegistroGenerico();
+		UnRegistroGenerico* aReg = new UnRegistroGenerico();
 		aReg->setClave(DATA[i][0]);
-		int ad = aBlockTable.search(&aReg);
+		int ad = aBlockTable.search(aReg);
 		if( ! ad ){
 			cout << " \t ** Error i=" << i << " id=" << DATA[i][0] << " ad=" << DATA[i][1] << " ret_val=" << ad << endl;
 			error++;
 		}
+		delete aReg;
 	}
 
 	cout << "fin " ;

@@ -82,7 +82,7 @@ class Block {
 		//Una vez que obtengo el bloque, tengo que buscar en la lista el registro que yo quiero
 		//Devuelvo el fileAdress de ese registro que es donde estara guardado el dato
 		//SI NO SE ENCUENTRA EL REGISTRO SE DEVUELVE 0
-		bool search(T** aReg);
+		bool search(T*&);
 
 		void read();
 		void write();
@@ -102,7 +102,7 @@ class Block {
 		//int blockCurrentSize;
 		int maxBlockSize;
 		int dispersionSize;
-		list<T> regsList;
+		list< T > regsList;
 		int blockNum;
 		char *filePath;
 
@@ -175,17 +175,21 @@ bool Block<T>::easyInsert(T& aReg){
 	SerialBuffer aSerialBuffer(maxBlockSize);
 	this->getCurrentBuffer(&aSerialBuffer);
 
-	if(aSerialBuffer.pack(aReg)!=-3)
+	unsigned short int preSize = aSerialBuffer.getBuffSize();
+	aReg.serializar(&aSerialBuffer);
+
+	if(aSerialBuffer.getBuffSize() - preSize == 0)
 		return false;
 	return true;
 }
 
 template <class T>
-bool Block<T>::search(T** regToLook){
+bool Block<T>::search(T*& regToLook){
 	typename list<T>::iterator it;
 	for (it = regsList.begin(); it != regsList.end(); it++){
-		if ((*it).getClave()==(*regToLook)->getClave()){
-			*regToLook=(*it);
+		if ((it)->getClave()==regToLook->getClave()){
+			//TODO:Habria que hacer delete?
+			regToLook=&*it;
 			return true;
 		}
 	}
@@ -255,10 +259,10 @@ void Block::write(){
 
 template <class T>
 void Block<T>::getCurrentBuffer(SerialBuffer* aSerialBuffer){
-	aSerialBuffer->pack(this->numberOfRegs, sizeof(this->numberOfRegs));
+	aSerialBuffer->pack(&(this->numberOfRegs), sizeof(this->numberOfRegs));
 	typename list<T>::iterator it;
 	for(it = regsList.begin(); it!= regsList.end(); it++){
-		it.serializar(aSerialBuffer);
+		it->serializar(aSerialBuffer);
 	}
 }
 
@@ -282,9 +286,9 @@ void Block<T>::read(){
 	//TODO: Liberar 
 	regsList.clear();
 	for (int i=0; i < this->numberOfRegs;i++){
-		T reg();
+		T reg;
 		reg.deserializar(&aSerialBuffer);
-		regsList.push(reg);
+		regsList.push_back(reg);
 		//aSerialBuffer.unpack(&(this->numberOfRegs));
 		//aSerialBuffer.unpack()
 	}
