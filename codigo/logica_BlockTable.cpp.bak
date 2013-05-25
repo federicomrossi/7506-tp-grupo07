@@ -6,23 +6,21 @@
  */
 #include "logica_BlockTable.h"
 
-#define PRINT_REF(X) cout << X << "blockReferences" ; for(int i=0;i<this->getSize();i++) cout << " '" << this->blockReferences[i] << "'"; cout << endl
 using namespace std;
 
-BlockTable::BlockTable(string path, string blockPath, int blockSize) {
-	// TODO: exepcion si path == NULL
+template <class T>
+BlockTable<T>::BlockTable(string path, string blockPath, int blockSize) {
 	this->filePath= new char[strlen(path.c_str())+1]();
-	//this->filePath = (char*) calloc(strlen(path.c_str()) +1, sizeof(char));
 	strcpy(this->filePath, path.c_str());
 	this->blockPath = new char[strlen(blockPath.c_str())+1]();
-	//this->blockPath = (char*) calloc(strlen(blockPath.c_str()) +1, sizeof(char));
 	strcpy(this->blockPath, blockPath.c_str());
 	this->blockReferences = NULL;
 	this->blockSize = blockSize;
 	this->read();
 }
 
-void BlockTable::read(){
+template <class T>
+void BlockTable<T>::read(){
 	fstream archivo(this->filePath,ios::in|ios::out|ios::binary);
 
 	if (!archivo.is_open())
@@ -32,12 +30,10 @@ void BlockTable::read(){
 	this->size = archivo.tellg() / sizeof(int);
 
 	if(this->blockReferences)
-		//free(this->blockReferences);
 		delete [] this->blockReferences;
 
 	if(this->size){ //TODO: revisar que esto ande bien!
 		archivo.seekg(0,archivo.beg);
-		//this->blockReferences = (int*) calloc(this->size, sizeof(int));
 		this->blockReferences= new int[this->size]();
 		archivo.read((char*)this->blockReferences, this->size * sizeof(int));
 	}else{
@@ -49,14 +45,16 @@ void BlockTable::read(){
 	archivo.close();
 }
 
-void BlockTable::write(){
+template <class T>
+void BlockTable<T>::write(){
 	fstream archivo(this->filePath,ios::in|ios::out|ios::binary);
 	archivo.write((char*)this->blockReferences,sizeof(int)*this->size);
 	archivo.close();
 }
 
 //TODO: por que le paso un registro y no un id solo, osae, al crear un registro ya lo creo con un adres especifico, y si estoy buscando, no se ese adress!
-int BlockTable::search(Reg& aReg){ // TODO: persistencia
+template <class T>
+bool BlockTable<T>::search(T** aReg){ // TODO: persistencia
 	int pos=HashExtensible::doHash(aReg.getId(),this->getSize());
 	
 	int blockNumber=this->blockReferences[pos];
@@ -64,14 +62,15 @@ int BlockTable::search(Reg& aReg){ // TODO: persistencia
 	//1cout << "\tSearch doHash(regId=" << aReg.getId() << ", size=" << this->getSize() <<") = "<< pos << endl;
 	//1	PRINT_REF("\t\t (" << blockNumber << ")");
 
-	Block aBlock(this->getSize(), blockNumber, this->blockPath, this->blockSize);
+	Block<T> aBlock(this->getSize(), blockNumber, this->blockPath, this->blockSize);
 	//1 cout << "\t\t\t Read";
 	aBlock.read();
 
 	return aBlock.search(aReg);
 }
 
-int BlockTable::countNumberOfReferences(int blockNumber){
+template <class T>
+int BlockTable<T>::countNumberOfReferences(int blockNumber){
 	int count = 0;
 	for (int i=0; i< this->getSize(); i++){
 		if (this->blockReferences[i]==blockNumber)
@@ -80,15 +79,21 @@ int BlockTable::countNumberOfReferences(int blockNumber){
 	return count;
 }
 
-int BlockTable::insert(Reg & aReg){
+template <class T>
+int BlockTable<T>::insert(T & aReg){
+
+	//Aca le voy a tener que pasar un registro geneirco, donde dice getId , sera getClave();
 	int pos = HashExtensible::doHash(aReg.getId(),this->getSize());
 	int tmpBlockNumber = this->blockReferences[pos];
 	int dispersionSize = this->getSize() / this->countNumberOfReferences(tmpBlockNumber);
 	//1cout << "\tInserto doHash(regId=" << aReg.getId() << ", size=" << this->getSize() <<") = "<< pos << endl;
 	//1	PRINT_REF("\t\t (" << tmpBlockNumber << ")");
 
-	Block tmpBlock(dispersionSize, tmpBlockNumber, this->blockPath, this->blockSize);
+	Block<T> tmpBlock(dispersionSize, tmpBlockNumber, this->blockPath, this->blockSize);
 	//1cout << "\t\t\t tmpBlock";
+	//Cambiar esto adentro,
+	//tengo q pedirle al registro generico cuantos bytes va a ocupar para deserializarlo en una misma estructura y
+	//agregarlo a una lista
 	tmpBlock.read();
 
 	//Puede ser el caso de que el ID ya exista en el hash, en ese caso, no se agrega
@@ -108,7 +113,7 @@ int BlockTable::insert(Reg & aReg){
 				//1				PRINT_REF("\t\t afterDuplicate:");
 			}
 			int lastBlockNum = tmpBlock.newBlockNum();
-			Block anotherBlock(tmpBlock.duplicateDispersionSize(), lastBlockNum, this->blockPath, this->blockSize);
+			Block<T> anotherBlock(tmpBlock.duplicateDispersionSize(), lastBlockNum, this->blockPath, this->blockSize);
 			//1			cout << "\t\t anotherBlock(TD="<< anotherBlock.getDispersionSize() << ", lastBlockNum=" << lastBlockNum << ", path=" << this->blockPath << ", size="<< this->blockSize << ")" << endl;
 
 			this->insertBlock(pos, lastBlockNum, tmpBlock.getDispersionSize());
@@ -123,16 +128,19 @@ int BlockTable::insert(Reg & aReg){
 	return 0;
 }
 
-int BlockTable::getSize(){
+template <class T>
+int BlockTable<T>::getSize(){
 	return size;
 }
 
-bool BlockTable::canAddBlock(Block* aBlock){
+template <class T>
+bool BlockTable<T>::canAddBlock(Block<T>* aBlock){
 	//1cout << "\t\t TT:" << this->getSize() << " TD:" << aBlock->getDispersionSize() << endl;
 	return (aBlock->getDispersionSize()!=this->getSize());
 }
 
-void BlockTable::insertBlock(int blockPos, int newBlockNum, int td){
+template <class T>
+void BlockTable<T>::insertBlock(int blockPos, int newBlockNum, int td){
 	for (int i = blockPos; i < this->getSize(); i+=td) {
 		this->blockReferences[i] = newBlockNum;
 	}
@@ -142,10 +150,11 @@ void BlockTable::insertBlock(int blockPos, int newBlockNum, int td){
 	}
 }
 
-void BlockTable::redisperse(Block* anOldBlock, Block* aNewBlock){
-	list<Reg>::iterator it;
-	list<Reg> anOldBlockList = anOldBlock->getRegList();
-	Block newAnOldBlock(anOldBlock->getDispersionSize(), anOldBlock->getBlockNum(), this->blockPath, this->blockSize);
+template <class T>
+void BlockTable<T>::redisperse(Block<T>* anOldBlock, Block<T>* aNewBlock){
+	typename list<T>::iterator it;
+	list<T> anOldBlockList = anOldBlock->getRegList();
+	Block<T> newAnOldBlock(anOldBlock->getDispersionSize(), anOldBlock->getBlockNum(), this->blockPath, this->blockSize);
 
 	for (it = anOldBlockList.begin(); it != anOldBlockList.end() ; it++) {
 		int pos = HashExtensible::doHash((*it).getId(),this->getSize());
@@ -164,7 +173,8 @@ void BlockTable::redisperse(Block* anOldBlock, Block* aNewBlock){
 
 
 
-void BlockTable::duplicateTable(){
+template <class T>
+void BlockTable<T>::duplicateTable(){
 	int newBlockTableSize = this->size *2;
 	int *tmpBlockReference = (int*) calloc(newBlockTableSize, sizeof(int));
 	for (int i = 0; i < this->size ; i++) {
@@ -176,7 +186,8 @@ void BlockTable::duplicateTable(){
 	this->size = newBlockTableSize;
 }
 
-BlockTable::~BlockTable(){
+template <class T>
+BlockTable<T>::~BlockTable(){
 	this->write();
 	free(this->blockReferences);
 	delete [] this->blockPath;

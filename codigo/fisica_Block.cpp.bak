@@ -5,24 +5,18 @@
  *      Author: rburdet
  */
 #include "fisica_Block.h"
-
 using namespace std;
 
-//TODO: hidratar bloque
-//TODO: deshardcodear!!!
-#define REG_SIZE (sizeof(int)*2)
 
-Block::Block(int dispersionSize, int blockNum, char* filePath, int blockSize){
-	//TODO:revisar que se use all lo que esta aca
-	this->blockCurrentSize=0;
+template <class T>
+Block<T>::Block(int dispersionSize, int blockNum, char* filePath){
+	this->numberOfRegs=0;
 	this->dispersionSize=dispersionSize;
-
-	this->maxBlockSize=blockSize;
-
+	this->maxBlockSize=MAX_BLOCK_SIZE;
+	this->maxNumberOfRegs=MAX_REGS_PER_BLOCK;
 	this->blockNum = blockNum;
-
-	//this->filePath = (char*) calloc(strlen(filePath)+1, sizeof(char));
 	this->filePath=new char[strlen(filePath)+1]();
+	this->blockCurrentSize = 0;
 	strcpy(this->filePath, filePath);
 }
 
@@ -30,74 +24,71 @@ Block::Block(int dispersionSize, int blockNum, char* filePath, int blockSize){
  * en un bloque yo tengo que agregar un registro, y ademas tengo que agregar ese bloque a la lista de bloques
  * */
 
-//TODO: emprolijar
-int Block::newBlockNum(){
+
+template <class T>
+unsigned int Block<T>::newBlockNum(){
 	ArchivoBloques archivo(this->maxBlockSize, this->filePath);
-	
 	return  archivo.ultimoBloque();
-	
 }
 
-int Block::Insert(Reg & aReg){
-	//TODO: aReg.getSize() -> devuelve cualqiercosa, el size del reg es siempre REG_SIZE. DESHARDCODEAR
-	//this->blockCurrentSize+=aReg.getSize();
-	this->blockCurrentSize+=REG_SIZE;
+template <class T>
+int Block<T>::Insert(T & aReg){
+	this->numberOfRegs+=1;
 	this->regsList.push_back(aReg);
 	return 0;
 
 }
 
-void Block::changeDispersionSize(int newDispersionSize){
+template <class T>
+void Block<T>::changeDispersionSize(int newDispersionSize){
 	this->dispersionSize=newDispersionSize;
 }
-list<Reg> Block::getRegList(){
+template <class T>
+list<T> Block<T>::getRegList(){
 	return this->regsList;
 }
 
-int Block::getBlockNum(){
+template <class T>
+int Block<T>::getBlockNum(){
 	return this->blockNum;
 }
 
-int Block::duplicateDispersionSize(){
+template <class T>
+int Block<T>::duplicateDispersionSize(){
 	return (this->dispersionSize*=2);
 }
 
-int Block::getDispersionSize(){
+template <class T>
+int Block<T>::getDispersionSize(){
 	return dispersionSize;
 }
 
-
-// TODO: SE ELIMINA? -> Si
-int Block::separate(){
-	return 0; //hacer
+template <class T>
+short int Block<T>::getNumberOfRegs(){
+	return this->numberOfRegs;
 }
 
-int Block::getCurrentSize(){
-	return this->blockCurrentSize;
+
+template <class T>
+bool Block<T>::easyInsert(T& aReg){
+	SerialBuffer aSerialBuffer(maxBlockSize);
+	this->getCurrentBuffer(&aSerialBuffer);
+
+	if(aSerialBuffer.pack(aReg)!=-3)
+		return false;
+	return true;
 }
 
-/* TODO: SE USA  ? ? ? -> no, borrar
-int Block::getBlockAdress(){
-	return blockAdress;
-}*/
-
-bool Block::easyInsert(Reg& aReg){
-	//TODO: tiene qeu ser menor o menor e igual?
-	return (aReg.getSize()+ this->blockCurrentSize <= this->maxBlockSize);
-}
-
-//  Devuelve el addres si lo encuentra, sino -1, no ponog 0 por qe puede qe el addres sea 0, no? TODO: Checkear si esto es verdad
-//  TODO: Andar anda, pero no se por qe le pasamos un registro, se tendria qe pasar solo el ID
-int Block::search(Reg& regToLook){
-	list<Reg>::iterator it;
+template <class T>
+bool Block<T>::search(T** regToLook){
+	typename list<T>::iterator it;
 	for (it = regsList.begin(); it != regsList.end(); it++){
-		if ((*it).getId()==regToLook.getId()){
-			regToLook.setFileAdress((*it).getFileAdress());
-			//El size es siempre el mismo
-			return ((*it).getFileAdress());
+		if ((*it).getClave()==(*regToLook)->getClave()){
+			*regToLook=(*it);
+			return true;
 		}
 	}
-	return -1;
+	return false;
 }
 
 // Implementacion con clase de archivo -> No anda
@@ -132,6 +123,7 @@ int Block::search(Reg& regToLook){
 //}
 
 // Implementacion abriendo archivo de manera cabeza -> Anda =D
+/*
 void Block::write(){
 	fstream archivo(this->filePath,ios::in|ios::out|ios::binary);
 	if (!archivo.is_open())
@@ -157,25 +149,46 @@ void Block::write(){
 	//2free(Buf);
 	delete[]Buf;
 }
+*/
 
 
-///ESTOY SEGURO QUE ESTO NO VA A ANDAR
-// NO SE COMO FUNCIONA
-// TODO: FEDEEEEEEEEEE
-// XXX : FEDEEEEEEE
-// FIXME: FEDEEEEEEE
-// ****************************************************************************************************************************
-// ****************************************************************************************************************************
-// ****************************************************************************************************************************
-// ****************************************************************************************************************************
-// *************************************************************							 **********************************
-// ************************************************************* 		MIRAD ESTO			 **********************************
-// *************************************************************							 **********************************
-// ****************************************************************************************************************************
-// ****************************************************************************************************************************
-// ****************************************************************************************************************************
-// ****************************************************************************************************************************
-// ****************************************************************************************************************************
+template <class T>
+void Block<T>::getCurrentBuffer(SerialBuffer* aSerialBuffer){
+	aSerialBuffer->pack(this->numberOfRegs, sizeof(this->numberOfRegs));
+	typename list<T>::iterator it;
+	for(it = regsList.begin(); it!= regsList.end(); it++){
+		it.serializar(aSerialBuffer);
+	}
+}
+
+template <class T>
+void Block<T>::write(){
+	ArchivoBloques archivo(maxBlockSize,this->filePath);
+	SerialBuffer aSerialBuffer(maxBlockSize);
+	this->getCurrentBuffer(&aSerialBuffer);
+	archivo.escribirBloque(aSerialBuffer.getBuffer(),this->getBlockNum());
+}
+
+
+
+/// SEGUIR CON ESTOOOOO
+template <class T>
+void Block<T>::read(){
+	ArchivoBloques archivo(maxBlockSize,this->filePath);
+	SerialBuffer aSerialBuffer(maxBlockSize);
+	archivo.leerBloque(aSerialBuffer.getBuffer(),this->getBlockNum());
+	aSerialBuffer.unpack(&(this->numberOfRegs));
+	//TODO: Liberar 
+	regsList.clear();
+	for (int i=0; i < this->numberOfRegs;i++){
+		T reg();
+		reg.deserializar(&aSerialBuffer);
+		regsList.push(reg);
+		//aSerialBuffer.unpack(&(this->numberOfRegs));
+		//aSerialBuffer.unpack()
+	}
+}
+
 
 /*void Block::read(){ //
 	ArchivoBloques archivo(maxBlockSize,this->filePath);
@@ -189,7 +202,7 @@ void Block::write(){
 }*/
 
 // Implementacion abriendo archivo de manera cabeza -> Anda =D
-
+/*
 void Block::read(){
 	fstream archivo(this->filePath,ios::in|ios::out|ios::binary);
 	if (!archivo.is_open()){
@@ -203,6 +216,10 @@ void Block::read(){
 	archivo.seekg(0,archivo.beg);
 	archivo.seekg(this->maxBlockSize*this->getBlockNum());
 	archivo.read((char*)buf, this->maxBlockSize);
+
+
+	//
+
 
 	//1cout << "Read ->" ;
 	//for (int i=0; ((unsigned int) i)<this->maxBlockSize/sizeof(int) && buf[i]!=0; i++){ //Cuando viene un id =0 significa qe ya no hay mas info TODO: controlar qe no se pase del buffer
@@ -219,7 +236,7 @@ void Block::read(){
 	//2free(buf);
 	delete[] buf;
 }
-
+*/
 /**/
 /*
 ArchivoBloques* Block::getArchivo(){
@@ -242,7 +259,9 @@ int Block::redistribute(Block* aNewBlock,int tableSize){
 		return 0; //cambiar
 }*/ //LA REDISPERSION LA TENDRIA QUE SABER HACER LA TABLA, NO EL BLOQUE
 
-Block::~Block() {
+template <class T>
+Block<T>::~Block() {
 	//2free(this->filePath);
+	regsList.clear();
 	delete [] this->filePath;
 }

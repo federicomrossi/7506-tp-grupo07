@@ -19,7 +19,8 @@
 #define TEST_FILE_TABLE "./test_file_TESTTABLEFILE"
 // Tama~no del bloque
 
-#define MAX_BLOCK_SIZE (10)
 
+#define MAX_BLOCK_SIZE (512)
+#define MAX_REGS_PER_BLOCK (10)
 
 #endif /* CONFIG_H_ */
