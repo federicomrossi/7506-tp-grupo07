@@ -1,5 +1,8 @@
 //
-//  ListaFija.h
+//  lib_ListaFija.h
+//	ListaFija
+//	***************************************************************************
+//
 //	Implementacion de una lista de tamanio maximo fijo, la cual imita las
 //  funcionalidades de la libreria list de la STL.
 //

@@ -8,9 +8,10 @@
 #define ARBOLBMAS_NODO_H
 
 
-class ArchivoBloques;
-class SerialBuffer;
-class RegistroGenerico;
+#include "logica_ArbolBmasNodo.h"
+#include "fisica_ArchivoBloques.h"
+#include "fisica_SerialBuffer.h"
+
 
 // Definicion de tipo uint para utilizar nombre mas corto
 typedef unsigned int uint; 
@@ -19,10 +20,22 @@ typedef unsigned int uint;
 
 
 /* ****************************************************************************
+ * CONFIGURACION
+ * ***************************************************************************/
+
+namespace {
+
+	// Constantes para el buffer
+	const int NODO_BUFFER_TAMANIO = 512;
+}
+
+
+
+/* ****************************************************************************
  * DECLARACIÓN DE LA ESTRUCTURA
  * ***************************************************************************/
 
-
+template < typename Tipo >
 struct Nodo
 {
 	SerialBuffer *buffer;			// Buffer utilizado para serializacion
@@ -55,7 +68,7 @@ struct Nodo
 	// se almacena el arbol; 'contBloques' es el contador de bloques del
 	// arbol.
 	// POST: devuelve true si queda en overflow o false en caso contrario
-	virtual bool insertar(uint& clave, RegistroGenerico& registro, 
+	virtual bool insertar(uint& clave, Tipo & registro, 
 		ArchivoBloques *archivo, uint& contBloques) = 0;
 
 	// Busca un registro.
@@ -65,7 +78,7 @@ struct Nodo
 	// POST: Si se encontró el registro, se devuelve true y se almacena en
 	// 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
 	// en 'registro' el registro superior mas proximo al buscado.
-	virtual bool buscar(const uint clave, RegistroGenerico & registro, 
+	virtual bool buscar(const uint clave, Tipo & registro, 
 		ArchivoBloques *archivo) = 0;
 
 	// Reparte su contenido con su nodoHermano, pasandole la mitad.
@@ -88,5 +101,58 @@ struct Nodo
 	// Se imprime el nodo en la salida estandar con su contenido
 	virtual void imprimir(uint& nivelDelArbol, ArchivoBloques *archivo) = 0;
 };
+
+
+
+
+
+/* ****************************************************************************
+ * DEFINICIÓN DE LA ESTRUCTURA
+ * ***************************************************************************/
+
+
+// Constructor
+template < typename Tipo >
+Nodo< Tipo >::Nodo() 
+{
+	this->buffer = new SerialBuffer(NODO_BUFFER_TAMANIO);
+}
+
+
+// Destructor
+template < typename Tipo >
+Nodo< Tipo >::~Nodo() 
+{
+	// Liberamos la memoria utilizada para el buffer de serializacion
+	delete this->buffer;
+}
+
+
+// Inicializa el nodo.
+// PRE: 'numBloque' es el numero de bloque en el que se encuentra
+// almacenado; 'nivel' es el nivel en el que se encuentra el nodo.
+template < typename Tipo >
+void Nodo< Tipo >::inicializar(uint numBloque, uint nivel)
+{
+	this->numBloque = numBloque;
+	this->nivel = nivel;
+}
+
+// Establece el numero de bloque del nodo. Se utiliza para setear
+// el numero de bloque de un nodo existente, previo a realizar la
+// carga de este a memoria.
+template < typename Tipo >
+void Nodo< Tipo >::setNumBloque(uint numBloque)
+{
+	this->numBloque = numBloque;
+}
+
+
+// Devuelve el numero de bloque en el que se encuentra el nodo
+template < typename Tipo >
+uint Nodo< Tipo >::getNumBloque()
+{
+	return this->numBloque;
+}
 
 #endif

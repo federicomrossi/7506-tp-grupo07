@@ -1,6 +1,11 @@
 //
-//  ArbolBmasNodoHoja.h
-//	[ Insertar documentacion ]
+//  logica_ArbolBmasNodoHoja.h
+//	NODO HOJA - ARBOL B+
+//	***************************************************************************
+//
+//	Implementacion de la estructura del Nodo Hoja utilizado en el Arbol B+.
+//	Debe considerarse esta estructura como privada del arbol, es decir, su
+//	
 //
 
 
@@ -24,15 +29,15 @@ typedef unsigned int uint;
  * ***************************************************************************/
 
 
-template < size_t MAX_HOJA, size_t MAX_INTERNO >
-struct NodoHoja : public Nodo
+template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
+struct NodoHoja : public Nodo< Tipo >
 {
 	// Referencia al nodo hermano
 	uint nodoHermano;
 	// Claves de registros
 	ListaFija< unsigned int, MAX_HOJA + 1 > claves;
 	// Lista de registros (se usa si es un nodo hoja)
-	ListaFija< RegistroGenerico, MAX_HOJA + 1 > registros;
+	ListaFija< Tipo, MAX_HOJA + 1 > registros;
 
 
 	// Constructor
@@ -47,7 +52,7 @@ struct NodoHoja : public Nodo
 	// se almacena el arbol; 'contBloques' es el contador de bloques del
 	// arbol.
 	// POST: devuelve true si queda en overflow o false en caso contrario
-	virtual bool insertar(uint& clave, RegistroGenerico& registro, 
+	virtual bool insertar(uint& clave, Tipo & registro, 
 		ArchivoBloques *archivo, uint& contBloques);
 
 	// Busca un registro.
@@ -57,18 +62,18 @@ struct NodoHoja : public Nodo
 	// POST: Si se encontró el registro, se devuelve true y se almacena en
 	// 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
 	// en 'registro' el registro superior mas proximo al buscado.
-	virtual bool buscar(const uint clave, RegistroGenerico & registro, 
+	virtual bool buscar(const uint clave, Tipo & registro, 
 		ArchivoBloques *archivo);
 
 	// Obtiene el menor de los registros contenido en el nodo.
 	// PRE: 'registro' es donde se almacena el registro menor.
 	// POST: si se encuentra vacio el nodo se lanza una excepcion.
-	void obtenerMenorRegistro(RegistroGenerico & registro);
+	void obtenerMenorRegistro(Tipo & registro);
 
 	// Reparte su contenido con su nodoHermano, pasandole la mitad.
 	// PRE: 'nodoHermano' es un nodo con el que se hara la division
 	// POST: devuelve la clave del registro inferior de 'nodoHermano'
-	virtual uint dividir(Nodo *nodoHermano);
+	virtual uint dividir(Nodo< Tipo > *nodoHermano);
 
 	// Carga el nodo desde un archivo.
 	// PRE: 'archivo' es donde se almacena el nodo que se desea cargar, el
@@ -96,8 +101,8 @@ struct NodoHoja : public Nodo
 
 
 // Constructor
-template < size_t MAX_HOJA, size_t MAX_INTERNO >
-NodoHoja< MAX_HOJA, MAX_INTERNO >::NodoHoja()
+template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
+NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::NodoHoja()
 {
 	this->cantMaxClaves = MAX_HOJA;
 	this->nodoHermano = 0;
@@ -105,8 +110,8 @@ NodoHoja< MAX_HOJA, MAX_INTERNO >::NodoHoja()
 
 
 // Destructo
-template < size_t MAX_HOJA, size_t MAX_INTERNO >
-NodoHoja< MAX_HOJA, MAX_INTERNO >::~NodoHoja() { }
+template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
+NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::~NodoHoja() { }
 
 
 // Inserta el registro en el nodo.
@@ -115,9 +120,9 @@ NodoHoja< MAX_HOJA, MAX_INTERNO >::~NodoHoja() { }
 // se almacena el arbol; 'contBloques' es el contador de bloques del
 // arbol.
 // POST: devuelve true si queda en overflow o false en caso contrario
-template < size_t MAX_HOJA, size_t MAX_INTERNO >
-bool NodoHoja< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave, 
-	RegistroGenerico& registro, ArchivoBloques *archivo, uint& contBloques)
+template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
+bool NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::insertar(uint& clave, 
+	Tipo & registro, ArchivoBloques *archivo, uint& contBloques)
 {
 	for(size_t i = 0; i < this->claves.tamanio()+1; i++)
 	{
@@ -161,9 +166,9 @@ bool NodoHoja< MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 // POST: Si se encontró el registro, se devuelve true y se almacena en
 // 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
 // en 'registro' el registro superior mas proximo al buscado.
-template < size_t MAX_HOJA, size_t MAX_INTERNO >
-bool NodoHoja< MAX_HOJA, MAX_INTERNO >::buscar(const uint clave,
-	RegistroGenerico & registro, ArchivoBloques *archivo)
+template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
+bool NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::buscar(const uint clave,
+	Tipo & registro, ArchivoBloques *archivo)
 {
 	// Iteramos sobre las claves del nodo
 	for(size_t i = 0; i < this->claves.tamanio(); i++)
@@ -190,7 +195,7 @@ bool NodoHoja< MAX_HOJA, MAX_INTERNO >::buscar(const uint clave,
 	if(this->nodoHermano == 0) return false;
 
 	// Cargamos nodo hermano y devolvemos el primero de sus registros
-	NodoHoja< MAX_HOJA, MAX_INTERNO > nodoHermano;
+	NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO > nodoHermano;
 	nodoHermano.setNumBloque(this->nodoHermano);
 	nodoHermano.cargar(archivo);
 	nodoHermano.obtenerMenorRegistro(registro);
@@ -203,9 +208,9 @@ bool NodoHoja< MAX_HOJA, MAX_INTERNO >::buscar(const uint clave,
 // Obtiene el menor de los registros contenido en el nodo.
 // PRE: 'registro' es donde se almacena el registro menor.
 // POST: si se encuentra vacio el nodo se lanza una excepcion.
-template < size_t MAX_HOJA, size_t MAX_INTERNO >
-void NodoHoja< MAX_HOJA, MAX_INTERNO >::obtenerMenorRegistro(
-	RegistroGenerico & registro)
+template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
+void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::obtenerMenorRegistro(
+	Tipo & registro)
 {
 	// Corroboramos que no este vacia
 	if(this->registros.estaVacia())
@@ -218,11 +223,12 @@ void NodoHoja< MAX_HOJA, MAX_INTERNO >::obtenerMenorRegistro(
 // Reparte su contenido con su nodoHermano, pasandole la mitad.
 // PRE: 'nodoHermano' es un nodo con el que se hara la division
 // POST: devuelve la clave del registro inferior de 'nodoHermano'
-template < size_t MAX_HOJA, size_t MAX_INTERNO >
-uint NodoHoja< MAX_HOJA, MAX_INTERNO >::dividir(Nodo *nodoHermano)
+template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
+uint NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::dividir(
+	Nodo< Tipo > *nodoHermano)
 {
 	// Casteamos para poder tratarlo como nodo hoja
-	NodoHoja *nodoHojaHermano = (NodoHoja< MAX_HOJA, MAX_INTERNO >*)
+	NodoHoja *nodoHojaHermano = (NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >*)
 		nodoHermano;
 		
 	// Calculamos posicion de corte
@@ -248,8 +254,8 @@ uint NodoHoja< MAX_HOJA, MAX_INTERNO >::dividir(Nodo *nodoHermano)
 // PRE: 'archivo' es donde se almacena el nodo que se desea cargar, el
 // cual se encuentra en el numero de bloque con el que fue inicializado.
 // POST: se han cargado todos los atributos internos del nodo
-template < size_t MAX_HOJA, size_t MAX_INTERNO >
-void NodoHoja< MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
+template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
+void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
 {
 	this->buffer->clear();
 	archivo->leerBloque(this->buffer->getBuffer(), this->numBloque);
@@ -267,9 +273,9 @@ void NodoHoja< MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
 	this->nodoHermano = nodoHermano;
 
 	// Deserializamos las claves
-	this->claves.deserializar(buffer);
-	// Deserializamos los registros
-	this->registros.deserializar(buffer);
+	this->claves.deserializar(this->buffer);
+	// Deserializamos los registrosthis
+	this->registros.deserializar(this->buffer);
 }
 
 
@@ -277,8 +283,8 @@ void NodoHoja< MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
 // PRE: 'archivo' es donde se almacenaran los datos del nodo, los cuales
 // se guardaran en el numero de bloque con el cual fue inicializado.
 // POST: se guardo el estado del nodo en el archivo.
-template < size_t MAX_HOJA, size_t MAX_INTERNO >
-void NodoHoja< MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
+template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
+void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
 {
 	this->buffer->clear();
 
@@ -294,9 +300,9 @@ void NodoHoja< MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
 	this->buffer->pack(&nodoHermano, sizeof(uint));
 
 	// Serializamos las claves
-	this->claves.serializar(buffer);
+	this->claves.serializar(this->buffer);
 	// Serializamos los registros
-	this->registros.serializar(buffer);
+	this->registros.serializar(this->buffer);
 
 	// Escribimos bloque y limpiamos buffer
 	archivo->escribirBloque(this->buffer->getBuffer(), this->numBloque);
@@ -306,8 +312,8 @@ void NodoHoja< MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
 
 // Se imprime el nodo en la salida estandar con su contenido.
 // FORMATO: "[nivel], [numero_bloque]: ([clave1])...([claveN])[nodo_hermano] 
-template < size_t MAX_HOJA, size_t MAX_INTERNO >
-void NodoHoja< MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol, 
+template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
+void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol, 
 	ArchivoBloques *archivo)
 {
 	// Tabulamos de acuerdo al nivel

@@ -16,12 +16,12 @@
 void prueba_ArbolBmas_1()
 {
     // Creamos el arbol
-    ArbolBmas arbol;
+    ArbolBmas< UnRegistroGenerico > arbol;
     // Lo abrimos. Si no existe se crea con un nodo raiz inicial.
     arbol.abrir(".arbol.prueba.1");
 
     // Creamos un unico registro de prueba vacio
-    RegistroGenerico reg;
+    UnRegistroGenerico reg;
     
     // Insertamos pares (clave, valor) de prueba para armado del arbol
     try {
@@ -53,41 +53,41 @@ void prueba_ArbolBmas_1()
 
 void prueba_ArbolBmas_2()
 {
-    ArbolBmas arbol;
+    ArbolBmas< UnRegistroGenerico > arbol;
     arbol.abrir(".arbol.prueba.2");
 
     UnRegistroGenerico r1;
     r1.setClave(1);
-    r1.setAtributo(8);
-    // UnRegistroGenerico r2;
-    // r2.setClave(2);
-    // r2.setAtributo(22);
-    // UnRegistroGenerico r3;
-    // r3.setClave(3);
-    // r3.setAtributo(33);
-    // UnRegistroGenerico r4;
-    // r4.setClave(4);
-    // r4.setAtributo(44);
-    // UnRegistroGenerico r5;
-    // r5.setClave(5);
-    // r5.setAtributo(55);
-    // UnRegistroGenerico r6;
-    // r6.setClave(6);
-    // r6.setAtributo(66);
-    // UnRegistroGenerico r7;
-    // r7.setClave(7);
-    // r7.setAtributo(77);
+    r1.setAtributo(1);
+    UnRegistroGenerico r2;
+    r2.setClave(2);
+    r2.setAtributo(22);
+    UnRegistroGenerico r3;
+    r3.setClave(3);
+    r3.setAtributo(33);
+    UnRegistroGenerico r4;
+    r4.setClave(4);
+    r4.setAtributo(44);
+    UnRegistroGenerico r5;
+    r5.setClave(5);
+    r5.setAtributo(55);
+    UnRegistroGenerico r6;
+    r6.setClave(6);
+    r6.setAtributo(66);
+    UnRegistroGenerico r7;
+    r7.setClave(7);
+    r7.setAtributo(77);
 
     try {
         
         // Insertamos pares (clave, valor) de prueba para armado del arbol
         arbol.insertar(r1.getClave(), r1);
-        // arbol.insertar(r2.getClave(), r2);
-        // arbol.insertar(r3.getClave(), r3);
-        // arbol.insertar(r4.getClave(), r4);
-        // arbol.insertar(r5.getClave(), r5);
-        // arbol.insertar(r6.getClave(), r6);
-        // arbol.insertar(r7.getClave(), r7);
+        arbol.insertar(r2.getClave(), r2);
+        arbol.insertar(r3.getClave(), r3);
+        arbol.insertar(r4.getClave(), r4);
+        arbol.insertar(r5.getClave(), r5);
+        arbol.insertar(r6.getClave(), r6);
+        arbol.insertar(r7.getClave(), r7);
         arbol.imprimir();
 
         // Realizamos la busqueda de un registro
