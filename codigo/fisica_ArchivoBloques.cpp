@@ -14,12 +14,20 @@ ArchivoBloques::ArchivoBloques(unsigned int blockSize, std::string filename)
     this->blockSize=blockSize;
 }
 
+/*  PRE: debe existir el archivo.
+//  POST: el archivo es eliminado.
+*/
 
 void ArchivoBloques::borrarArchivo()
 {
     remove(filename.c_str());
 }
 
+/*  Metodo para modificar un bloque intermedio del archivo. 
+//  En caso de querer agregar un bloque, utilizar el metodo correspondiente.
+//  PRE: el archivo y el bloque deben existir.
+//  POST: se reemplaza el bloque correspondiente por el contenido del buffer.
+*/
 
 int ArchivoBloques::escribirBloque(const char *buffer, unsigned int numeroBloque)
 {
@@ -97,6 +105,10 @@ int ArchivoBloques::escribirBloque(const char *buffer, unsigned int numeroBloque
     return 0;
 }
 
+/*  Escribe el buffer pasado como argumento como el nuevo ultimo bloque del archivo.
+//  POST: el ultimo bloque del archivo queda con los datos del buffer.
+*/
+
 int ArchivoBloques::agregarBloque(const char *buffer)
 {
    std::ofstream file;
@@ -106,6 +118,11 @@ int ArchivoBloques::agregarBloque(const char *buffer)
    return 0;
 }
 
+/*  Lee un bloque del tamano especificado al momento de instanciacion y lo guarda en el buffer
+//  pasado como argumento. No se chequea por ultimoBloque en este metodo para no agregar trabajo de I/O.
+//  PRE: el archivo debe existir y el numero de bloque debe ser menor que el ultimo bloque.
+//  POST: el buffer queda con la informacion que estuviera escrita en el bloque numeroBloque del archivo.
+*/
 
 int ArchivoBloques::leerBloque(char *buffer, unsigned int numeroBloque)
 {
@@ -125,6 +142,10 @@ bool ArchivoBloques::existe()
     file.close();
     return existe;
 }
+
+/*  Metodo para saber cual es el ultimo bloque escrito de un archivo.
+//  Devulve el numero de bloque en caso que el archivo exista y -1 en caso contrario. 
+*/
 
 int ArchivoBloques::ultimoBloque()
 {
