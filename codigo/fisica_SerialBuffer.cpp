@@ -26,7 +26,7 @@ void SerialBuffer::clear()
 
 int SerialBuffer::pack(const void *object, unsigned short int size)
 {
-    if (this->bufferSize+size > this->maxSize) {
+    if (this->bufferSize+size+sizeof(size) > this->maxSize) {
         cerr<<"Se excede el tamano maximo del buffer";
         return -3;
     } 
