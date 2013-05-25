@@ -5,7 +5,7 @@
 
 
 /*  INDICACIONES PARA PRUEBAS
- *  
+ *
  *  Para cambiar la cantidad de registros en nodos hoja y nodos internos deben
  *  cambiar los valores de las constantes de configuracion ubicadas en el
  *  header logica_ArbolBmas.h.
@@ -23,7 +23,7 @@ void prueba_ArbolBmas_1()
 
     // Creamos un unico registro de prueba vacio
     UnRegistroGenerico reg;
-    
+
     // Insertamos pares (clave, valor) de prueba para armado del arbol
     try {
 	    arbol.insertar(4, reg);
@@ -80,7 +80,7 @@ void prueba_ArbolBmas_2()
     r7.setAtributo(77);
 
     try {
-        
+
         // Insertamos pares (clave, valor) de prueba para armado del arbol
         arbol.insertar(r1.getClave(), r1);
         arbol.insertar(r2.getClave(), r2);
@@ -95,7 +95,7 @@ void prueba_ArbolBmas_2()
         std::cout << std::endl << "BUSQUEDA" << std::endl;
 
         for(unsigned int i = 0; i <= 10; i++)
-        { 
+        {
             UnRegistroGenerico rb;
 
             if(arbol.buscar(i, rb))
@@ -131,7 +131,7 @@ void prueba_ArbolBmas_3()
     ArbolBmas< AutorReferencias > arbol;
     arbol.abrir(".arbol.prueba.3");
 
-    AutorReferencias r1(26);
+    AutorReferencias r1(0);
     r1.setCant(1);
     r1.setRef1(2);
     r1.setRef2(3);
@@ -139,10 +139,29 @@ void prueba_ArbolBmas_3()
     r1.setRef4(5);
     r1.setRef5(6);
     r1.setRefLista(7);
+    arbol.insertar(0,r1);
+    AutorReferencias* a = new AutorReferencias();
+    bool b = arbol.buscar(0,*a);
+    if(b){
+        std::cout << "encontrado";
+    }else{
+        std::cout<< "No encontrado";
+    }
+    arbol.cerrar();
+    arbol.abrir(".arbol.prueba.3");
+    AutorReferencias* a2 = new AutorReferencias();
+    b = arbol.buscar(0,*a2);
+    if(b){
+        std::cout << "encontrado";
+    }else{
+        std::cout<< "No encontrado";
+    }
+    delete a;
+    delete a2;
 
     try {
 
-        for(int i = 1; i <= 22; i++)
+        for(int i = 1; i <= 2; i++)
         {
             AutorReferencias r(i);
             arbol.insertar(r.getClave(), r);
@@ -160,7 +179,7 @@ void prueba_ArbolBmas_3()
         arbol.imprimir();
 
         for(unsigned int i = 25; i < 30; i++)
-        { 
+        {
             AutorReferencias rb;
 
             if(arbol.buscar(i, rb))
