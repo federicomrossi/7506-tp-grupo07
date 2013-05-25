@@ -109,6 +109,7 @@ int IndiceTitulo::pack(){
         delete ar;
         delete lista;
     }
+    remove(this->temporalOcurrencias.c_str());
     return  0;
 }
 
@@ -145,11 +146,37 @@ int IndiceTitulo::printOcurrencias(){
     return 0;
 }
 
-int IndiceTitulo::recuperar(std::string titulo, unsigned int* songRef){
-    *songRef = 0;
+int IndiceTitulo::recuperar(std::string titulo, std::list<unsigned int> *lista){
+ /*   unsigned int clave = this->obtenerId(titulo);
+//    hash->abrir(this->hashName.c_str());
+    TituloReferencias* ar = new TituloReferencias();
+    bool b = hash->buscar(clave, *ar);
+    if(b){
+        unsigned int* refs = ar->getRefs();
+        unsigned int stop = ar->getCant() > 3 ? 3: ar->getCant();
+        for(unsigned int i=0;i<stop;i++){
+            lista->push_back(refs[i]);
+        }
+        if(ar->getCant() > 3){
+            std::ifstream file;
+            file.open(this->listaRefs.c_str());
+            file.seekg(ar->getRefLista());
+            unsigned int cant;
+            file.read((char*)&cant,sizeof(unsigned int));
+            for(unsigned int i=0;i < cant;i++){
+                unsigned int ref;
+                file.read((char*)&ref,sizeof(unsigned int));
+                lista->push_back(ref);
+            }
+            file.close();
+        }
+    }
+    arbol->cerrar();*/
     return 0;
 }
 
 int IndiceTitulo::eliminarTodo(){
+    remove(listaRefs.c_str());
+    remove(titulos.c_str());
     return 0;
 }

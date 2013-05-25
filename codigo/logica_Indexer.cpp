@@ -11,6 +11,7 @@
 Indexer::Indexer(){
     fromPath="/home/pablo/tpDatos/7506-tp-grupo07/temas";
     destPath="/home/pablo/tpDatos/dest/";
+    masterName = destPath+".master";
     rtt = new RTTgenerator(destPath);
     autores = new IndiceAutor(destPath);
     titulos =  new IndiceTitulo(destPath);
@@ -23,6 +24,10 @@ Indexer::~Indexer(){
 }
 
 int Indexer::eliminarTodo(){
+    remove(masterName.c_str());
+    autores->eliminarTodo();
+    titulos->eliminarTodo();
+    rtt->eliminarTodo();
     return 0;
 }
 
@@ -45,7 +50,7 @@ int Indexer::indexarCancionesDesde(int mode){
                 std::cout << "Archivo ya indexado. Descartado" << endl;
             }else{
                 std::cout << "OK." << endl << "Indexando..";
-                unsigned int songPosition = this->copyToMaster(*it, destPath+".master");
+                unsigned int songPosition = this->copyToMaster(*it, masterName);
                 this->indexarAutores(header,songPosition);
                 this->indexarTitulo(header,songPosition);
                 this->generateRTT(*it,songPosition);

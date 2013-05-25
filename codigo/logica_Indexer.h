@@ -25,6 +25,7 @@ class Indexer{
         RTTgenerator *rtt;
         std::string fromPath;
         std::string destPath;
+        std::string masterName;
 };
 
 

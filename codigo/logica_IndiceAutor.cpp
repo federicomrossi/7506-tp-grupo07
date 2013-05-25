@@ -56,6 +56,7 @@ unsigned int IndiceAutor::obtenerId(std::string autor){
         id = file2.tellp();
         AutorId* aid = new AutorId(autor.c_str(),id);
         file2 << *aid;
+        delete aid;
         file2.close();
     }
     return id;
@@ -162,6 +163,7 @@ int IndiceAutor::printOcurrencias(){
         std::cout << "(" << o->getAutorId() << "," << o->getDocumentoId() << ")";
         file >> *o;
     }
+    delete o;
     file.close();
     return 0;
 }
@@ -173,29 +175,34 @@ int IndiceAutor::recuperar(std::string autor, std::list<unsigned int> *lista){
     AutorReferencias* ar = new AutorReferencias();
     bool b = arbol->buscar(clave, *ar);
     if(b){
-    unsigned int* refs = ar->getRefs();
-    unsigned int stop = ar->getCant() > 5 ? 5: ar->getCant();
-    for(unsigned int i=0;i<stop;i++){
-        lista->push_back(refs[i]);
-    }
-    if(ar->getCant() > 5){
-        std::ifstream file;
-        file.open(this->listaRefs.c_str());
-        file.seekg(ar->getRefLista());
-        unsigned int cant;
-        file.read((char*)&cant,sizeof(unsigned int));
-        for(unsigned int i=0;i < cant;i++){
-            unsigned int ref;
-            file.read((char*)&ref,sizeof(unsigned int));
-            lista->push_back(ref);
+        unsigned int* refs = ar->getRefs();
+        unsigned int stop = ar->getCant() > 5 ? 5: ar->getCant();
+        for(unsigned int i=0;i<stop;i++){
+            lista->push_back(refs[i]);
         }
-        file.close();
+        if(ar->getCant() > 5){
+            std::ifstream file;
+            file.open(this->listaRefs.c_str());
+            file.seekg(ar->getRefLista());
+            unsigned int cant;
+            file.read((char*)&cant,sizeof(unsigned int));
+            for(unsigned int i=0;i < cant;i++){
+                unsigned int ref;
+                file.read((char*)&ref,sizeof(unsigned int));
+                lista->push_back(ref);
+            }
+            file.close();
+        }
     }
-    }
+    delete ar;
     arbol->cerrar();
     return 0;
 }
 
 int IndiceAutor::eliminarTodo(){
+    arbol->abrir(arbolName.c_str());
+    arbol->eliminar();
+    remove(autores.c_str());
+    remove(listaRefs.c_str());
     return 0;
 }

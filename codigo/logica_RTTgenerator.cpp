@@ -8,7 +8,6 @@
 
 
 RTTgenerator::RTTgenerator(std::string path){
-    //this->arbol = new ArbolBmas();
     this->temporalOcurrencias=path+".ocurrencias";
     this->palabras=path+".palabras";
     this->nonIndexableWords=path+ ".palabrasNoIndexables";
@@ -19,7 +18,6 @@ RTTgenerator::RTTgenerator(std::string path){
 }
 
 RTTgenerator::~RTTgenerator(){
-    arbol->cerrar();
     delete arbol;
 }
 
@@ -118,6 +116,7 @@ int RTTgenerator::pack(){
     }
     arbol->imprimir();
     arbol->cerrar();
+    remove(this->temporalOcurrencias.c_str());
     return  0;
 }
 
@@ -176,5 +175,18 @@ int RTTgenerator::printOcurrencias(){
         file >> *o;
     }
     file.close();
+    return 0;
+}
+
+int RTTgenerator::eliminarTodo(){
+    remove(palabras.c_str());
+    remove(listasInvertidasDocumentos.c_str());
+    remove(listasInvertidasPosiciones.c_str());
+    arbol->abrir(arbolName.c_str());
+    arbol->eliminar();
+    return 0;
+}
+
+int RTTgenerator::recuperar(std::string frase, std::list<unsigned int> *lista){
     return 0;
 }

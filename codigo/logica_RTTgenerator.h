@@ -12,6 +12,8 @@ class RTTgenerator{
         ~RTTgenerator();
         int indexarPalabra(std::string palabra, unsigned int song, unsigned int position);
         int pack();
+        int eliminarTodo();
+        int recuperar(std::string frase, std::list<unsigned int> *lista);
     private:
         int esIndexable(std::string palabra);
         unsigned int obtenerId(std::string palabra);
