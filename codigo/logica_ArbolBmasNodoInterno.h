@@ -15,7 +15,6 @@
 
 #include "fisica_ArchivoBloques.h"
 #include "logica_ArbolBmasNodo.h"
-#include "logica_ArbolBmasNodoInterno.h"
 #include "logica_ArbolBmasNodoHoja.h"
 #include "lib_ListaFija.h"
 

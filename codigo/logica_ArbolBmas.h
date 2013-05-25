@@ -47,6 +47,10 @@ namespace {
 	const int CANT_REG_NODO_INTERNO = 5;
 	const int CANT_REG_NODO_HOJA = 6;
 
+	// Constante para el tamanio de bloque 
+	// utilizado por los registros en nodos
+	const int TAMANIO_BLOQUE = 512;
+
 	// Constantes para el buffer
 	const int BUFFER_TAMANIO = 512;
 
@@ -168,7 +172,7 @@ template < typename Tipo >
 void ArbolBmas< Tipo >::abrir(const char* nombre_archivo)
 {
 	// Creamos un archivo de bloques
-	this->archivo = new ArchivoBloques(512, nombre_archivo);
+	this->archivo = new ArchivoBloques(TAMANIO_BLOQUE, nombre_archivo);
 
 	// Inicializamos el archivo de bloques o lo levantamos si ya existia
 	if(!this->archivo->existe())
