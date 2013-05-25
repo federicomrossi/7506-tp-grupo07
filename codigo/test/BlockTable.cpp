@@ -28,16 +28,19 @@ int main()
 		aBlockTable.insert(aReg);
 	}
 
+	cout << "Despues de insertar" << endl;
+
 
 	//Busco
 	for(int i=0;i<DATA_LENGTH;i++){
 		UnRegistroGenerico* aReg = new UnRegistroGenerico();
 		aReg->setClave(DATA[i][0]);
 		int ad = aBlockTable.search(aReg);
-		if( ! ad ){
+		if( ! ( ad && aReg->getClave() ==  DATA[i][0])){
 			cout << " \t ** Error i=" << i << " id=" << DATA[i][0] << " ad=" << DATA[i][1] << " ret_val=" << ad << endl;
 			error++;
 		}
+		cout << "Claveeee" <<aReg->getClave()  << endl;
 		delete aReg;
 	}
 

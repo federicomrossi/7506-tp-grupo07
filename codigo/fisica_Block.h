@@ -178,8 +178,11 @@ bool Block<T>::easyInsert(T& aReg){
 	unsigned short int preSize = aSerialBuffer.getBuffSize();
 	aReg.serializar(&aSerialBuffer);
 
-	if(aSerialBuffer.getBuffSize() - preSize == 0)
+	if(aSerialBuffer.getBuffSize() - preSize == 0){
+		cout << "Return false" << endl;
 		return false;
+	}
+	cout << "Return true" << endl;
 	return true;
 }
 
@@ -189,7 +192,8 @@ bool Block<T>::search(T*& regToLook){
 	for (it = regsList.begin(); it != regsList.end(); it++){
 		if ((it)->getClave()==regToLook->getClave()){
 			//TODO:Habria que hacer delete?
-			regToLook=&*it;
+			//regToLook=&*it;
+			memcpy(regToLook, &*it, sizeof(T));
 			return true;
 		}
 	}
@@ -280,6 +284,9 @@ void Block<T>::write(){
 template <class T>
 void Block<T>::read(){
 	ArchivoBloques archivo(maxBlockSize,this->filePath);
+	if(!archivo.existe())
+		return;
+
 	SerialBuffer aSerialBuffer(maxBlockSize);
 	archivo.leerBloque(aSerialBuffer.getBuffer(),this->getBlockNum());
 	aSerialBuffer.unpack(&(this->numberOfRegs));

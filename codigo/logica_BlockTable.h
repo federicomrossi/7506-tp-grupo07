@@ -31,7 +31,7 @@ class BlockTable{
 		//Path -> archivo de la tabla, blockPath -> archivo de bloques
 		BlockTable(string path, string blockPath, int blockSize);	// Cuando se crea la tabla de bloques, se crea a partir del archivo.
 		~BlockTable();	// Cierro los archivos, libero la memoria pedida por blockReferences.
-		int insert(T&); // A su vez llama al insertar del bloque
+		int insert(T); // A su vez llama al insertar del bloque
 		void insertBlock(int blockPos,int newBlockReference,int td); //En la posicion blockPos de la tabla pongo la nueva ref.
 		int countNumberOfReferences(int blockNumber);
 
@@ -133,7 +133,7 @@ int BlockTable<T>::countNumberOfReferences(int blockNumber){
 }
 
 template <class T>
-int BlockTable<T>::insert(T & aReg){
+int BlockTable<T>::insert(T aReg){
 
 	//Aca le voy a tener que pasar un registro geneirco, donde dice getId , sera getClave();
 	int pos = HashExtensible::doHash(aReg.getClave(),this->getSize());

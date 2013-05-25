@@ -8,7 +8,7 @@
 extension = cpp
 
 #TESTS = BlockTable TableBlock BlockTable_con_archivo
-TESTS = BlockTable
+TESTS = BlockTable BlockTable_con_archivo
 TMP_FILE_PREFIX = test_file_
 
 
