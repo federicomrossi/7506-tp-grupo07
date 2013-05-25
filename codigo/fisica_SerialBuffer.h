@@ -1,6 +1,8 @@
 //
 //  fisica_SerialBuffer.h
-//  Test2
+//  Clase utilizada para serializar varios elementos con iguales o distintos tipos
+//  dentro de un buffer para su posterior escritura a disco. Extienden a VarBuffer
+//  para poder manejar mas e un elemento por empaquetado.
 //
 //  Created by Federico Colangelo on 20/05/13.
 //  Copyright (c) 2013 Federico Colangelo. All rights reserved.
