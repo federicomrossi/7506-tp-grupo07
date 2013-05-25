@@ -10,6 +10,7 @@ IndiceTitulo::IndiceTitulo(std::string path){
     this->temporalOcurrencias = path + ".ocurrenciasTitulo";
     this->titulos = path + ".titulos";
     this->listaRefs = path + ".titulosRef";
+    //this->hash = new BlockTable<
 }
 
 IndiceTitulo::IndiceTitulo(){
@@ -53,6 +54,7 @@ unsigned int IndiceTitulo::obtenerId(std::string titulo){
         AutorId* aid = new AutorId(titulo.c_str(),id);
         file2 << *aid;
         file2.close();
+        delete aid;
     }
     return id;
 }

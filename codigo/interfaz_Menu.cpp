@@ -82,7 +82,9 @@ int Menu::ingresarOpcion(int opcion){
         case 5:
             busc = new Buscador;
             cout << "Ingrese la frase a buscar" << endl;
-            cin >> text;
+            std::cin.ignore();
+            std::getline(std::cin, text);
+            //text = Utils::uniformizarString(text);
             busc->buscarPorFrase(text);
             delete busc;
             break;

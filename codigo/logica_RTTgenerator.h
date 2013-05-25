@@ -23,6 +23,8 @@ class RTTgenerator{
         unsigned int getRefListaPos();
         int guardarListaPos(std::list<unsigned int>* lista);
         int guardarListaDocs(std::list<RTTreferencia*>* lista);
+        unsigned int intersecarListas(std::list<std::list<RTTreferencia*>*>* listaMadre);
+
         ArbolBmas<RTTreferencia> *arbol;
         std::string temporalOcurrencias;
         std::string nonIndexableWords;
