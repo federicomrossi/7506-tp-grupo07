@@ -1,5 +1,6 @@
 #include <iostream>
 #include "prueba_UnRegistroGenerico.h"
+#include "domain_AutorReferencias.h"
 #include "logica_ArbolBmas.h"
 
 
@@ -121,5 +122,73 @@ void prueba_ArbolBmas_2()
     // Cerramos el arbol. Esto guarda los metadatos del mismo en disco
     arbol.cerrar();
     // Eliminamos el archivo que contiene el arbol.
+    arbol.eliminar();
+}
+
+
+void prueba_ArbolBmas_3()
+{
+    ArbolBmas< AutorReferencias > arbol;
+    arbol.abrir(".arbol.prueba.3");
+
+    AutorReferencias r1(26);
+    r1.setCant(1);
+    r1.setRef1(2);
+    r1.setRef2(3);
+    r1.setRef3(4);
+    r1.setRef4(5);
+    r1.setRef5(6);
+    r1.setRefLista(7);
+
+    try {
+
+        for(int i = 1; i <= 22; i++)
+        {
+            AutorReferencias r(i);
+            arbol.insertar(r.getClave(), r);
+        }
+
+
+        for(int i = 30; i <= 60; i++)
+        {
+            AutorReferencias r(i);
+            arbol.insertar(r.getClave(), r);
+        }
+
+        arbol.insertar(r1.getClave(), r1);
+
+        arbol.imprimir();
+
+        for(unsigned int i = 25; i < 30; i++)
+        { 
+            AutorReferencias rb;
+
+            if(arbol.buscar(i, rb))
+            {
+                std::cout << std::endl << "ENCONTRO EL REGISTRO " << i << std::endl;
+                std::cout << "CLAVE: " << rb.getClave() << std::endl;
+                std::cout << "ATTR: " << rb.getCant() << std::endl;
+                std::cout << "ATTR: " << rb.getRef1() << std::endl;
+                std::cout << "ATTR: " << rb.getRef2() << std::endl;
+                std::cout << "ATTR: " << rb.getRef3() << std::endl;
+                std::cout << "ATTR: " << rb.getRef4() << std::endl;
+                std::cout << "ATTR: " << rb.getRef5() << std::endl;
+                std::cout << "ATTR: " << rb.getRefLista() << std::endl;
+                std::cout << std::endl;
+            }
+            // else
+            // {
+            //     std::cout << "NO ENCONTRO EL REGISTRO " << i << std::endl;
+            //     std::cout << "CLAVE: " << rb.getClave() << std::endl;
+            //     std::cout << "ATTR: " << rb.getAtributo() << std::endl;
+            // }
+        }
+    }
+    catch(char const * e){
+        std::cout << e << std::endl;
+    }
+
+
+    arbol.cerrar();
     arbol.eliminar();
 }

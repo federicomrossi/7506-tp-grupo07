@@ -6,10 +6,10 @@
 
 int main()
 {
-    //prueba_ArbolBmas_2();
+    // prueba_ArbolBmas_3();
 
-     Menu *m = new Menu;
-     while(m->start());
-     delete m;
+    Menu *m = new Menu;
+    while(m->start());
+    delete m;
     return 0;
 }
