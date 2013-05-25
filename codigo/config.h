@@ -13,6 +13,9 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
+#define SOURCE_PATH ""
+#define DEST_PATH ""
+
 //Archivo para guardar los bloques
 #define TEST_FILE "./test_file_TESTBLOCKFILE"
 // Archivo para guardar la tabla de referencia

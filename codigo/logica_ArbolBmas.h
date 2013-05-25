@@ -32,7 +32,7 @@
 #include "logica_ArbolBmasNodoInterno.h"
 
 // Definicion de tipo uint para utilizar nombre mas corto
-typedef unsigned int uint; 
+typedef unsigned int uint;
 
 
 
@@ -47,7 +47,7 @@ namespace {
 	const int CANT_REG_NODO_INTERNO = 5;
 	const int CANT_REG_NODO_HOJA = 6;
 
-	// Constante para el tamanio de bloque 
+	// Constante para el tamanio de bloque
 	// utilizado por los registros en nodos
 	const int TAMANIO_BLOQUE = 512;
 
@@ -127,7 +127,7 @@ public:
 	bool buscar(const uint clave, Tipo & registro);
 
 	// Elimina un arbol por completo.
-	// POST: se borro el archivo almacenado en disco con los datos del arbol. 
+	// POST: se borro el archivo almacenado en disco con los datos del arbol.
 	void eliminar();
 
 	// Imprime el arbol sobre la salida estandar. Las tabulaciones indican
@@ -147,15 +147,19 @@ public:
 
 // Constructor
 template < typename Tipo >
-ArbolBmas< Tipo >::ArbolBmas() : nivel(0), 
-	contBloques(NUM_BLOQUE_RAIZ_INICIAL) 
+ArbolBmas< Tipo >::ArbolBmas() : nivel(0),
+	contBloques(NUM_BLOQUE_RAIZ_INICIAL)
 {
 	this->buffer = new SerialBuffer(BUFFER_TAMANIO);
 
 	// this->maxRegNI = (TAMANIO_BLOQUE - attrNodo) / (sizeof(uint) + sizeof(Tipo));
 	this->maxRegNI = ((TAMANIO_BLOQUE - 12) / (2 * 4)) - 3;
 	this->maxRegNH = ((TAMANIO_BLOQUE - 16) / (4 + (4+4)));
-	
+
+    this->archivo = 0;
+    this->raiz = 0;
+    this->buffer = 0;
+
 	std::cout << "REG INT: " << this->maxRegNI << std::endl;
 	std::cout << "REG HOJA: " << this->maxRegNH << std::endl;
 }
@@ -163,7 +167,7 @@ ArbolBmas< Tipo >::ArbolBmas() : nivel(0),
 
 // Destructor
 template < typename Tipo >
-ArbolBmas< Tipo >::~ArbolBmas() 
+ArbolBmas< Tipo >::~ArbolBmas()
 {
 	// Liberamos la memoria utilizada por el archivo
 	delete this->archivo;
@@ -192,7 +196,7 @@ void ArbolBmas< Tipo >::abrir(const char* nombre_archivo)
 		this->contBloques = NUM_BLOQUE_RAIZ_INICIAL;
 
 		// Creamos el nodo raiz
-		this->raiz = new NodoHoja< Tipo, CANT_REG_NODO_HOJA, 
+		this->raiz = new NodoHoja< Tipo, CANT_REG_NODO_HOJA,
 			CANT_REG_NODO_INTERNO >;
 		this->raiz->inicializar(NUM_BLOQUE_RAIZ_INICIAL, 0);
 
@@ -204,7 +208,7 @@ void ArbolBmas< Tipo >::abrir(const char* nombre_archivo)
 
 		return;
 	}
-	
+
 	// Cargamos metadata
 	cargarMetadata();
 }
@@ -232,7 +236,7 @@ void ArbolBmas< Tipo >::insertar(uint clave, Tipo & registro)
 		throw "ArbolBmas::insertar() ERROR: no se ha abierto el arbol";
 
 	// Insertamos. Si no hubo overflow, retornamos
-	if(!this->raiz->insertar(clave, registro, this->archivo, 
+	if(!this->raiz->insertar(clave, registro, this->archivo,
 		this->contBloques))
 	{
 		// Caso en que la raiz es un nodo hoja, la cual debe guardarse.
@@ -244,10 +248,10 @@ void ArbolBmas< Tipo >::insertar(uint clave, Tipo & registro)
 	Nodo< Tipo > *nuevoHermano;
 
 	if(this->nivel == 0)
-		nuevoHermano = new NodoHoja< Tipo, CANT_REG_NODO_HOJA, 
+		nuevoHermano = new NodoHoja< Tipo, CANT_REG_NODO_HOJA,
 			CANT_REG_NODO_INTERNO >;
 	else
-		nuevoHermano = new NodoInterno< Tipo, CANT_REG_NODO_HOJA, 
+		nuevoHermano = new NodoInterno< Tipo, CANT_REG_NODO_HOJA,
 			CANT_REG_NODO_INTERNO >;
 
 	NodoInterno< Tipo, CANT_REG_NODO_HOJA, CANT_REG_NODO_INTERNO > *nuevaRaiz
@@ -266,7 +270,7 @@ void ArbolBmas< Tipo >::insertar(uint clave, Tipo & registro)
 	uint claveQueSube = this->raiz->dividir(nuevoHermano);
 
 	// Insertamos clave e hijos en la nueva raiz
-	nuevaRaiz->insertarHijosIniciales(claveQueSube, 
+	nuevaRaiz->insertarHijosIniciales(claveQueSube,
 		this->raiz->getNumBloque(), nuevoHermano->getNumBloque());
 
 	// Escribimos los nodos
@@ -276,7 +280,7 @@ void ArbolBmas< Tipo >::insertar(uint clave, Tipo & registro)
 
 	delete this->raiz;
 	delete nuevoHermano;
-	
+
 	// Guardamos en el arbol la nueva raiz
 	this->raiz = nuevaRaiz;
 }
@@ -303,7 +307,7 @@ bool ArbolBmas< Tipo >::buscar(const uint clave, Tipo & registro)
 
 // Elimina un arbol por completo.
 // POST: se borro el archivo almacenado en disco con los datos del arbol.
-template < typename Tipo > 
+template < typename Tipo >
 void ArbolBmas< Tipo >::eliminar()
 {
 	this->archivo->borrarArchivo();
@@ -353,10 +357,10 @@ void ArbolBmas< Tipo >::cargarMetadata()
 	// Cargamos la raiz
 	// Si el nivel es cero, la raiz es un nodo hoja, sino es nodo interno
 	if(this->nivel == 0)
-		this->raiz = new NodoHoja< Tipo, CANT_REG_NODO_HOJA, 
+		this->raiz = new NodoHoja< Tipo, CANT_REG_NODO_HOJA,
 			CANT_REG_NODO_INTERNO >;
 	else
-		this->raiz = new NodoInterno< Tipo, CANT_REG_NODO_HOJA, 
+		this->raiz = new NodoInterno< Tipo, CANT_REG_NODO_HOJA,
 				CANT_REG_NODO_INTERNO >;
 
 	// Seteamos el numero de bloque de la raiz y cargamos la raiz
@@ -383,7 +387,7 @@ void ArbolBmas< Tipo >::guardarMetadata()
 	this->buffer->pack(&bloqueRaiz, sizeof(uint));
 
 	// Escribimos metadata en archivo
-	this->archivo->escribirBloque(this->buffer->getBuffer(), 
+	this->archivo->escribirBloque(this->buffer->getBuffer(),
 		NUM_BLOQUE_METADATA);
 }
 
