@@ -9,8 +9,8 @@
 #include "logica_Utils.h"
 
 Indexer::Indexer(){
-    fromPath="/home/pablo/tpDatos/7506-tp-grupo07/temas";
-    destPath="/home/pablo/tpDatos/dest/";
+    fromPath="../temas";
+    destPath="destino/";
     masterName = destPath+".master";
     rtt = new RTTgenerator(destPath);
     autores = new IndiceAutor(destPath);

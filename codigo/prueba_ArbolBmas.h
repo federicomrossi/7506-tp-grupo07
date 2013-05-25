@@ -58,8 +58,11 @@ void prueba_ArbolBmas_2()
     arbol.abrir(".arbol.prueba.2");
 
     UnRegistroGenerico r1;
+    std::cout << "R PESA: " << r1.getTamanioEnBytes() << std::endl;
     r1.setClave(1);
+    std::cout << "R PESA: " << r1.getTamanioEnBytes() << std::endl;
     r1.setAtributo(1);
+    std::cout << "R PESA: " << r1.getTamanioEnBytes() << std::endl;
     UnRegistroGenerico r2;
     r2.setClave(2);
     r2.setAtributo(22);
