@@ -5,7 +5,7 @@
 
 
 Buscador::Buscador(){
-    destPath="/home/pablo/tpDatos/dest/";
+    destPath="destino/";
     rtt = new RTTgenerator(destPath);
     autores = new IndiceAutor(destPath);
     titulos =  new IndiceTitulo(destPath);

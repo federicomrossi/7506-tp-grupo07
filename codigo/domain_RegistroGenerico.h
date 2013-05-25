@@ -56,6 +56,12 @@ public:
 		buffer->unpack(&clv);
 		this->clave = clv;
 	}
+
+	// Devuelve el tamanio en bytes que ocuparia persistir la clase.
+	virtual size_t getTamanioEnBytes()
+	{
+		return sizeof(unsigned int);
+	}
 };
 
 #endif

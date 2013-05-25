@@ -106,6 +106,9 @@ struct Nodo
 
 	// Se imprime el nodo en la salida estandar con su contenido
 	virtual void imprimir(uint& nivelDelArbol, ArchivoBloques *archivo) = 0;
+
+	// Devuelve el tamanio en bytes que ocuparia persistir la clase.
+	virtual size_t getTamanioEnBytes();
 };
 
 
@@ -160,5 +163,14 @@ uint Nodo< Tipo >::getNumBloque()
 {
 	return this->numBloque;
 }
+
+
+// Devuelve el tamanio en bytes que ocuparia persistir la clase.
+template < typename Tipo >
+size_t Nodo< Tipo >::getTamanioEnBytes()
+{
+	return (3 * sizeof(uint));
+}
+
 
 #endif

@@ -90,6 +90,9 @@ struct NodoHoja : public Nodo< Tipo >
 	// Se imprime el nodo en la salida estandar con su contenido.
 	// FORMATO: "[nivel], [numero_bloque]: ([clave1])..([claveN])[nodo_hermano]
 	virtual void imprimir(uint& nivelDelArbol, ArchivoBloques *archivo);
+
+	// Devuelve el tamanio en bytes que ocuparia persistir la clase.
+	// virtual size_t getTamanioEnBytes();
 };
 
 
@@ -329,5 +332,22 @@ void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol,
 
 	return;
 }
+
+
+// Devuelve el tamanio en bytes que ocuparia persistir la clase.
+// template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
+// size_t NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::getTamanioEnBytes()
+// {
+// 	size_t bytes = 0;
+
+// 	// Contamos el tamanio de la clase padre
+// 	bytes += Nodo< Tipo >::getTamanioEnBytes();
+	
+// 	// Agregamos el tamanio de los atributos de esta clase
+// 	bytes += sizeof(uint);
+	
+
+// 	return bytes;
+// }
 
 #endif

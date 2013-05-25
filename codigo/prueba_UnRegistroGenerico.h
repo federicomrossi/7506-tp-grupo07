@@ -64,6 +64,20 @@ public:
 	{
 		return this->unAtributo;
 	}
+
+	// Devuelve el tamanio en bytes que ocuparia persistir la clase.
+	virtual size_t getTamanioEnBytes()
+	{
+		size_t bytes = 0;
+
+		// Contamos el tamanio de la clase padre
+		bytes += RegistroGenerico::getTamanioEnBytes();
+		
+		// Agregamos el tamanio de los atributos de esta clase
+		bytes += sizeof(int);
+
+		return bytes;
+	}
 };
 
 #endif

@@ -93,6 +93,9 @@ struct NodoInterno : public Nodo< Tipo >
 	// FORMATO: "[nivel], [numero_bloque]: [hijo1]([clave1])..[hijoN]([claveN])
 	// [hijoN+1] 
 	virtual void imprimir(uint& nivelDelArbol, ArchivoBloques *archivo);
+
+	// Devuelve el tamanio en bytes que ocuparia persistir la clase.
+	// virtual size_t getTamanioEnBytes();
 };
 
 
@@ -379,5 +382,13 @@ void NodoInterno< Tipo, MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol,
 		delete hijo;
 	}
 }
+
+
+// Devuelve el tamanio en bytes que ocuparia persistir la clase.
+// template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
+// size_t NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::getTamanioEnBytes()
+// {
+// 	return 0;
+// }
 
 #endif
