@@ -1,19 +1,25 @@
 #include "logica_IndiceAutor.h"
 #include "logica_SortExterno.h"
 #include "domain_AutorId.h"
+#include "domain_AutorReferencias.h"
 #include <string.h>
 #include <string>
 #include <fstream>
 #include <iostream>
-
+#include <climits>
 
 IndiceAutor::IndiceAutor(std::string path){
     this->temporalOcurrencias = path + ".ocurrenciasAutor";
     this->autores = path + ".autores";
+    this->listaRefs = path + ".autoresRef";
+    this->arbolName = path + ".arbolAutores";
+    this->arbol = new ArbolBmas<AutorReferencias>();
 
 }
 
 IndiceAutor::~IndiceAutor(){
+    arbol->cerrar();
+    delete arbol;
 }
 
 
@@ -65,11 +71,78 @@ int IndiceAutor::guardarOcurrencia(AutorOcurrencia* ocur){
 
 int IndiceAutor::pack(){
     SortExterno<AutorOcurrencia>* sort = new SortExterno<AutorOcurrencia>(this->temporalOcurrencias,4096);
-    this->printOcurrencias();
-    std::cout << "ORDENANDO" << std::endl;
     sort->ordenar();
-    this->printOcurrencias();
+    delete sort;
+    std::ifstream file;
+    file.open(this->temporalOcurrencias.c_str());
+    AutorOcurrencia aid;
+    unsigned int autor;
+    unsigned int cant = 0;
+    unsigned int refLista;
+    std::list<unsigned int>* lista;
+    arbol->abrir(this->arbolName.c_str());
+    file >> aid;
+    while(!file.eof()){
+        autor = aid.getAutorId();
+        cant = 0;
+        AutorReferencias* ar = new AutorReferencias(autor);
+        refLista = this->getRefLista();
+        lista = new std::list<unsigned int>();
+        while((aid.getAutorId() == autor) && !file.eof()){
+            switch(cant){
+                case 0: ar->setRef1(aid.getDocumentoId());
+                        break;
+                case 1:
+                        ar->setRef2(aid.getDocumentoId());
+                        break;
+                case 2:
+                        ar->setRef3(aid.getDocumentoId());
+                        break;
+                case 3:
+                        ar->setRef4(aid.getDocumentoId());
+                        break;
+                case 4:
+                        ar->setRef5(aid.getDocumentoId());
+                        break;
+                case 5: ar->setRefLista(refLista);
+                default: lista->push_back(aid.getDocumentoId());
+            }
+            cant++;
+            file >> aid;
+        }
+        ar->setCant(cant);
+        if(cant > 5){
+            this->guardarRefLista(lista);
+        }else{
+            ar->setRefLista(UINT_MAX);
+        }
+        arbol->insertar(ar->getClave(),*ar);
+        delete ar;
+        delete lista;
+    }
+    arbol->imprimir();
+    arbol->cerrar();
     return  0;
+}
+
+unsigned int IndiceAutor::getRefLista(){
+    std::ofstream file;
+    file.open(this->listaRefs.c_str(),std::fstream::app);
+    unsigned int pos = file.tellp();
+    file.close();
+    return pos;
+}
+
+int IndiceAutor::guardarRefLista(std::list<unsigned int>* lista){
+    unsigned int cant = lista->size();
+    std::ofstream file;
+    file.open(this->listaRefs.c_str(),std::fstream::app);
+    file.write((char*)&cant,sizeof(cant));
+    for(std::list<unsigned int>::iterator it = lista->begin();it != lista->end();it++){
+        file.write((char*)&*it,sizeof(unsigned int));
+    }
+    file.close();
+    return 0;
 }
 
 int IndiceAutor::printOcurrencias(){

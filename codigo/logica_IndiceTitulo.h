@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "domain_AutorOcurrencia.h"
+#include <list>
 
 class IndiceTitulo{
     public:
@@ -17,10 +18,13 @@ class IndiceTitulo{
         unsigned int obtenerId(std::string palabra);
         int guardarOcurrencia(AutorOcurrencia* ocur);
         int printOcurrencias();
+        unsigned int getRefLista();
+        int guardarRefLista(std::list<unsigned int>* lista);
         //UN HASH
 
         std::string temporalOcurrencias;
         std::string titulos;
+        std::string listaRefs;
 
 };
 

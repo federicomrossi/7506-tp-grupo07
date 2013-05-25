@@ -29,6 +29,8 @@ public:
 	// Constructor
 	RegistroGenerico() { }
 
+	virtual ~RegistroGenerico(){}
+
 	// Setea el identificador (clave) del registro
 	void setClave(unsigned int clave) { this->clave = clave; }
 
@@ -36,7 +38,7 @@ public:
 	unsigned int getClave() { return this->clave; }
 
 	// Serializa el registro.
-	// PRE: 'buffer' es el buffer en donde se serializara el registro para 
+	// PRE: 'buffer' es el buffer en donde se serializara el registro para
 	// poder ser almacenada en algun medio.
 	virtual void serializar(SerialBuffer *buffer)
 	{
@@ -49,7 +51,7 @@ public:
 	// POST: el estado del registro se actualiza con los datos obtenidos del
 	// buffer.
 	virtual void deserializar(SerialBuffer *buffer)
-	{ 
+	{
 		unsigned int clv;
 		buffer->unpack(&clv);
 		this->clave = clv;

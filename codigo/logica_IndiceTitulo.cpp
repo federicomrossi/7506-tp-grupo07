@@ -1,12 +1,15 @@
 #include "logica_IndiceTitulo.h"
 #include "domain_AutorId.h"
 #include "logica_SortExterno.h"
+#include "domain_TituloReferencias.h"
 #include <fstream>
 #include <string.h>
+#include <climits>
 
 IndiceTitulo::IndiceTitulo(std::string path){
     this->temporalOcurrencias = path + ".ocurrenciasTitulo";
     this->titulos = path + ".titulos";
+    this->listaRefs = path + ".titulosRef";
 }
 
 IndiceTitulo::IndiceTitulo(){
@@ -64,11 +67,69 @@ int IndiceTitulo::guardarOcurrencia(AutorOcurrencia* ocur){
 
 int IndiceTitulo::pack(){
     SortExterno<AutorOcurrencia>* sort = new SortExterno<AutorOcurrencia>(this->temporalOcurrencias,4096);
-    this->printOcurrencias();
-    std::cout << "ORDENANDO" << std::endl;
     sort->ordenar();
-    this->printOcurrencias();
+    delete sort;
+    std::ifstream file;
+    file.open(this->temporalOcurrencias.c_str());
+    AutorOcurrencia aid;
+    unsigned int titulo;
+    unsigned int cant = 0;
+    unsigned int refLista;
+    std::list<unsigned int>* lista;
+    file >> aid;
+    while(!file.eof()){
+        titulo = aid.getAutorId();
+        cant = 0;
+        TituloReferencias* ar = new TituloReferencias(titulo);
+        refLista = this->getRefLista();
+        lista = new std::list<unsigned int>();
+        while((aid.getAutorId() == titulo) && !file.eof()){
+            switch(cant){
+                case 0: ar->setRef1(aid.getDocumentoId());
+                        break;
+                case 1:
+                        ar->setRef2(aid.getDocumentoId());
+                        break;
+                case 2:
+                        ar->setRef3(aid.getDocumentoId());
+                        break;
+                case 3: ar->setRefLista(refLista);
+                default: lista->push_back(aid.getDocumentoId());
+            }
+            cant++;
+            file >> aid;
+        }
+        ar->setCant(cant);
+        if(cant > 3){
+            this->guardarRefLista(lista);
+        }else{
+            ar->setRefLista(UINT_MAX);
+        }
+        //aborl->guardar(ar);
+        delete ar;
+        delete lista;
+    }
     return  0;
+}
+
+unsigned int IndiceTitulo::getRefLista(){
+    std::ofstream file;
+    file.open(this->listaRefs.c_str(),std::fstream::app);
+    unsigned int pos = file.tellp();
+    file.close();
+    return pos;
+}
+
+int IndiceTitulo::guardarRefLista(std::list<unsigned int>* lista){
+    unsigned int cant = lista->size();
+    std::ofstream file;
+    file.open(this->listaRefs.c_str(),std::fstream::app);
+    file.write((char*)&cant,sizeof(cant));
+    for(std::list<unsigned int>::iterator it = lista->begin();it != lista->end();it++){
+        file.write((char*)&*it,sizeof(unsigned int));
+    }
+    file.close();
+    return 0;
 }
 
 int IndiceTitulo::printOcurrencias(){
