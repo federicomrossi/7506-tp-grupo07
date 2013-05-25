@@ -14,15 +14,14 @@ class TituloReferencias : public RegistroGenerico {
         unsigned int getRef3();
         unsigned int getRefLista();
         unsigned int getCant();
+        unsigned int* getRefs();
         void setRef1(unsigned int ref);
         void setRef2(unsigned int ref);
         void setRef3(unsigned int ref);
         void setRefLista(unsigned int ref);
         void setCant(unsigned int cant);
     private:
-        unsigned int ref1;
-        unsigned int ref2;
-        unsigned int ref3;
+        unsigned int refs[3];
         unsigned int refLista;
         unsigned int cant;
 
