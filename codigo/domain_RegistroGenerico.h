@@ -5,7 +5,7 @@
 
 
 #ifndef REGISTRO_GENERICO_H
-#define REGISTRO_BENERICO_H
+#define REGISTRO_GENERICO_H
 
 
 #include "fisica_SerialBuffer.h"

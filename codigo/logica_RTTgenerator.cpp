@@ -14,10 +14,13 @@ RTTgenerator::RTTgenerator(std::string path){
     this->nonIndexableWords=path+ ".palabrasNoIndexables";
     this->listasInvertidasDocumentos=path+ ".listaDocumentos";
     this->listasInvertidasPosiciones=path+ ".listaPosiciones";
+    this->arbolName = path + ".arbolRTT";
+    this->arbol = new ArbolBmas<RTTreferencia>();
 }
 
 RTTgenerator::~RTTgenerator(){
-//    delete arbol;
+    arbol->cerrar();
+    delete arbol;
 }
 
 int RTTgenerator::indexarPalabra(std::string palabra, unsigned int song, unsigned int position){
@@ -69,11 +72,98 @@ int RTTgenerator::guardarOcurrencia(RTTocurrencia* ocur){
 
 int RTTgenerator::pack(){
     SortExterno<RTTocurrencia>* sort = new SortExterno<RTTocurrencia>(this->temporalOcurrencias,4096);
-    //this->printOcurrencias();
-    //std::cout << "ORDENANDO" << endl;
     sort->ordenar();
-    //this->printOcurrencias();
+    delete sort;
+    std::ifstream file;
+    file.open(this->temporalOcurrencias.c_str());
+    RTTocurrencia ocur;
+    unsigned int idPalabra;
+    unsigned int idDoc;
+    unsigned int cantDocs = 0;
+    unsigned int cantPos = 0;
+    unsigned int refListaDocs;
+    unsigned int refListaPos;
+    std::list<RTTreferencia*>* listaDocs;
+    std::list<unsigned int>* listaPos;
+    arbol->abrir(this->arbolName.c_str());
+    file >> ocur;
+    while(!file.eof()){
+        idPalabra = ocur.getPalabraId();
+        cantDocs = 0;
+        RTTreferencia* ar = new RTTreferencia(idPalabra);
+        refListaDocs = this->getRefListaDocs();
+        ar->setRefLista(refListaDocs);
+        listaDocs = new std::list<RTTreferencia*>();
+        while((ocur.getPalabraId() == idPalabra) && !file.eof()){
+            idDoc = ocur.getDocumentoId();
+            cantPos = 0;
+            refListaPos = this->getRefListaPos();
+            RTTreferencia* refPos = new RTTreferencia(idDoc);
+            refPos->setRefLista(refListaPos);
+            listaPos = new std::list<unsigned int>;
+            while((ocur.getDocumentoId() == idDoc) && !file.eof()){
+                listaPos->push_back(ocur.getPosition());
+                cantPos++;
+                file >> ocur;
+            }
+            this->guardarListaPos(listaPos);
+            delete listaPos;
+            listaDocs->push_back(refPos);
+            cantDocs++;
+        }
+        this->guardarListaDocs(listaDocs);
+        arbol->insertar(ar->getClave(),*ar);
+        delete ar;
+        delete listaDocs;
+    }
+    arbol->imprimir();
+    arbol->cerrar();
     return  0;
+}
+
+unsigned int RTTgenerator::getRefListaDocs(){
+    std::ofstream file;
+    file.open(this->listasInvertidasDocumentos.c_str(),std::fstream::app);
+    unsigned int pos = file.tellp();
+    file.close();
+    return pos;
+}
+
+
+unsigned int RTTgenerator::getRefListaPos(){
+    std::ofstream file;
+    file.open(this->listasInvertidasPosiciones.c_str(),std::fstream::app);
+    unsigned int pos = file.tellp();
+    file.close();
+    return pos;
+}
+
+int RTTgenerator::guardarListaDocs(std::list<RTTreferencia*> *lista){
+    unsigned int cant = lista->size();
+    std::ofstream file;
+    file.open(this->listasInvertidasDocumentos.c_str(),std::fstream::app);
+    file.write((char*)&cant,sizeof(cant));
+    for(std::list<RTTreferencia*>::iterator it = lista->begin();it != lista->end();it++){
+        unsigned int p = (*it)->getClave();
+        file.write((char*)&p,sizeof(unsigned int));
+        p = (*it)->getRefLista();
+        file.write((char*)&p,sizeof(unsigned int));
+        delete *it;
+    }
+    file.close();
+    return 0;
+}
+
+int RTTgenerator::guardarListaPos(std::list<unsigned int> *lista){
+    unsigned int cant = lista->size();
+    std::ofstream file;
+    file.open(this->listasInvertidasPosiciones.c_str(),std::fstream::app);
+    file.write((char*)&cant,sizeof(cant));
+    for(std::list<unsigned int>::iterator it = lista->begin();it != lista->end();it++){
+        file.write((char*)&*it,sizeof(unsigned int));
+    }
+    file.close();
+    return 0;
 }
 
 int RTTgenerator::printOcurrencias(){

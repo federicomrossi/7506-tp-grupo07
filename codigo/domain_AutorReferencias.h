@@ -1,5 +1,6 @@
 #ifndef DOMAIN_AUTORREFERENCIAS_H_INCLUDED
 #define DOMAIN_AUTORREFERENCIAS_H_INCLUDED
+
 #include "domain_RegistroGenerico.h"
 
 class AutorReferencias : public RegistroGenerico {
