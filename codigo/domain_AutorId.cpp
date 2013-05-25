@@ -13,7 +13,8 @@ AutorId::~AutorId(){
 }
 
 int AutorId::comparar(Comparable *obj) const{
-    return 1;
+    AutorId *aid = (AutorId*) obj;
+    return strcmp(this->autor,aid->getAutor());
 }
 
 unsigned int AutorId::getId() const{

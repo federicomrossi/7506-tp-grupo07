@@ -3,6 +3,7 @@
 #include "logica_Validator.h"
 #include "logica_Indexer.h"
 #include "logica_Buscador.h"
+#include "logica_Utils.h"
 
 using namespace std;
 
@@ -64,8 +65,10 @@ int Menu::ingresarOpcion(int opcion){
             break;
         case 3:
             busc = new Buscador;
-            cout << "Ingrese el autor a buscar" << endl;
-            cin >> text;
+            std::cout << "Ingrese el autor a buscar" << std::endl;
+            std::cin.ignore();
+            std::getline(std::cin, text);
+            text = Utils::uniformizarString(text);
             busc->buscarPorAutor(text);
             delete busc;
             break;

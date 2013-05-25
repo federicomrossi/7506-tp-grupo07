@@ -12,7 +12,7 @@ class IndiceAutor{
         IndiceAutor(std::string path);
         ~IndiceAutor();
         int agregar(unsigned int posArch, std::string autor);
-        int recuperar(std::string autor, unsigned int* posArch);
+        int recuperar(std::string autor, std::list<unsigned int> *lista);
         int eliminarTodo();
         int pack();
     private:

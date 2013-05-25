@@ -15,23 +15,23 @@ unsigned int AutorReferencias::getCant(){
 }
 
 unsigned int AutorReferencias::getRef1(){
-    return this->ref1;
+    return this->refs[0];
 }
 
 unsigned int AutorReferencias::getRef2(){
-    return this->ref2;
+    return this->refs[1];
 }
 
 unsigned int AutorReferencias::getRef3(){
-    return this->ref3;
+    return this->refs[2];
 }
 
 unsigned int AutorReferencias::getRef4(){
-    return this->ref4;
+    return this->refs[3];
 }
 
 unsigned int AutorReferencias::getRef5(){
-    return this->ref5;
+    return this->refs[4];
 }
 
 unsigned int AutorReferencias::getRefLista(){
@@ -43,47 +43,43 @@ void AutorReferencias::setCant(unsigned int cant){
 }
 
 void AutorReferencias::setRef1(unsigned int ref){
-    this->ref1 = ref;
+    this->refs[0] = ref;
 }
 
 void AutorReferencias::setRef2(unsigned int ref){
-    this->ref2 = ref;
+    this->refs[1] = ref;
 }
 
 void AutorReferencias::setRef3(unsigned int ref){
-    this->ref3 = ref;
+    this->refs[2] = ref;
 }
 
 void AutorReferencias::setRef4(unsigned int ref){
-    this->ref4 = ref;
+    this->refs[3] = ref;
 }
 
 void AutorReferencias::setRef5(unsigned int ref){
-    this->ref5 = ref;
+    this->refs[4]= ref;
 }
 
 void AutorReferencias::setRefLista(unsigned int ref){
     this->refLista = ref;
 }
 
+unsigned int* AutorReferencias::getRefs(){
+    return this->refs;
+}
+
 void AutorReferencias::serializar(SerialBuffer *buffer){
     RegistroGenerico::serializar(buffer);
     buffer->pack(&cant,sizeof(cant));
-    buffer->pack(&ref1,sizeof(ref1));
-    buffer->pack(&ref2,sizeof(ref2));
-    buffer->pack(&ref3,sizeof(ref3));
-    buffer->pack(&ref4,sizeof(ref4));
-    buffer->pack(&ref5,sizeof(ref5));
+    buffer->pack(refs,sizeof(unsigned int)*5);
     buffer->pack(&refLista,sizeof(refLista));
 }
 
 void AutorReferencias::deserializar(SerialBuffer *buffer){
     RegistroGenerico::deserializar(buffer);
     buffer->unpack(&cant);
-    buffer->unpack(&ref1);
-    buffer->unpack(&ref2);
-    buffer->unpack(&ref3);
-    buffer->unpack(&ref4);
-    buffer->unpack(&ref5);
+    buffer->unpack(&refs);
     buffer->unpack(&refLista);
 }

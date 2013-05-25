@@ -61,6 +61,10 @@ unsigned int IndiceAutor::obtenerId(std::string autor){
     return id;
 }
 
+/*unsigned int IndiceAutor::obtenerIdBinary(std::string autor){
+return 0;
+}*/
+
 int IndiceAutor::guardarOcurrencia(AutorOcurrencia* ocur){
     std::ofstream file;
     file.open(temporalOcurrencias.c_str(),std::fstream::app);
@@ -71,8 +75,11 @@ int IndiceAutor::guardarOcurrencia(AutorOcurrencia* ocur){
 
 int IndiceAutor::pack(){
     SortExterno<AutorOcurrencia>* sort = new SortExterno<AutorOcurrencia>(this->temporalOcurrencias,4096);
+    SortExterno<AutorId>* sort2 = new SortExterno<AutorId>(this->autores,4096);
     sort->ordenar();
+    sort2->ordenar();
     delete sort;
+    delete sort2;
     std::ifstream file;
     file.open(this->temporalOcurrencias.c_str());
     AutorOcurrencia aid;
@@ -122,6 +129,7 @@ int IndiceAutor::pack(){
     }
     arbol->imprimir();
     arbol->cerrar();
+    remove(this->temporalOcurrencias.c_str());
     return  0;
 }
 
@@ -159,8 +167,32 @@ int IndiceAutor::printOcurrencias(){
 }
 
 
-int IndiceAutor::recuperar(std::string autor, unsigned int* songRef){
-    *songRef = 0;
+int IndiceAutor::recuperar(std::string autor, std::list<unsigned int> *lista){
+    unsigned int clave = this->obtenerId(autor);
+    arbol->abrir(this->arbolName.c_str());
+    AutorReferencias* ar = new AutorReferencias();
+    bool b = arbol->buscar(clave, *ar);
+    if(b){
+    unsigned int* refs = ar->getRefs();
+    unsigned int stop = ar->getCant() > 5 ? 5: ar->getCant();
+    for(unsigned int i=0;i<stop;i++){
+        lista->push_back(refs[i]);
+    }
+    if(ar->getCant() > 5){
+        std::ifstream file;
+        file.open(this->listaRefs.c_str());
+        file.seekg(ar->getRefLista());
+        unsigned int cant;
+        file.read((char*)&cant,sizeof(unsigned int));
+        for(unsigned int i=0;i < cant;i++){
+            unsigned int ref;
+            file.read((char*)&ref,sizeof(unsigned int));
+            lista->push_back(ref);
+        }
+        file.close();
+    }
+    }
+    arbol->cerrar();
     return 0;
 }
 
