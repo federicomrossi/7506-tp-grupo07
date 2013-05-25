@@ -4,8 +4,8 @@
 //	***************************************************************************
 //
 //	Implementacion de la estructura del Nodo Hoja utilizado en el Arbol B+.
-//	Debe considerarse esta estructura como privada del arbol, es decir, su
-//	
+//	Debe considerarse esta estructura como privada del arbol, es decir, se
+//	prohibe su uso fuera del ambito de la clase del ArbolBmas.
 //
 
 

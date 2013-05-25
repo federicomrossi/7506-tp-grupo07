@@ -1,6 +1,12 @@
 //
-//  ArbolBmasNodo.h
-//	[ Insertar documentacion ]
+//  logica_ArbolBmasNodo.h
+//	NODO HOJA - ARBOL B+
+//	***************************************************************************
+//
+//	Implementacion de la estructura Nodo, la cual es de donde heredan los
+//	nodos utilizados dentro del arbol B+. Debe considerarse esta estructura
+//	como privada del arbol, es decir, se prohibe su uso fuera del ambito de la
+//	clase del ArbolBmas.
 //
 
 

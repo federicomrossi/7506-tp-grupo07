@@ -1,6 +1,11 @@
 //
-//  ArbolBmasNodoHoja.h
-//	[ Insertar documentacion ]
+//  logica_ArbolBmasNodoInterno.h
+//	NODO INTERNO - ARBOL B+
+//	***************************************************************************
+//
+//	Implementacion de la estructura del Nodo Interno utilizado en el Arbol B+.
+//	Debe considerarse esta estructura como privada del arbol, es decir, se
+//	prohibe su uso fuera del ambito de la clase del ArbolBmas.
 //
 
 

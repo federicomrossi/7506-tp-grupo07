@@ -15,6 +15,9 @@
 //
 //  Esto le permitira a la lista ser serializable y persistible.
 //
+//	TIPOS NATIVOS SOPORTADOS: Esta primer version de ListaFija solamente
+//	soporta el tipo nativo unsigned int.
+//
 
 
 #ifndef LISTA_FIJA_H
