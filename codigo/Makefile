@@ -20,7 +20,7 @@ extension = cpp
 CFLAGS = -Wall -pedantic #-Werror -pedantic-errors
 
 # Para que explote lo mas posible
-CFLAGS += -O3 -DNDEBUG
+CFLAGS += -O0 -DNDEBUG
 
 # Para valgrind o debug
 CFLAGS += -ggdb -DDEBUG -fno-inline

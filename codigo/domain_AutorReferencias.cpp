@@ -70,11 +70,16 @@ unsigned int* AutorReferencias::getRefs(){
     return this->refs;
 }
 
-void AutorReferencias::serializar(SerialBuffer *buffer){
+int AutorReferencias::serializar(SerialBuffer *buffer){
     RegistroGenerico::serializar(buffer);
-    buffer->pack(&cant,sizeof(cant));
-    buffer->pack(refs,sizeof(unsigned int)*5);
-    buffer->pack(&refLista,sizeof(refLista));
+    if(buffer->pack(&cant,sizeof(cant)))
+		return 0;
+    if(buffer->pack(refs,sizeof(unsigned int)*5))
+		return 0;
+    if(buffer->pack(&refLista,sizeof(refLista)))
+		return 0;
+
+	return 1;
 }
 
 void AutorReferencias::deserializar(SerialBuffer *buffer){

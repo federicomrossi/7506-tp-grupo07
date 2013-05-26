@@ -40,10 +40,12 @@ public:
 	// Serializa el registro.
 	// PRE: 'buffer' es el buffer en donde se serializara el registro para
 	// poder ser almacenada en algun medio.
-	virtual void serializar(SerialBuffer *buffer)
+	virtual int serializar(SerialBuffer *buffer)
 	{
 		unsigned int clv = this->clave;
-		buffer->pack(&clv, sizeof(unsigned int));
+		if(buffer->pack(&clv, sizeof(unsigned int)))
+			return 0;
+		return 1;
 	}
 
 	// Deserializa una lista.

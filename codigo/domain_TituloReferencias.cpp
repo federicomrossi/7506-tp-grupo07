@@ -54,11 +54,16 @@ unsigned int* TituloReferencias::getRefs(){
     return this->refs;
 }
 
-void TituloReferencias::serializar(SerialBuffer *buffer){
-    RegistroGenerico::serializar(buffer);
-    buffer->pack(&cant,sizeof(cant));
-    buffer->pack(refs,sizeof(unsigned int)*3);
-    buffer->pack(&refLista,sizeof(refLista));
+int TituloReferencias::serializar(SerialBuffer *buffer){
+	RegistroGenerico::serializar(buffer);
+    if(buffer->pack(&cant,sizeof(cant)))
+		return 0;
+    if(buffer->pack(refs,sizeof(unsigned int)*3))
+		return 0;
+    if(buffer->pack(&refLista,sizeof(refLista)))
+		return 0;
+
+	return 1;
 }
 
 void TituloReferencias::deserializar(SerialBuffer *buffer){

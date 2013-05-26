@@ -7,7 +7,7 @@ class TituloReferencias : public RegistroGenerico {
         TituloReferencias(unsigned int clave);
         TituloReferencias();
         ~TituloReferencias();
-        virtual void serializar(SerialBuffer *buffer);
+        virtual int serializar(SerialBuffer *buffer);
         virtual void deserializar(SerialBuffer *buffer);
         unsigned int getRef1();
         unsigned int getRef2();

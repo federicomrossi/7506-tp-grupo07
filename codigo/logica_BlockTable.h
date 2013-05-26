@@ -57,6 +57,7 @@ class BlockTable{
 		char *filePath;
 		char *blockPath;
 		int blockSize;
+		bool firstTime;
 
 	//private:
 	//	struct Metadata{
@@ -72,6 +73,7 @@ BlockTable<T>::BlockTable(string path, string blockPath, int blockSize) {
 	strcpy(this->blockPath, blockPath.c_str());
 	this->blockReferences = NULL;
 	this->blockSize = blockSize;
+	this->firstTime = true;
 	this->read();
 }
 
@@ -152,7 +154,6 @@ int BlockTable<T>::insert(T *aReg){
 	PRINT_REF("\t\t (" << tmpBlockNumber << ")");
 
 	Block<T> tmpBlock(dispersionSize, tmpBlockNumber, this->blockPath, this->blockSize);
-	cout << "\t\t\t tmpBlock";
 	//Cambiar esto adentro,
 	//tengo q pedirle al registro generico cuantos bytes va a ocupar para deserializarlo en una misma estructura y
 	//agregarlo a una lista
@@ -165,10 +166,16 @@ int BlockTable<T>::insert(T *aReg){
 	if(! tmpBlock.search(searchReg)){
 		cout << "agrego xq no esta"<<endl;
 		if (tmpBlock.easyInsert(*aReg)){
+			this->firstTime = false;
 			tmpBlock.Insert(*aReg);
 			cout << "\t\t\t\teasyInsert " << endl;
 			tmpBlock.write();
 		} else {
+			if(this->firstTime){
+				cout << "EXPLOTA TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" << endl;
+				exit(EXIT_FAILURE);
+				return -1;
+			}
 			cout << " como no es easy insert, tengo que ver que hago"<<endl;
 			cout << "el TD del bloque: "<<tmpBlock.getBlockNum()<< " es de :"<<dispersionSize<< endl;
 			cout << endl;

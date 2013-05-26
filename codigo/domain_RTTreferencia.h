@@ -8,7 +8,7 @@ class RTTreferencia : public RegistroGenerico {
         RTTreferencia(unsigned int clave);
         RTTreferencia();
         ~RTTreferencia();
-        virtual void serializar(SerialBuffer *buffer);
+        virtual int serializar(SerialBuffer *buffer);
         virtual void deserializar(SerialBuffer *buffer);
         unsigned int getRefLista();
         void setRefLista(unsigned int ref);
