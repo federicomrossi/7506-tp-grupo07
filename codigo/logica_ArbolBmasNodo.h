@@ -108,7 +108,7 @@ struct Nodo
 	virtual void imprimir(uint& nivelDelArbol, ArchivoBloques *archivo) = 0;
 
 	// Devuelve el tamanio en bytes que ocuparia persistir la clase.
-	virtual size_t getTamanioEnBytes();
+	virtual size_t getBytesUsados();
 };
 
 
@@ -167,7 +167,7 @@ uint Nodo< Tipo >::getNumBloque()
 
 // Devuelve el tamanio en bytes que ocuparia persistir la clase.
 template < typename Tipo >
-size_t Nodo< Tipo >::getTamanioEnBytes()
+size_t Nodo< Tipo >::getBytesUsados()
 {
 	return (3 * sizeof(uint));
 }
