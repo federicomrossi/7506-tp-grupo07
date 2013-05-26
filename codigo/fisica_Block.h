@@ -172,16 +172,20 @@ short int Block<T>::getNumberOfRegs(){
 
 template <class T>
 bool Block<T>::easyInsert(T& aReg){
+	cout << "Easy insert ";
 	SerialBuffer aSerialBuffer(maxBlockSize);
 	this->getCurrentBuffer(&aSerialBuffer);
 
-	unsigned short int preSize = aSerialBuffer.getBuffSize();
-	aReg.serializar(&aSerialBuffer);
+	//unsigned short int preSize = aSerialBuffer.getBuffSize();
+	bool a = aReg.serializar(&aSerialBuffer);
 
-	if(aSerialBuffer.getBuffSize() - preSize == 0){
-		return false;
-	}
-	return true;
+	cout << a << endl;
+	return a;
+
+	//if(aSerialBuffer.getBuffSize() - preSize == 0){
+	//	return false;
+	//}
+	//return true;
 }
 
 template <class T>

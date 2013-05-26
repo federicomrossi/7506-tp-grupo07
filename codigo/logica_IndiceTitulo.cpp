@@ -10,7 +10,7 @@ IndiceTitulo::IndiceTitulo(std::string path){
     this->temporalOcurrencias = path + ".ocurrenciasTitulo";
     this->titulos = path + ".titulos";
     this->listaRefs = path + ".titulosRef";
-    this->hash = new BlockTable<TituloReferencias>(path+".hashTable",path+".hashTitulos",32);
+    this->hash = new BlockTable<TituloReferencias>(path+".hashTable",path+".hashTitulos", 50);
 }
 
 IndiceTitulo::IndiceTitulo(){

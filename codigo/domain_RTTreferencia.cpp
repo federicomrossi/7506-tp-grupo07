@@ -18,9 +18,11 @@ void RTTreferencia::setRefLista(unsigned int ref){
     this->refLista = ref;
 }
 
-void RTTreferencia::serializar(SerialBuffer *buffer){
+int RTTreferencia::serializar(SerialBuffer *buffer){
     RegistroGenerico::serializar(buffer);
-    buffer->pack(&refLista,sizeof(refLista));
+    if(buffer->pack(&refLista,sizeof(refLista)))
+		return 0;
+	return 1;
 }
 
 void RTTreferencia::deserializar(SerialBuffer *buffer){
