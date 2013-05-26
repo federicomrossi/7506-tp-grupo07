@@ -20,7 +20,7 @@
 #define TEST_FILE "./test_file_TESTBLOCKFILE"
 // Archivo para guardar la tabla de referencia
 #define TEST_FILE_TABLE "./test_file_TESTTABLEFILE"
-// Tama~no del bloque
+// Tamano del bloque
 
 
 #define MAX_BLOCK_SIZE (512)
