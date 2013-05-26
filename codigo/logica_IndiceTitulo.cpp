@@ -112,6 +112,7 @@ int IndiceTitulo::pack(){
         delete ar;
         delete lista;
     }
+	cout << "Termine operaciones con hash" <<  endl;
     remove(this->temporalOcurrencias.c_str());
     return  0;
 }

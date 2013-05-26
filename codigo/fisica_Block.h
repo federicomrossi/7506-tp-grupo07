@@ -179,10 +179,8 @@ bool Block<T>::easyInsert(T& aReg){
 	aReg.serializar(&aSerialBuffer);
 
 	if(aSerialBuffer.getBuffSize() - preSize == 0){
-		cout << "Return false" << endl;
 		return false;
 	}
-	cout << "Return true" << endl;
 	return true;
 }
 
@@ -276,6 +274,7 @@ void Block<T>::write(){
 	SerialBuffer aSerialBuffer(maxBlockSize);
 	this->getCurrentBuffer(&aSerialBuffer);
 	archivo.escribirBloque(aSerialBuffer.getBuffer(),this->getBlockNum());
+	cout << "\t\t\t Bloque agregue" << endl;
 }
 
 
@@ -289,9 +288,11 @@ void Block<T>::read(){
 
 	SerialBuffer aSerialBuffer(maxBlockSize);
 	archivo.leerBloque(aSerialBuffer.getBuffer(),this->getBlockNum());
-	aSerialBuffer.unpack(&(this->numberOfRegs));
+	if(aSerialBuffer.unpack(&(this->numberOfRegs)))
+		cout << "ERROR DE UNPACK!!!" << endl;
 	//TODO: Liberar 
 	regsList.clear();
+	cout << "\t\t Block->numberOfRegs"<< this->numberOfRegs << endl;
 	for (int i=0; i < this->numberOfRegs;i++){
 		T reg;
 		reg.deserializar(&aSerialBuffer);

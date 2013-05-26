@@ -22,6 +22,9 @@
 #include "logica_HashExtensible.h"
 #include <string.h>
 
+#define PRINT_REF(X) cout << X << "blockReferences" ; for(int i=0;i<this->getSize();i++) cout << " '" << this->blockReferences[i] << "'"; cout << endl
+
+
 
 using namespace std;
 
@@ -85,16 +88,22 @@ void BlockTable<T>::read(){
 	if(this->blockReferences)
 		delete [] this->blockReferences;
 
-	if(this->size){ //TODO: revisar que esto ande bien!
+	if(this->size > 0){ //TODO: revisar que esto ande bien!
 		archivo.seekg(0,archivo.beg);
 		this->blockReferences= new int[this->size]();
 		archivo.read((char*)this->blockReferences, this->size * sizeof(int));
+	}else if(this->size < 0){
+		cerr << "*** No se puede crear archivo, error del sistema:" << this->size << " path: "<< this->filePath << endl;
 	}else{
 		this->size = 1;
 		//this->blockReferences = (int*) calloc(this->size, sizeof(int));;
 		this->blockReferences = new int[this->size]();
 	}
-
+	for (int i = 0; i < this->size ; i++ )
+	{
+		cout<< "  " << blockReferences[i];
+	}
+	cout << endl;
 	archivo.close();
 }
 
@@ -112,11 +121,11 @@ bool BlockTable<T>::search(T*& aReg){ // TODO: persistencia
 
 	int blockNumber=this->blockReferences[pos];
 
-	//1cout << "\tSearch doHash(regId=" << aReg.getId() << ", size=" << this->getSize() <<") = "<< pos << endl;
-	//1	PRINT_REF("\t\t (" << blockNumber << ")");
+	cout << "\tSearch doHash(regId=" << aReg->getClave() << ", size=" << this->getSize() <<") = "<< pos << endl;
+	PRINT_REF("\t\t (" << blockNumber << ")");
 
 	Block<T> aBlock(this->getSize(), blockNumber, this->blockPath, this->blockSize);
-	//1 cout << "\t\t\t Read";
+	cout << "\t\t\t Read";
 	aBlock.read();
 
 	return aBlock.search(aReg);
@@ -139,11 +148,11 @@ int BlockTable<T>::insert(T *aReg){
 	int pos = HashExtensible::doHash(aReg->getClave(),this->getSize());
 	int tmpBlockNumber = this->blockReferences[pos];
 	int dispersionSize = this->getSize() / this->countNumberOfReferences(tmpBlockNumber);
-	//1cout << "\tInserto doHash(regId=" << aReg.getId() << ", size=" << this->getSize() <<") = "<< pos << endl;
-	//1	PRINT_REF("\t\t (" << tmpBlockNumber << ")");
+	cout << "\tInserto doHash(regId=" << aReg->getClave() << ", size=" << this->getSize() <<") = "<< pos << endl;
+	PRINT_REF("\t\t (" << tmpBlockNumber << ")");
 
 	Block<T> tmpBlock(dispersionSize, tmpBlockNumber, this->blockPath, this->blockSize);
-	//1cout << "\t\t\t tmpBlock";
+	cout << "\t\t\t tmpBlock";
 	//Cambiar esto adentro,
 	//tengo q pedirle al registro generico cuantos bytes va a ocupar para deserializarlo en una misma estructura y
 	//agregarlo a una lista
@@ -154,25 +163,25 @@ int BlockTable<T>::insert(T *aReg){
 	T *searchReg = new T();
 	searchReg->setClave(aReg->getClave());
 	if(! tmpBlock.search(searchReg)){
-		//1cout << "agrego xq no esta"<<endl;
+		cout << "agrego xq no esta"<<endl;
 		if (tmpBlock.easyInsert(*aReg)){
 			tmpBlock.Insert(*aReg);
-			//1cout << "\t\t\t\teasyInsert ";
+			cout << "\t\t\t\teasyInsert " << endl;
 			tmpBlock.write();
 		} else {
-			//1cout << " como no es easy insert, tengo que ver que hago"<<endl;
-			//1cout << "el TD del bloque: "<<tmpBlock.getBlockNum()<< " es de :"<<dispersionSize<< endl;
-			//1cout << endl;
+			cout << " como no es easy insert, tengo que ver que hago"<<endl;
+			cout << "el TD del bloque: "<<tmpBlock.getBlockNum()<< " es de :"<<dispersionSize<< endl;
+			cout << endl;
 			if (! this->canAddBlock(&tmpBlock)){
 				this->duplicateTable();
-				//1				PRINT_REF("\t\t afterDuplicate:");
+								PRINT_REF("\t\t afterDuplicate:");
 			}
 			int lastBlockNum = tmpBlock.newBlockNum();
 			Block<T> anotherBlock(tmpBlock.duplicateDispersionSize(), lastBlockNum, this->blockPath, this->blockSize);
-			//1			cout << "\t\t anotherBlock(TD="<< anotherBlock.getDispersionSize() << ", lastBlockNum=" << lastBlockNum << ", path=" << this->blockPath << ", size="<< this->blockSize << ")" << endl;
+						cout << "\t\t anotherBlock(TD="<< anotherBlock.getDispersionSize() << ", lastBlockNum=" << lastBlockNum << ", path=" << this->blockPath << ", size="<< this->blockSize << ")" << endl;
 
 			this->insertBlock(pos, lastBlockNum, tmpBlock.getDispersionSize());
-			//1cout << "\t\tinsertBlock(pos=" << pos << ", lastBlockNum=" << lastBlockNum << ", TD=" << tmpBlock.getDispersionSize() << ")" << endl;
+			cout << "\t\tinsertBlock(pos=" << pos << ", lastBlockNum=" << lastBlockNum << ", TD=" << tmpBlock.getDispersionSize() << ")" << endl;
 			//1PRINT_REF("\t\t after insertBlock:");
 
 			this->redisperse(&tmpBlock, &anotherBlock);
@@ -193,7 +202,7 @@ int BlockTable<T>::getSize(){
 
 template <class T>
 bool BlockTable<T>::canAddBlock(Block<T>* aBlock){
-	//1cout << "\t\t TT:" << this->getSize() << " TD:" << aBlock->getDispersionSize() << endl;
+	cout << "\t\t TT:" << this->getSize() << " TD:" << aBlock->getDispersionSize() << endl;
 	return (aBlock->getDispersionSize()!=this->getSize());
 }
 
@@ -223,9 +232,9 @@ void BlockTable<T>::redisperse(Block<T>* anOldBlock, Block<T>* aNewBlock){
 			aNewBlock->Insert((*it));
 	}
 
-	//1cout << "\t\t\t\t(" << newAnOldBlock.getBlockNum() <<", TD:" <<  newAnOldBlock.getDispersionSize() << ") newAnOldBlock.write() ";
+	cout << "\t\t\t\t(" << newAnOldBlock.getBlockNum() <<", TD:" <<  newAnOldBlock.getDispersionSize() << ") newAnOldBlock.write() ";
 	newAnOldBlock.write();
-	//1cout << "\t\t\t\t(" << aNewBlock->getBlockNum() <<", TD:" <<  aNewBlock->getDispersionSize() << ") aNewBlock.write() ";
+	cout << "\t\t\t\t(" << aNewBlock->getBlockNum() <<", TD:" <<  aNewBlock->getDispersionSize() << ") aNewBlock.write() ";
 	aNewBlock->write();
 }
 
