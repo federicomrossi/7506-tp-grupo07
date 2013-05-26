@@ -193,8 +193,45 @@ void prueba_ArbolBmas_3()
         std::cout<< "No encontrado" << std::endl;
     }
 
+
+    std::cout << a2->getCant() << std::endl;
+    std::cout << a2->getRef1() << std::endl;
+    std::cout << a2->getRef2() << std::endl;
+    std::cout << a2->getRef3() << std::endl;
+    std::cout << a2->getRef4() << std::endl;
+    std::cout << a2->getRef5() << std::endl;
+    std::cout << a2->getRefLista() << std::endl;
+
+
+    std::cout << std::endl << "ACTUALIZACION" << std::endl;
+
+    a2->setCant(8);
+    a2->setRef1(9);
+    a2->setRef2(10);
+    a2->setRef3(11);
+    a2->setRef4(12);
+    a2->setRef5(13);
+    a2->setRefLista(14);
+    
+    if(arbol.actualizar(0, *a2))
+        std::cout << "Se actualizó con éxito." << std::endl;
+    else
+        std::cout << "Falló la actualización" << std::endl;
+
+    AutorReferencias* a3 = new AutorReferencias();
+    arbol.buscar(0,*a3);
+
+    std::cout << a3->getCant() << std::endl;
+    std::cout << a3->getRef1() << std::endl;
+    std::cout << a3->getRef2() << std::endl;
+    std::cout << a3->getRef3() << std::endl;
+    std::cout << a3->getRef4() << std::endl;
+    std::cout << a3->getRef5() << std::endl;
+    std::cout << a3->getRefLista() << std::endl;
+
     delete a;
     delete a2;
+    delete a3;
 
     // try {
 
@@ -246,7 +283,7 @@ void prueba_ArbolBmas_3()
 
 
     arbol.cerrar();
-    // arbol.eliminar();
+    arbol.eliminar();
 }
 
 

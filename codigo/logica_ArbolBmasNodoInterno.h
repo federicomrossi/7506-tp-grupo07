@@ -72,6 +72,16 @@ struct NodoInterno : public Nodo< Tipo >
 	virtual bool buscar(const uint clave, Tipo & registro, 
 		ArchivoBloques *archivo);
 
+	// Actualiza un registro existente.
+	// PRE: 'clave' es la clave o id que identifica al registro a actualizar;
+	// 'registro' es una referencia al nuevo registro que sera almacenado en
+	// lugar del existente
+	// POST: se reemplazo el registro de clave 'clave' por el pasado por
+	// parametro. Si no se encuentra la clave, no se realiza ninguna 
+	// actualizacion y se devuelve false. En caso de exito se devuelve true.
+	virtual bool actualizar(const uint clave, Tipo & registro, 
+		ArchivoBloques *archivo);
+
 	// Reparte su contenido con su nodoHermano, pasandole la mitad.
 	// PRE: 'nodoHermano' es un nodo con el que se hara la division
 	// POST: devuelve la clave del registro inferior de 'nodoHermano'
@@ -230,8 +240,8 @@ void NodoInterno< Tipo >::insertarHijosIniciales(
 // 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
 // en 'registro' el registro superior mas proximo al buscado.
 template < typename Tipo >
-bool NodoInterno< Tipo >::buscar(const uint clave,
-	Tipo & registro, ArchivoBloques *archivo)
+bool NodoInterno< Tipo >::buscar(const uint clave, Tipo & registro, 
+	ArchivoBloques *archivo)
 {
 	Nodo< Tipo > *nodo;
 
@@ -255,6 +265,46 @@ bool NodoInterno< Tipo >::buscar(const uint clave,
 
 			// Retornamos el resultado de la busqueda en nodos inferiores
 			return resBusqueda;
+		}
+	}
+
+	return false;
+}
+
+
+// Actualiza un registro existente.
+// PRE: 'clave' es la clave o id que identifica al registro a actualizar;
+// 'registro' es una referencia al nuevo registro que sera almacenado en
+// lugar del existente
+// POST: se reemplazo el registro de clave 'clave' por el pasado por
+// parametro. Si no se encuentra la clave, no se realiza ninguna 
+// actualizacion y se devuelve false. En caso de exito se devuelve true.
+template < typename Tipo >
+bool NodoInterno< Tipo >::actualizar(const uint clave, Tipo & registro, 
+	ArchivoBloques *archivo)
+{
+	Nodo< Tipo > *nodo;
+
+	if(this->nivel == 1)
+		nodo = new NodoHoja< Tipo >(MAX_HOJA, MAX_INTERNO);
+	else
+		nodo = new NodoInterno< Tipo >(MAX_HOJA, MAX_INTERNO);
+
+	// Iteramos sobre los hijos
+	for(size_t i = 0; i < this->hijos->tamanio(); i++)
+	{
+		if(i == (this->hijos->tamanio()-1) || clave < (*this->claves)[i])
+		{
+			// Cargamos el nodo en memoria
+			nodo->setNumBloque((*this->hijos)[i]);
+			nodo->cargar(archivo);
+
+			// Buscamos en nodos inferiores
+			bool resActualizacion = nodo->actualizar(clave, registro, archivo);
+			delete nodo;
+
+			// Retornamos el resultado de la busqueda en nodos inferiores
+			return resActualizacion;
 		}
 	}
 

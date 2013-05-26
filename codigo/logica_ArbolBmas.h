@@ -41,7 +41,7 @@ namespace {
 
 	// Constante para el tamanio de bloque 
 	// utilizado por los registros en nodos
-	const int TAMANIO_BLOQUE = 2048;
+	const int TAMANIO_BLOQUE = 512;
 
 
 	// Constante para el buffer
@@ -135,6 +135,14 @@ public:
 	// 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
 	// en 'registro' el registro superior mas proximo al buscado.
 	bool buscar(const uint clave, Tipo & registro);
+
+	// Actualiza un registro existente en el arbol.
+	// PRE: 'clave' es la clave o id que identifica al registro a actualizar;
+	// 'registro' es una referencia al nuevo registro que sera almacenado en
+	// lugar del existente
+	// POST: se reemplazo el registro de clave 'clave' por el pasado por
+	// parametro.
+	bool actualizar(const uint clave, Tipo & registro);
 
 	// Elimina un arbol por completo.
 	// POST: se borro el archivo almacenado en disco con los datos del arbol. 
@@ -310,6 +318,25 @@ bool ArbolBmas< Tipo >::buscar(const uint clave, Tipo & registro)
 
 	// Buscamos a partir del nodo raiz y devolvemos resultado
 	return this->raiz->buscar(clave, registro, this->archivo);
+}
+
+
+// Actualiza un registro existente en el arbol.
+// PRE: 'clave' es la clave o id que identifica al registro a actualizar;
+// 'registro' es una referencia al nuevo registro que sera almacenado en
+// lugar del existente
+// POST: se reemplazo el registro de clave 'clave' por el pasado por
+// parametro. Si no se encuentra la clave, no se realiza ninguna actualizacion
+// y se devuelve false. En caso de exito se devuelve true.
+template < typename Tipo >
+bool ArbolBmas< Tipo >::actualizar(const uint clave, Tipo & registro)
+{
+	// Corroboramos que se haya creado el arbol
+	if(!this->archivo)
+		throw "ArbolBmas::actualizar() ERROR: no se ha abierto el arbol";
+
+	// Damos la orden de actualizar a partir de la raiz y devolvemos resultado.
+	return this->raiz->actualizar(clave, registro, this->archivo);
 }
 
 

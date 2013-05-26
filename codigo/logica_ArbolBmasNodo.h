@@ -92,6 +92,16 @@ struct Nodo
 	virtual bool buscar(const uint clave, Tipo & registro, 
 		ArchivoBloques *archivo) = 0;
 
+	// Actualiza un registro existente.
+	// PRE: 'clave' es la clave o id que identifica al registro a actualizar;
+	// 'registro' es una referencia al nuevo registro que sera almacenado en
+	// lugar del existente
+	// POST: se reemplazo el registro de clave 'clave' por el pasado por
+	// parametro. Si no se encuentra la clave, no se realiza ninguna 
+	// actualizacion y se devuelve false. En caso de exito se devuelve true.
+	virtual bool actualizar(const uint clave, Tipo & registro, 
+		ArchivoBloques *archivo) = 0;
+
 	// Reparte su contenido con su nodoHermano, pasandole la mitad.
 	// PRE: 'nodoHermano' es un nodo con el que se hara la division
 	// POST: devuelve la clave del registro inferior de 'nodoHermano'

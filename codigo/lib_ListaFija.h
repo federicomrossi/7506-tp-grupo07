@@ -69,6 +69,11 @@ public:
 	// PRE: 'elemento' es el dato a insertar.
 	void insertarUltimo(const Tipo elemento);
 
+	// Reemplaza el contenido de una posicion con un nuevo elemento.
+	// PRE: 'elemento' es el elemento nuevo; 'pos' es la posicion
+	// en la que se desea reemplazar.
+	void reemplazar(Tipo elemento, const size_t pos);
+
 	// Devuelve un puntero al primer elemento
 	Tipo verPrimero();
 
@@ -238,7 +243,7 @@ void ListaFija< Tipo >::insertar(Tipo elemento, const size_t pos)
 {
 	// Corroboramos que la posicion sea valida
 	if(pos > this->tamanioParcial)
-		throw "ERROR: Posicion de lista inválido.";
+		throw "ERROR: Posicion de lista inválida.";
 	// Corroboramos que no este llena
 	else if(this->estaLlena()) 
 		throw "ERROR: Lista llena. No puede insertarse elemento.";
@@ -268,6 +273,20 @@ void ListaFija< Tipo >::insertarUltimo(const Tipo elemento)
 
 	this->lista[this->tamanioParcial] = elemento;
 	++tamanioParcial;
+}
+
+
+// Reemplaza el contenido de una posicion con un nuevo elemento.
+// PRE: 'elemento' es el elemento nuevo; 'pos' es la posicion
+// en la que se desea reemplazar.
+template <typename Tipo >
+void ListaFija< Tipo >::reemplazar(Tipo elemento, const size_t pos)
+{
+	// Corroboramos que la posicion sea valida
+	if(pos > this->tamanioParcial)
+		throw "ERROR: Posicion de lista inválida.";
+
+	this->lista[pos] = elemento;
 }
 
 
