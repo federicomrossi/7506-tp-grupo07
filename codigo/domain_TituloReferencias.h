@@ -20,6 +20,10 @@ class TituloReferencias : public RegistroGenerico {
         void setRef3(unsigned int ref);
         void setRefLista(unsigned int ref);
         void setCant(unsigned int cant);
+
+        // Devuelve el tamanio en bytes que ocuparia persistir la clase.
+        static size_t getTamanioEnBytes();
+        
     private:
         unsigned int refs[3];
         unsigned int refLista;

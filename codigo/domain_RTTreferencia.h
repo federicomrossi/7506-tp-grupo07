@@ -12,6 +12,10 @@ class RTTreferencia : public RegistroGenerico {
         virtual void deserializar(SerialBuffer *buffer);
         unsigned int getRefLista();
         void setRefLista(unsigned int ref);
+
+        // Devuelve el tamanio en bytes que ocuparia persistir la clase.
+        static size_t getTamanioEnBytes();
+        
     private:
         unsigned int refLista;
 

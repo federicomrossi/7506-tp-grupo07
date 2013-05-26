@@ -172,6 +172,12 @@ void prueba_ArbolBmas_3()
     }else{
         std::cout<< "No encontrado" << std::endl;
     }
+
+    for(int j = 1; j < 150; j++)
+    {
+        AutorReferencias r1(j);
+        arbol.insertar(j,r1);
+    }
     
     arbol.imprimir();
     arbol.cerrar();
@@ -228,6 +234,8 @@ void prueba_ArbolBmas_3()
     std::cout << a3->getRef4() << std::endl;
     std::cout << a3->getRef5() << std::endl;
     std::cout << a3->getRefLista() << std::endl;
+
+    arbol.imprimir();
 
     delete a;
     delete a2;
