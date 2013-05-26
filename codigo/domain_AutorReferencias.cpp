@@ -83,3 +83,17 @@ void AutorReferencias::deserializar(SerialBuffer *buffer){
     buffer->unpack(&refs);
     buffer->unpack(&refLista);
 }
+
+// Devuelve el tamanio en bytes que ocuparia persistir la clase.
+size_t AutorReferencias::getTamanioEnBytes()
+{
+    size_t bytes = 0;
+
+    // Contamos el tamanio de la clase padre
+    bytes += RegistroGenerico::getTamanioEnBytes();
+    
+    // Agregamos el tamanio de los atributos de esta clase
+    bytes += sizeof(unsigned int)*7 + sizeof(unsigned short int)*3;
+
+    return bytes;
+}

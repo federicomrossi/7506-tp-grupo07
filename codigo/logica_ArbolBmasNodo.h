@@ -31,8 +31,13 @@ typedef unsigned int uint;
 
 namespace {
 
-	// Constantes para el buffer
-	const int NODO_BUFFER_TAMANIO = 512;
+	// Constante para el buffer
+	#ifndef BUFFER_TAMANIO_CONFIG
+	#define BUFFER_TAMANIO_CONFIG
+
+	const int BUFFER_TAMANIO = 512;
+	
+	#endif
 }
 
 
@@ -106,9 +111,6 @@ struct Nodo
 
 	// Se imprime el nodo en la salida estandar con su contenido
 	virtual void imprimir(uint& nivelDelArbol, ArchivoBloques *archivo) = 0;
-
-	// Devuelve el tamanio en bytes que ocuparia persistir la clase.
-	virtual size_t getBytesUsados();
 };
 
 
@@ -124,7 +126,7 @@ struct Nodo
 template < typename Tipo >
 Nodo< Tipo >::Nodo() 
 {
-	this->buffer = new SerialBuffer(NODO_BUFFER_TAMANIO);
+	this->buffer = new SerialBuffer(BUFFER_TAMANIO);
 }
 
 
@@ -162,14 +164,6 @@ template < typename Tipo >
 uint Nodo< Tipo >::getNumBloque()
 {
 	return this->numBloque;
-}
-
-
-// Devuelve el tamanio en bytes que ocuparia persistir la clase.
-template < typename Tipo >
-size_t Nodo< Tipo >::getBytesUsados()
-{
-	return (3 * sizeof(uint));
 }
 
 

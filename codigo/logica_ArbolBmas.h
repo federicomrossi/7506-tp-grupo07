@@ -14,22 +14,20 @@
 //
 //	CONFIGURACION
 //
-//	Es configurable la cantidad de registros en nodos internos y en nodos
-//	hoja. Las demas constantes se recomienda no modificarlas a menos que sea
-//	con conocimiento y razon de lo que se esta haciendo.
+//	Es configurable el tamanio del bloque, el cual representa a un nodo
+//	del arbol (ya sea interno u hoja). De acuerdo al valor especificado
+//	se calcularan la cantidad maxima de registros que pueden insertarse
+//	en cada nodo hoja y nodo interno. Tengase en cuenta que al modificar
+//	el tamanio del bloque, debe modificarse el tamanio del buffer.
+//	Es configurable el bloque en el que se debe guardar la metadata, pero
+//	siguiendo la restriccion de que el bloque de metadata siempre debe
+//	encontrarse por debajo del numero de bloque en el que se encuentra la
+//	raiz inicial. Esto se debe a cuestiones de disenio e implementacion.
 //
 
 
 #ifndef ARBOLBMAS_H
 #define ARBOLBMAS_H
-
-
-#include "logica_ArbolBmas.h"
-#include "fisica_SerialBuffer.h"
-#include "fisica_ArchivoBloques.h"
-#include "logica_ArbolBmasNodo.h"
-#include "logica_ArbolBmasNodoHoja.h"
-#include "logica_ArbolBmasNodoInterno.h"
 
 // Definicion de tipo uint para utilizar nombre mas corto
 typedef unsigned int uint; 
@@ -43,21 +41,34 @@ typedef unsigned int uint;
 
 namespace {
 
-	// Cantidad de registros en nodos
-	const int CANT_REG_NODO_INTERNO = 5;
-	const int CANT_REG_NODO_HOJA = 6;
-
 	// Constante para el tamanio de bloque 
 	// utilizado por los registros en nodos
 	const int TAMANIO_BLOQUE = 512;
 
-	// Constantes para el buffer
+
+	// Constante para el buffer
+	#define BUFFER_TAMANIO_CONFIG
 	const int BUFFER_TAMANIO = 512;
 
 	// Constantes para los numeros de bloque
 	const uint NUM_BLOQUE_METADATA = 0;
 	const uint NUM_BLOQUE_RAIZ_INICIAL = 1;
 }
+
+
+
+
+/* ****************************************************************************
+ * INCLUDES
+ * ***************************************************************************/
+
+
+#include "logica_ArbolBmas.h"
+#include "fisica_SerialBuffer.h"
+#include "fisica_ArchivoBloques.h"
+#include "logica_ArbolBmasNodo.h"
+#include "logica_ArbolBmasNodoHoja.h"
+#include "logica_ArbolBmasNodoInterno.h"
 
 
 
@@ -80,8 +91,9 @@ private:
 	uint contBloques;				// Contador de bloques existentes
 	bool estaAbierto;				// Flag para sensar si se abrio el arbol
 
-	uint maxRegNH;
-	uint maxRegNI;
+	size_t MAX_HOJA;				// Cantidad maxima de registros en hoja
+	size_t MAX_INTERNO;				// Cantidad maxima de registros en nodo
+									// interno
 
 
 	// Carga la metadata del arbol desde el archivo.
@@ -91,7 +103,6 @@ private:
 	// Guarda la metadata actual del arbol en el archivo, actualizando info.
 	// POST: si todavia no ha sido abierto o creado el archivo, no hace nada.
 	void guardarMetadata();
-
 
 public:
 
@@ -149,16 +160,15 @@ public:
 // Constructor
 template < typename Tipo >
 ArbolBmas< Tipo >::ArbolBmas() : nivel(0), 
-	contBloques(NUM_BLOQUE_RAIZ_INICIAL), estaAbierto(false) 
+	contBloques(NUM_BLOQUE_RAIZ_INICIAL), estaAbierto(false)
 {
+	// Creamos el buffer
 	this->buffer = new SerialBuffer(BUFFER_TAMANIO);
-
-	// this->maxRegNI = (TAMANIO_BLOQUE - attrNodo) / (sizeof(uint) + sizeof(Tipo));
-	this->maxRegNI = ((TAMANIO_BLOQUE - 12) / (2 * 4)) - 3;
-	this->maxRegNH = ((TAMANIO_BLOQUE - 16) / (4 + (4+4)));
 	
-	std::cout << "REG INT: " << this->maxRegNI << std::endl;
-	std::cout << "REG HOJA: " << this->maxRegNH << std::endl;
+	// Calculamos la cantidad maxima de registros por bloques en nodos hoja y
+	// en nodos internos del arbol
+	this->MAX_INTERNO = ((TAMANIO_BLOQUE - 30) / (12)) - 2;
+	this->MAX_HOJA = ((TAMANIO_BLOQUE - 36) / (6+Tipo::getTamanioEnBytes()))-1;
 }
 
 
@@ -199,8 +209,7 @@ void ArbolBmas< Tipo >::abrir(const char* nombre_archivo)
 		this->contBloques = NUM_BLOQUE_RAIZ_INICIAL;
 
 		// Creamos el nodo raiz
-		this->raiz = new NodoHoja< Tipo, CANT_REG_NODO_HOJA, 
-			CANT_REG_NODO_INTERNO >;
+		this->raiz = new NodoHoja< Tipo >(MAX_HOJA, MAX_INTERNO);
 		this->raiz->inicializar(NUM_BLOQUE_RAIZ_INICIAL, 0);
 
 		// Guardamos metadata del arbol con valores iniciales
@@ -251,14 +260,12 @@ void ArbolBmas< Tipo >::insertar(uint clave, Tipo & registro)
 	Nodo< Tipo > *nuevoHermano;
 
 	if(this->nivel == 0)
-		nuevoHermano = new NodoHoja< Tipo, CANT_REG_NODO_HOJA, 
-			CANT_REG_NODO_INTERNO >;
+		nuevoHermano = new NodoHoja< Tipo >(MAX_HOJA, MAX_INTERNO);
 	else
-		nuevoHermano = new NodoInterno< Tipo, CANT_REG_NODO_HOJA, 
-			CANT_REG_NODO_INTERNO >;
+		nuevoHermano = new NodoInterno< Tipo >(MAX_HOJA, MAX_INTERNO);
 
-	NodoInterno< Tipo, CANT_REG_NODO_HOJA, CANT_REG_NODO_INTERNO > *nuevaRaiz
-	 = new NodoInterno< Tipo, CANT_REG_NODO_HOJA, CANT_REG_NODO_INTERNO >;
+	NodoInterno< Tipo > *nuevaRaiz
+	 = new NodoInterno< Tipo >(MAX_HOJA, MAX_INTERNO);
 
 	// Inicializamos al nuevo hermano
 	this->contBloques++;
@@ -328,6 +335,7 @@ void ArbolBmas< Tipo >::imprimir()
 
 
 
+
 /**********************************
  *  METODOS PRIVADOS
  **********************************/
@@ -360,11 +368,9 @@ void ArbolBmas< Tipo >::cargarMetadata()
 	// Cargamos la raiz
 	// Si el nivel es cero, la raiz es un nodo hoja, sino es nodo interno
 	if(this->nivel == 0)
-		this->raiz = new NodoHoja< Tipo, CANT_REG_NODO_HOJA, 
-			CANT_REG_NODO_INTERNO >;
+		this->raiz = new NodoHoja< Tipo >(MAX_HOJA, MAX_INTERNO);
 	else
-		this->raiz = new NodoInterno< Tipo, CANT_REG_NODO_HOJA, 
-				CANT_REG_NODO_INTERNO >;
+		this->raiz = new NodoInterno< Tipo >(MAX_HOJA, MAX_INTERNO);
 
 	// Seteamos el numero de bloque de la raiz y cargamos la raiz
 	this->raiz->setNumBloque(bloqueRaiz);
@@ -393,5 +399,6 @@ void ArbolBmas< Tipo >::guardarMetadata()
 	this->archivo->escribirBloque(this->buffer->getBuffer(), 
 		NUM_BLOQUE_METADATA);
 }
+
 
 #endif

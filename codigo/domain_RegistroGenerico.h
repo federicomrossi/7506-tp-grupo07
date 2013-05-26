@@ -58,9 +58,9 @@ public:
 	}
 
 	// Devuelve el tamanio en bytes que ocuparia persistir la clase.
-	virtual size_t getTamanioEnBytes()
+	static size_t getTamanioEnBytes()
 	{
-		return sizeof(unsigned int);
+		return (sizeof(unsigned int) + sizeof(unsigned short int));
 	}
 };
 

@@ -66,7 +66,7 @@ public:
 	}
 
 	// Devuelve el tamanio en bytes que ocuparia persistir la clase.
-	virtual size_t getTamanioEnBytes()
+	static size_t getTamanioEnBytes()
 	{
 		size_t bytes = 0;
 
@@ -74,7 +74,7 @@ public:
 		bytes += RegistroGenerico::getTamanioEnBytes();
 		
 		// Agregamos el tamanio de los atributos de esta clase
-		bytes += sizeof(int);
+		bytes += sizeof(int) + sizeof(unsigned short int);
 
 		return bytes;
 	}

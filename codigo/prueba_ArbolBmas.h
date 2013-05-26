@@ -2,6 +2,7 @@
 #include "prueba_UnRegistroGenerico.h"
 #include "domain_AutorReferencias.h"
 #include "logica_ArbolBmas.h"
+#include "lib_ListaFija.h"
 
 
 /*  INDICACIONES PARA PRUEBAS
@@ -12,6 +13,24 @@
  *  Recuerden que deben borrar lo compilado con CLEAN y volver a compilar desde
  *  cero para que agarre bien...
  */
+
+
+void prueba_ArbolBmas_0()
+{
+    ListaFija< int > *l = new ListaFija< int >(5);
+
+    if(l->estaVacia()) std::cout << "Lista vacia" << std::endl;
+    else  std::cout << "Lista no vacia" << std::endl;
+    std::cout << "Tamanio: " << l->tamanio() << std::endl;
+
+    l->insertarUltimo(1);
+    if(l->estaVacia()) std::cout << "Lista vacia" << std::endl;
+    else  std::cout << "Lista no vacia" << std::endl;
+    std::cout << "Tamanio: " << l->tamanio() << std::endl;
+
+
+    // for(int i = 0; i)
+}
 
 
 void prueba_ArbolBmas_1()
@@ -254,7 +273,7 @@ void prueba_ArbolBmas_4()
         arbol2.imprimir();
         arbol2.cerrar();
 
-        arbol2.eliminar();
+        // arbol2.eliminar();
     }
     catch(char const * e)
     {

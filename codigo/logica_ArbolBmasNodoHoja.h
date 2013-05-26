@@ -29,22 +29,21 @@ typedef unsigned int uint;
  * ***************************************************************************/
 
 
-template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
+template < typename Tipo >
 struct NodoHoja : public Nodo< Tipo >
 {
-	// Referencia al nodo hermano
-	uint nodoHermano;
-	// Claves de registros
-	ListaFija< unsigned int, MAX_HOJA + 1 > claves;
-	// Lista de registros (se usa si es un nodo hoja)
-	ListaFija< Tipo, MAX_HOJA + 1 > registros;
-
+	ListaFija< uint > *claves;		// Claves de registros
+	ListaFija< Tipo > *registros;	// Lista de registros
+	uint nodoHermano;				// Referencia al nodo hermano
+	size_t MAX_HOJA;				// Cantidad maxima de registros en hoja
+	size_t MAX_INTERNO;				// Cantidad maxima de registros en nodo
+									// interno
 
 	// Constructor
-	NodoHoja();
+	NodoHoja(size_t max_hoja, size_t max_interno);
 
 	// Destructor
-	~NodoHoja();	
+	~NodoHoja();
 
 	// Inserta el registro en el nodo.
 	// PRE: 'clave' es la clave a insertar; 'registro' es el registro
@@ -90,10 +89,8 @@ struct NodoHoja : public Nodo< Tipo >
 	// Se imprime el nodo en la salida estandar con su contenido.
 	// FORMATO: "[nivel], [numero_bloque]: ([clave1])..([claveN])[nodo_hermano]
 	virtual void imprimir(uint& nivelDelArbol, ArchivoBloques *archivo);
-
-	// Devuelve el tamanio en bytes que ocuparia persistir la clase.
-	// virtual size_t getTamanioEnBytes();
 };
+
 
 
 
@@ -104,17 +101,24 @@ struct NodoHoja : public Nodo< Tipo >
 
 
 // Constructor
-template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
-NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::NodoHoja()
+template < typename Tipo >
+NodoHoja< Tipo >::NodoHoja(size_t max_hoja, size_t max_interno) : 
+	MAX_HOJA(max_hoja), MAX_INTERNO(max_interno)
 {
 	this->cantMaxClaves = MAX_HOJA;
 	this->nodoHermano = 0;
+	this->claves = new ListaFija< uint >(MAX_HOJA + 1);
+	this->registros = new ListaFija< Tipo >(MAX_HOJA + 1);
 }
 
 
 // Destructo
-template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
-NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::~NodoHoja() { }
+template < typename Tipo >
+NodoHoja< Tipo >::~NodoHoja() 
+{
+	delete this->claves;
+	delete this->registros;
+}
 
 
 // Inserta el registro en el nodo.
@@ -123,41 +127,41 @@ NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::~NodoHoja() { }
 // se almacena el arbol; 'contBloques' es el contador de bloques del
 // arbol.
 // POST: devuelve true si queda en overflow o false en caso contrario
-template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
-bool NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::insertar(uint& clave, 
+template < typename Tipo >
+bool NodoHoja< Tipo >::insertar(uint& clave, 
 	Tipo & registro, ArchivoBloques *archivo, uint& contBloques)
 {
-	for(size_t i = 0; i < this->claves.tamanio()+1; i++)
+	for(size_t i = 0; i < this->claves->tamanio()+1; i++)
 	{
 		// Si esta vacia insertamos directamente
-		if(this->claves.estaVacia())
+		if(this->claves->estaVacia())
 		{
-			this->claves.insertarUltimo(clave);
-			this->registros.insertarUltimo(registro);
+			this->claves->insertarUltimo(clave);
+			this->registros->insertarUltimo(registro);
 			break;
 		}
 		// Comprobamos que no hayan claves iguales
-		else if(this->claves[i] == clave)
+		else if((*this->claves)[i] == clave)
 			throw "ERROR: Claves iguales en arbol.";
 		// Si la clave es mas grande que el actual, insertamos en ese lugar
-		else if(this->claves[i] > clave)
+		else if((*this->claves)[i] > clave)
 		{
-			this->claves.insertar(clave, i);
-			this->registros.insertar(registro, i);
+			this->claves->insertar(clave, i);
+			this->registros->insertar(registro, i);
 			break;
 		}
 		// Si llegamos a la ultima posicion y no hubo elemento mayor,
 		// insertamos clave y registro al final de las listas.
-		else if(i == (this->claves.tamanio() - 1))
+		else if(i == (this->claves->tamanio() - 1))
 		{
-			this->claves.insertarUltimo(clave);
-			this->registros.insertarUltimo(registro);
+			this->claves->insertarUltimo(clave);
+			this->registros->insertarUltimo(registro);
 			break;
 		}
 	}
 
 	// Verificamos si entro en overflow y devolvemos de acuerdo a esto
-	if(this->claves.tamanio() > this->cantMaxClaves) return true;
+	if(this->claves->tamanio() > this->cantMaxClaves) return true;
 	return false;
 }
 
@@ -169,27 +173,27 @@ bool NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 // POST: Si se encontró el registro, se devuelve true y se almacena en
 // 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
 // en 'registro' el registro superior mas proximo al buscado.
-template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
-bool NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::buscar(const uint clave,
+template < typename Tipo >
+bool NodoHoja< Tipo >::buscar(const uint clave,
 	Tipo & registro, ArchivoBloques *archivo)
 {
 	// Iteramos sobre las claves del nodo
-	for(size_t i = 0; i < this->claves.tamanio(); i++)
+	for(size_t i = 0; i < this->claves->tamanio(); i++)
 	{
 		// Caso en que esta vacia la lista de claves
-		if(this->claves.estaVacia())
+		if(this->claves->estaVacia())
 			return false;
 
 		// Caso en que coincide la clave buscada con una clave del nodo
-		else if(this->claves[i] == clave)
+		else if((*this->claves)[i] == clave)
 		{
 			// Devolvemos la clave asociada al registro.
-			registro = this->registros[i];
+			registro = (*this->registros)[i];
 			return true;
 		}
-		else if(this->claves[i] > clave)
+		else if((*this->claves)[i] > clave)
 		{
-			registro = this->registros[i];
+			registro = (*this->registros)[i];
 			return false;
 		}
 	}
@@ -198,7 +202,7 @@ bool NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::buscar(const uint clave,
 	if(this->nodoHermano == 0) return false;
 
 	// Cargamos nodo hermano y devolvemos el primero de sus registros
-	NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO > nodoHermano;
+	NodoHoja< Tipo > nodoHermano(MAX_HOJA, MAX_INTERNO);
 	nodoHermano.setNumBloque(this->nodoHermano);
 	nodoHermano.cargar(archivo);
 	nodoHermano.obtenerMenorRegistro(registro);
@@ -211,45 +215,45 @@ bool NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::buscar(const uint clave,
 // Obtiene el menor de los registros contenido en el nodo.
 // PRE: 'registro' es donde se almacena el registro menor.
 // POST: si se encuentra vacio el nodo se lanza una excepcion.
-template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
-void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::obtenerMenorRegistro(
+template < typename Tipo >
+void NodoHoja< Tipo >::obtenerMenorRegistro(
 	Tipo & registro)
 {
 	// Corroboramos que no este vacia
-	if(this->registros.estaVacia())
+	if(this->registros->estaVacia())
 		throw "ERROR: El nodo no contiene elementos.";
 
-	registro = this->registros[0];
+	registro = (*this->registros)[0];
 }
 
 
 // Reparte su contenido con su nodoHermano, pasandole la mitad.
 // PRE: 'nodoHermano' es un nodo con el que se hara la division
 // POST: devuelve la clave del registro inferior de 'nodoHermano'
-template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
-uint NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::dividir(
+template < typename Tipo >
+uint NodoHoja< Tipo >::dividir(
 	Nodo< Tipo > *nodoHermano)
 {
 	// Casteamos para poder tratarlo como nodo hoja
-	NodoHoja *nodoHojaHermano = (NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >*)
+	NodoHoja *nodoHojaHermano = (NodoHoja< Tipo >*)
 		nodoHermano;
 		
 	// Calculamos posicion de corte
-	int pos_corte = this->claves.tamanio() / 2;
+	int pos_corte = this->claves->tamanio() / 2;
 
 	// Transferimos elementos de la segunda mitad hacia las listas del
 	// nodo hermano
-	this->claves.transferir(nodoHojaHermano->claves, pos_corte, 
-		this->claves.tamanio() - 1);
-	this->registros.transferir(nodoHojaHermano->registros, pos_corte,
-		this->registros.tamanio() - 1);
+	this->claves->transferir(nodoHojaHermano->claves, pos_corte, 
+		this->claves->tamanio() - 1);
+	this->registros->transferir(nodoHojaHermano->registros, pos_corte,
+		this->registros->tamanio() - 1);
 
 	// Apuntamos al nodo hermano
 	nodoHojaHermano->nodoHermano = this->nodoHermano;
 	this->nodoHermano = nodoHojaHermano->numBloque;
 
 	// Retornamos la clave menor del nodo hermano
-	return nodoHojaHermano->claves.verPrimero();
+	return nodoHojaHermano->claves->verPrimero();
 }
 
 
@@ -257,8 +261,8 @@ uint NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::dividir(
 // PRE: 'archivo' es donde se almacena el nodo que se desea cargar, el
 // cual se encuentra en el numero de bloque con el que fue inicializado.
 // POST: se han cargado todos los atributos internos del nodo
-template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
-void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
+template < typename Tipo >
+void NodoHoja< Tipo >::cargar(ArchivoBloques *archivo)
 {
 	this->buffer->clear();
 	archivo->leerBloque(this->buffer->getBuffer(), this->numBloque);
@@ -276,9 +280,9 @@ void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
 	this->nodoHermano = nodoHermano;
 
 	// Deserializamos las claves
-	this->claves.deserializar(this->buffer);
+	this->claves->deserializar(this->buffer);
 	// Deserializamos los registrosthis
-	this->registros.deserializar(this->buffer);
+	this->registros->deserializar(this->buffer);
 }
 
 
@@ -286,8 +290,8 @@ void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::cargar(ArchivoBloques *archivo)
 // PRE: 'archivo' es donde se almacenaran los datos del nodo, los cuales
 // se guardaran en el numero de bloque con el cual fue inicializado.
 // POST: se guardo el estado del nodo en el archivo.
-template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
-void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
+template < typename Tipo >
+void NodoHoja< Tipo >::guardar(ArchivoBloques *archivo)
 {
 	this->buffer->clear();
 
@@ -303,9 +307,9 @@ void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
 	this->buffer->pack(&nodoHermano, sizeof(uint));
 
 	// Serializamos las claves
-	this->claves.serializar(this->buffer);
+	this->claves->serializar(this->buffer);
 	// Serializamos los registros
-	this->registros.serializar(this->buffer);
+	this->registros->serializar(this->buffer);
 
 	// Escribimos bloque y limpiamos buffer
 	archivo->escribirBloque(this->buffer->getBuffer(), this->numBloque);
@@ -315,8 +319,8 @@ void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::guardar(ArchivoBloques *archivo)
 
 // Se imprime el nodo en la salida estandar con su contenido.
 // FORMATO: "[nivel], [numero_bloque]: ([clave1])...([claveN])[nodo_hermano] 
-template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
-void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol, 
+template < typename Tipo >
+void NodoHoja< Tipo >::imprimir(uint& nivelDelArbol, 
 	ArchivoBloques *archivo)
 {
 	// Tabulamos de acuerdo al nivel
@@ -325,29 +329,13 @@ void NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::imprimir(uint& nivelDelArbol,
 	std::cout << this->nivel << ", " << this->numBloque << ": ";
 
 	// Iteramos sobre las claves
-	for(size_t i = 0; i < this->claves.tamanio(); i++)
-		std::cout << "(" << this->claves[i] << ")";
+	for(size_t i = 0; i < this->claves->tamanio(); i++)
+		std::cout << "(" << (*this->claves)[i] << ")";
 
 	std::cout << this->nodoHermano << std::endl;
 
 	return;
 }
 
-
-// Devuelve el tamanio en bytes que ocuparia persistir la clase.
-// template < typename Tipo, size_t MAX_HOJA, size_t MAX_INTERNO >
-// size_t NodoHoja< Tipo, MAX_HOJA, MAX_INTERNO >::getTamanioEnBytes()
-// {
-// 	size_t bytes = 0;
-
-// 	// Contamos el tamanio de la clase padre
-// 	bytes += Nodo< Tipo >::getTamanioEnBytes();
-	
-// 	// Agregamos el tamanio de los atributos de esta clase
-// 	bytes += sizeof(uint);
-	
-
-// 	return bytes;
-// }
 
 #endif
