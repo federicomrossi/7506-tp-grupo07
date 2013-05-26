@@ -64,6 +64,16 @@ struct NodoHoja : public Nodo< Tipo >
 	virtual bool buscar(const uint clave, Tipo & registro, 
 		ArchivoBloques *archivo);
 
+	// Actualiza un registro existente.
+	// PRE: 'clave' es la clave o id que identifica al registro a actualizar;
+	// 'registro' es una referencia al nuevo registro que sera almacenado en
+	// lugar del existente
+	// POST: se reemplazo el registro de clave 'clave' por el pasado por
+	// parametro. Si no se encuentra la clave, no se realiza ninguna 
+	// actualizacion y se devuelve false. En caso de exito se devuelve true.
+	virtual bool actualizar(const uint clave, Tipo & registro, 
+		ArchivoBloques *archivo);
+
 	// Obtiene el menor de los registros contenido en el nodo.
 	// PRE: 'registro' es donde se almacena el registro menor.
 	// POST: si se encuentra vacio el nodo se lanza una excepcion.
@@ -174,8 +184,8 @@ bool NodoHoja< Tipo >::insertar(uint& clave,
 // 'registro' al mismo. Si no se encontró, se devuelve false y se almacena
 // en 'registro' el registro superior mas proximo al buscado.
 template < typename Tipo >
-bool NodoHoja< Tipo >::buscar(const uint clave,
-	Tipo & registro, ArchivoBloques *archivo)
+bool NodoHoja< Tipo >::buscar(const uint clave, Tipo & registro, 
+	ArchivoBloques *archivo)
 {
 	// Iteramos sobre las claves del nodo
 	for(size_t i = 0; i < this->claves->tamanio(); i++)
@@ -208,6 +218,38 @@ bool NodoHoja< Tipo >::buscar(const uint clave,
 	nodoHermano.obtenerMenorRegistro(registro);
 
 	// Retornamos false por no haber encontrado el registro buscado
+	return false;
+}
+
+
+// Actualiza un registro existente.
+// PRE: 'clave' es la clave o id que identifica al registro a actualizar;
+// 'registro' es una referencia al nuevo registro que sera almacenado en
+// lugar del existente
+// POST: se reemplazo el registro de clave 'clave' por el pasado por
+// parametro. Si no se encuentra la clave, no se realiza ninguna 
+// actualizacion y se devuelve false. En caso de exito se devuelve true.
+template < typename Tipo >
+bool NodoHoja< Tipo >::actualizar(const uint clave, Tipo & registro, 
+	ArchivoBloques *archivo)
+{
+	// Caso en que esta vacia la lista de claves
+	if(this->claves->estaVacia())
+		return false;
+
+	// Iteramos sobre las claves del nodo
+	for(size_t i = 0; i < this->claves->tamanio(); i++)
+	{
+		// Caso en que coincide la clave buscada con una clave del nodo
+		if((*this->claves)[i] == clave)
+		{
+			// Actualizamos el registro en la lista y guardamos cambios
+			this->registros->reemplazar(registro, i);
+			this->guardar(archivo);
+			return true;
+		}
+	}
+
 	return false;
 }
 
