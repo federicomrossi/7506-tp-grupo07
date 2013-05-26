@@ -1,7 +1,6 @@
 #include <iostream>
 #include "interfaz_Menu.h"
 
-#include "prueba_ArbolBmas.h"
 
 
 int main()

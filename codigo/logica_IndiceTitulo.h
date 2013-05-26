@@ -3,7 +3,9 @@
 
 #include <iostream>
 #include "domain_AutorOcurrencia.h"
+#include "domain_TituloReferencias.h"
 #include <list>
+#include "logica_BlockTable.h"
 
 class IndiceTitulo{
     public:
@@ -20,11 +22,12 @@ class IndiceTitulo{
         int printOcurrencias();
         unsigned int getRefLista();
         int guardarRefLista(std::list<unsigned int>* lista);
-        //UN HASH
+        BlockTable<TituloReferencias>* hash;
 
         std::string temporalOcurrencias;
         std::string titulos;
         std::string listaRefs;
+        std::string hashName;
 
 };
 

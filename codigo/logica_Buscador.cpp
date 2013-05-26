@@ -65,5 +65,23 @@ int Buscador::buscarPorTitulo(std::string titulo){
 }
 
 int Buscador::buscarPorFrase(std::string frase){
+    std::list<unsigned int> *listilla;
+    listilla = new std::list<unsigned int>;
+    rtt->recuperar(frase,listilla);
+    cout << "Se encontraron los siguientes temas" << std::endl;
+    std::ifstream file;
+    std::string fileName = destPath + ".master";
+    file.open(fileName.c_str());
+    std::string header;
+    unsigned int largo;
+    for (std::list<unsigned int>::iterator it = listilla->begin();it != listilla->end();it++){
+        file.seekg(*it);
+        file.read((char*)&largo,sizeof(largo));
+        getline(file,header);
+        cout << *it << std::endl;
+        cout << header << std::endl;
+    }
+    file.close();
+    delete listilla;
     return 0;
 }

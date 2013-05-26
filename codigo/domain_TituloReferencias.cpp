@@ -64,6 +64,6 @@ void TituloReferencias::serializar(SerialBuffer *buffer){
 void TituloReferencias::deserializar(SerialBuffer *buffer){
     RegistroGenerico::deserializar(buffer);
     buffer->unpack(&cant);
-    buffer->unpack(refs);
+    buffer->unpack(&refs);
     buffer->unpack(&refLista);
 }

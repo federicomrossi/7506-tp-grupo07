@@ -10,12 +10,14 @@ IndiceTitulo::IndiceTitulo(std::string path){
     this->temporalOcurrencias = path + ".ocurrenciasTitulo";
     this->titulos = path + ".titulos";
     this->listaRefs = path + ".titulosRef";
+    this->hash = new BlockTable<TituloReferencias>(path+".hashTable",path+".hashTitulos",32);
 }
 
 IndiceTitulo::IndiceTitulo(){
 }
 
 IndiceTitulo::~IndiceTitulo(){
+    delete hash;
 }
 
 
@@ -53,6 +55,7 @@ unsigned int IndiceTitulo::obtenerId(std::string titulo){
         AutorId* aid = new AutorId(titulo.c_str(),id);
         file2 << *aid;
         file2.close();
+        delete aid;
     }
     return id;
 }
@@ -105,7 +108,7 @@ int IndiceTitulo::pack(){
         }else{
             ar->setRefLista(UINT_MAX);
         }
-        //aborl->guardar(ar);
+        hash->insert(ar);
         delete ar;
         delete lista;
     }
@@ -147,10 +150,10 @@ int IndiceTitulo::printOcurrencias(){
 }
 
 int IndiceTitulo::recuperar(std::string titulo, std::list<unsigned int> *lista){
- /*   unsigned int clave = this->obtenerId(titulo);
-//    hash->abrir(this->hashName.c_str());
+    unsigned int clave = this->obtenerId(titulo);
     TituloReferencias* ar = new TituloReferencias();
-    bool b = hash->buscar(clave, *ar);
+    ar->setClave(clave);
+    bool b = hash->search(ar);
     if(b){
         unsigned int* refs = ar->getRefs();
         unsigned int stop = ar->getCant() > 3 ? 3: ar->getCant();
@@ -171,7 +174,6 @@ int IndiceTitulo::recuperar(std::string titulo, std::list<unsigned int> *lista){
             file.close();
         }
     }
-    arbol->cerrar();*/
     return 0;
 }
 

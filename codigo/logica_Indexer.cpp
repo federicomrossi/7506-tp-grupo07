@@ -10,7 +10,7 @@
 
 Indexer::Indexer(){
     fromPath="../temas";
-    destPath="destino/";
+    destPath="./destino/";
     masterName = destPath+".master";
     rtt = new RTTgenerator(destPath);
     autores = new IndiceAutor(destPath);
@@ -125,7 +125,6 @@ int Indexer::generateRTT(std::string songPath, unsigned int songPosition){
         std::istringstream lineaS(linea);
         while(getline(lineaS,palabra,' ')){
             palabra = Utils::uniformizarString(palabra);
-            std::cout << palabra << endl;
             rtt->indexarPalabra(palabra, songPosition,position);
             position++;
         }
