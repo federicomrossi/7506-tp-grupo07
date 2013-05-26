@@ -5,7 +5,7 @@
 
 
 #ifndef UN_REGISTRO_GENERICO_H
-#define UN_REGISTRO_BENERICO_H
+#define UN_REGISTRO_GENERICO_H
 
 #include "domain_RegistroGenerico.h"
 
@@ -28,13 +28,13 @@ public:
 	UnRegistroGenerico() { }
 
 	// Serializa el registro.
-	// PRE: 'buffer' es el buffer en donde se serializara el registro para 
+	// PRE: 'buffer' es el buffer en donde se serializara el registro para
 	// poder ser almacenada en algun medio.
 	void serializar(SerialBuffer *buffer)
 	{
 		// Serializamos clase padre
 		RegistroGenerico::serializar(buffer);
-		
+
 		// Serializamos atributos propios
 		int attr = this->unAtributo;
 		buffer->pack(&attr, sizeof(int));
@@ -44,8 +44,8 @@ public:
 	// PRE: 'buffer' es el buffer en donde se encuentra serializado el registro
 	// POST: el estado del registro se actualiza con los datos obtenidos del
 	// buffer.
-	void deserializar(SerialBuffer *buffer) 
-	{ 
+	void deserializar(SerialBuffer *buffer)
+	{
 		// Deserializamos clase padre
 		RegistroGenerico::deserializar(buffer);
 
@@ -72,7 +72,7 @@ public:
 
 		// Contamos el tamanio de la clase padre
 		bytes += RegistroGenerico::getTamanioEnBytes();
-		
+
 		// Agregamos el tamanio de los atributos de esta clase
 		bytes += sizeof(int);
 

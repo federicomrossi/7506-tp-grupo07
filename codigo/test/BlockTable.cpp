@@ -25,7 +25,7 @@ int main()
 		cout << "** Agregando registro "<< i  << endl;
 		UnRegistroGenerico aReg;
 		aReg.setClave(DATA[i][0]);
-		aBlockTable.insert(aReg);
+		aBlockTable.insert(&aReg);
 	}
 
 	cout << "Despues de insertar" << endl;

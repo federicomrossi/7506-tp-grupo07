@@ -75,7 +75,9 @@ int Menu::ingresarOpcion(int opcion){
         case 4:
             busc = new Buscador;
             cout << "Ingrese el titulo a buscar" << endl;
-            cin >> text;
+            std::cin.ignore();
+            std::getline(std::cin, text);
+            text = Utils::uniformizarString(text);
             busc->buscarPorTitulo(text);
             delete busc;
             break;

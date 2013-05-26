@@ -31,7 +31,7 @@ class BlockTable{
 		//Path -> archivo de la tabla, blockPath -> archivo de bloques
 		BlockTable(string path, string blockPath, int blockSize);	// Cuando se crea la tabla de bloques, se crea a partir del archivo.
 		~BlockTable();	// Cierro los archivos, libero la memoria pedida por blockReferences.
-		int insert(T); // A su vez llama al insertar del bloque
+		int insert(T*); // A su vez llama al insertar del bloque
 		void insertBlock(int blockPos,int newBlockReference,int td); //En la posicion blockPos de la tabla pongo la nueva ref.
 		int countNumberOfReferences(int blockNumber);
 
@@ -109,7 +109,7 @@ void BlockTable<T>::write(){
 template <class T>
 bool BlockTable<T>::search(T*& aReg){ // TODO: persistencia
 	int pos=HashExtensible::doHash(aReg->getClave(),this->getSize());
-	
+
 	int blockNumber=this->blockReferences[pos];
 
 	//1cout << "\tSearch doHash(regId=" << aReg.getId() << ", size=" << this->getSize() <<") = "<< pos << endl;
@@ -133,10 +133,10 @@ int BlockTable<T>::countNumberOfReferences(int blockNumber){
 }
 
 template <class T>
-int BlockTable<T>::insert(T aReg){
+int BlockTable<T>::insert(T *aReg){
 
 	//Aca le voy a tener que pasar un registro geneirco, donde dice getId , sera getClave();
-	int pos = HashExtensible::doHash(aReg.getClave(),this->getSize());
+	int pos = HashExtensible::doHash(aReg->getClave(),this->getSize());
 	int tmpBlockNumber = this->blockReferences[pos];
 	int dispersionSize = this->getSize() / this->countNumberOfReferences(tmpBlockNumber);
 	//1cout << "\tInserto doHash(regId=" << aReg.getId() << ", size=" << this->getSize() <<") = "<< pos << endl;
@@ -152,11 +152,11 @@ int BlockTable<T>::insert(T aReg){
 	//Puede ser el caso de que el ID ya exista en el hash, en ese caso, no se agrega
 
 	T *searchReg = new T();
-	searchReg->setClave(aReg.getClave());
+	searchReg->setClave(aReg->getClave());
 	if(! tmpBlock.search(searchReg)){
 		//1cout << "agrego xq no esta"<<endl;
-		if (tmpBlock.easyInsert(aReg)){
-			tmpBlock.Insert(aReg);
+		if (tmpBlock.easyInsert(*aReg)){
+			tmpBlock.Insert(*aReg);
 			//1cout << "\t\t\t\teasyInsert ";
 			tmpBlock.write();
 		} else {
