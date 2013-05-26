@@ -18,7 +18,6 @@ IndiceAutor::IndiceAutor(std::string path){
 }
 
 IndiceAutor::~IndiceAutor(){
-    arbol->cerrar();
     delete arbol;
 }
 

@@ -93,7 +93,7 @@ int RTTgenerator::pack(){
         refListaDocs = this->getRefListaDocs();
         ar->setRefLista(refListaDocs);
         listaDocs = new std::list<RTTreferencia*>();
-        std::cout<< ocur.getPalabraId() << std::endl;
+
         while((ocur.getPalabraId() == idPalabra) && !file.eof()){
             idDoc = ocur.getDocumentoId();
             cantPos = 0;
@@ -101,11 +101,12 @@ int RTTgenerator::pack(){
             RTTreferencia* refPos = new RTTreferencia(idDoc);
             refPos->setRefLista(refListaPos);
             listaPos = new std::list<unsigned int>;
-            while((ocur.getDocumentoId() == idDoc) && !file.eof()){
+            while((ocur.getDocumentoId() == idDoc) && (ocur.getPalabraId() == idPalabra) && !file.eof()){
                 listaPos->push_back(ocur.getPosition());
                 cantPos++;
                 file >> ocur;
             }
+
             this->guardarListaPos(listaPos);
             delete listaPos;
             listaDocs->push_back(refPos);
@@ -253,7 +254,7 @@ int RTTgenerator::recuperar(std::string frase, std::list<unsigned int> *lista){
             itMadre = listaMadre->begin();
             unsigned int posRelativa=1;
             itMadre++;
-            while(itMadre != listaMadre->end() && posOk){
+            while(itMadre != listaMadre->end() && !posOk){
                 std::list<RTTreferencia*> *listaDocs2 = *itMadre;
                 std::list<RTTreferencia*>::iterator itDocs2 = listaDocs2->begin();
                 for (unsigned int k=0;k<j;k++){
@@ -310,7 +311,7 @@ unsigned int RTTgenerator::intersecarListas(std::list<std::list<RTTreferencia*>*
     while(!finished){
         ok=1;
         std::list<std::list<RTTreferencia*>*>::iterator itMadre = listaMadre->begin();
-        while(itMadre != listaMadre->end() && ok){
+        while(itMadre != listaMadre->end() && ok && !finished){
             std::list<RTTreferencia*>* lista = *itMadre;
             std::list<RTTreferencia*>::iterator itLista = lista->begin();
             for (unsigned int i=0;i<cant;i++){
@@ -329,8 +330,12 @@ unsigned int RTTgenerator::intersecarListas(std::list<std::list<RTTreferencia*>*
                     ok=0;
                 }
             }
+            if(itLista == lista->end()){
+                finished =1;
+            }
+            itMadre++;
         }
-        if(ok){
+        if(ok && !finished){
             cant++;
         }
     }
