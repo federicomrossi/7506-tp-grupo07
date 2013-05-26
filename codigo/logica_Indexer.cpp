@@ -10,7 +10,7 @@
 
 Indexer::Indexer(){
     fromPath="../temas";
-    destPath="./destino/";
+    destPath="destino/";
     masterName = destPath+".master";
     rtt = new RTTgenerator(destPath);
     autores = new IndiceAutor(destPath);

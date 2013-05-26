@@ -41,12 +41,12 @@ namespace {
 
 	// Constante para el tamanio de bloque 
 	// utilizado por los registros en nodos
-	const int TAMANIO_BLOQUE = 512;
+	const int TAMANIO_BLOQUE = 2048;
 
 
 	// Constante para el buffer
 	#define BUFFER_TAMANIO_CONFIG
-	const int BUFFER_TAMANIO = 512;
+	const int BUFFER_TAMANIO = TAMANIO_BLOQUE;
 
 	// Constantes para los numeros de bloque
 	const uint NUM_BLOQUE_METADATA = 0;
