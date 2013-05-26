@@ -229,3 +229,35 @@ void prueba_ArbolBmas_3()
     arbol.cerrar();
     // arbol.eliminar();
 }
+
+
+void prueba_ArbolBmas_4()
+{
+    try{
+
+        ArbolBmas< UnRegistroGenerico > arbol1, arbol2;
+        arbol1.abrir(".arbol.prueba.4");
+
+        for(int i = 0; i < 200; i++)
+        {
+            UnRegistroGenerico r;
+            r.setClave(i);
+            r.setAtributo(i);
+            arbol1.insertar(r.getClave(), r);
+        }
+
+        arbol1.imprimir();
+
+        arbol1.cerrar();
+
+        arbol2.abrir(".arbol.prueba.4");
+        arbol2.imprimir();
+        arbol2.cerrar();
+
+        arbol2.eliminar();
+    }
+    catch(char const * e)
+    {
+        std::cout << e << std::endl;
+    }
+}

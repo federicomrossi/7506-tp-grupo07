@@ -175,8 +175,10 @@ bool NodoInterno< Tipo, MAX_HOJA, MAX_INTERNO >::insertar(uint& clave,
 				// de hijos
 				this->hijos.insertar(nodoHermano->getNumBloque(), i+1);
 
+				// Guardamos cambios en disco
 				nodo->guardar(archivo);
 				nodoHermano->guardar(archivo);
+				this->guardar(archivo);
 
 				delete nodo;
 				delete nodoHermano;

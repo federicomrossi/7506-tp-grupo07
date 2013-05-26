@@ -121,6 +121,9 @@ public:
 	// POST: el estado de la lista se actualiza con los datos obtenidos del
 	// buffer.
 	void deserializar(SerialBuffer *buffer);
+
+	// Devuelve el tamanio en bytes que ocuparia persistir la clase.
+	static size_t getBytesUsados();
 };
 
 
@@ -403,6 +406,16 @@ void ListaFija< Tipo, Tamanio >::deserializar(SerialBuffer *buffer)
 {
 	Serializacion< Tipo, Tamanio > s;
 	s.deserializar(buffer, this);
+}
+
+
+// Devuelve el tamanio en bytes que ocuparia persistir la clase.
+template <typename Tipo, size_t Tamanio >
+size_t ListaFija< Tipo, Tamanio >::getBytesUsados()
+{
+	// Retornamos la cantidad de bytes usadas para saber el tamanio parcial de
+	// la lista
+	return sizeof(size_t);
 }
 
 
