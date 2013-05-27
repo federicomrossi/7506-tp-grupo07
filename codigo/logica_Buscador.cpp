@@ -2,10 +2,11 @@
 #include <list>
 #include "logica_Buscador.h"
 #include "logica_Utils.h"
+#include "config.h"
 
 
 Buscador::Buscador(){
-    destPath="destino/";
+    destPath= DEST_PATH;
     rtt = new RTTgenerator(destPath);
     autores = new IndiceAutor(destPath);
     titulos =  new IndiceTitulo(destPath);

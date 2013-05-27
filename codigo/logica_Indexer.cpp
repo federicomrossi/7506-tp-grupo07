@@ -6,10 +6,11 @@
 #include "logica_FileHandler.h"
 #include "logica_Validator.h"
 #include "logica_Utils.h"
+#include "config.h"
 
 Indexer::Indexer(){
-    fromPath="../temas";
-    destPath="destino/";
+    fromPath=SOURCE_PATH;
+    destPath=DEST_PATH;
     masterName = destPath+".master";
     rtt = new RTTgenerator(destPath);
     autores = new IndiceAutor(destPath);

@@ -13,8 +13,8 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#define SOURCE_PATH ""
-#define DEST_PATH ""
+#define SOURCE_PATH "../temas"
+#define DEST_PATH "./destino/"
 
 //Archivo para guardar los bloques
 #define TEST_FILE "./test_file_TESTBLOCKFILE"
