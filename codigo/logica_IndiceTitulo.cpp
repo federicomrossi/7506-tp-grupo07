@@ -82,15 +82,9 @@ int IndiceTitulo::pack(){
         std::ifstream file;
         file.open(this->temporalOcurrencias.c_str());
         AutorOcurrencia aid;
-<<<<<<< HEAD
         unsigned int titulo = 0;
         unsigned int cant = 0;
         unsigned int refLista = 0;
-=======
-        unsigned int titulo=0;
-        unsigned int cant = 0;
-        unsigned int refLista=0;
->>>>>>> 2f9272c4069d29706f19d16f1d13f91b7d4dd67c
         std::list<unsigned int>* lista;
         file >> aid;
         while(!file.eof()){
