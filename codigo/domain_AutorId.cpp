@@ -3,7 +3,7 @@
 
 AutorId::AutorId(const char* autor, unsigned int id){
     unsigned int cant = strlen(autor);
-    memcpy(this->autor,autor,cant+1);
+    memcpy(this->autor,autor,cant>99 ? 100 : cant+1);
     this->id =id;
 }
 
