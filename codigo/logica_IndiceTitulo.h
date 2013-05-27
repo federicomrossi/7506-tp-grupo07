@@ -14,6 +14,7 @@ class IndiceTitulo{
         ~IndiceTitulo();
         int agregar(unsigned int posArch, std::string titulo);
         int recuperar(std::string titulo, std::list<unsigned int> *lista);
+        int recuperarPlus(std::string titulo, std::list<unsigned int> *lista);
         int eliminarTodo();
         int pack();
         int packAppend();

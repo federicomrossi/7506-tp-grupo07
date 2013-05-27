@@ -223,7 +223,28 @@ int IndiceTitulo::printOcurrencias(){
         std::cout << "(" << o->getAutorId() << "," << o->getDocumentoId() << ")";
         file >> *o;
     }
+    delete o;
     file.close();
+    return 0;
+}
+
+int IndiceTitulo::recuperarPlus(std::string titulo,std::list<unsigned int> *lista){
+    this->recuperar(titulo,lista);
+    unsigned int id = this->obtenerId(titulo);
+    std::ifstream file;
+    if(Utils::existeArchivo(temporalOcurrencias)){
+        file.open(temporalOcurrencias.c_str(), std::fstream::binary);
+        AutorOcurrencia* o = new AutorOcurrencia();
+        file >> *o;
+        while(!file.eof()){
+            if(o->getAutorId() == id){
+                lista->push_back(o->getDocumentoId());
+            }
+            file >> *o;
+        }
+        file.close();
+        delete o;
+    }
     return 0;
 }
 

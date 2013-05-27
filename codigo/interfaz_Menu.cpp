@@ -37,7 +37,7 @@ int Menu::imprimir()
     cout << "3. Buscar canciones por autor" << endl;
     cout << "4. Buscar canciones por titulo" << endl;
     cout << "5. Buscar canciones por frase" << endl;
-    cout << "6. Salir" << endl;
+    cout << "6. Salir" << endl<<endl;
     return 0;
 }
 
@@ -51,16 +51,15 @@ int Menu::ingresarOpcion(int opcion){
             cout << "Indexando canciones desde 0" << endl;
             cout << "Eliminando cualquier registro de canciones previo" << endl;
             in->eliminarTodo();
-            from = "/home/pablo/tpDatos/7506-tp-grupo07/temas";
-            cout << "Indexando canciones desde el directorio" << from << endl;
             in->indexarCancionesDesde(0);
+            std::cout << std::endl;
             delete in;
             break;
         case 2:
             in = new Indexer;
             cout << "Indexando canciones en modo append" << endl;
-            cout << "Indexando canciones desde el directorio" << from << endl;
             in->indexarCancionesDesde(1);
+            std::cout << std::endl;
             delete in;
             break;
         case 3:
@@ -69,7 +68,9 @@ int Menu::ingresarOpcion(int opcion){
             std::cin.ignore();
             std::getline(std::cin, text);
             text = Utils::uniformizarString(text);
+            std::cout << std::endl;
             busc->buscarPorAutor(text);
+            std::cout << std::endl;
             delete busc;
             break;
         case 4:
@@ -78,17 +79,20 @@ int Menu::ingresarOpcion(int opcion){
             std::cin.ignore();
             std::getline(std::cin, text);
             text = Utils::uniformizarString(text);
+            std::cout << std::endl;
             busc->buscarPorTitulo(text);
             delete busc;
+            std::cout << std::endl;
             break;
         case 5:
             busc = new Buscador;
             cout << "Ingrese la frase a buscar" << endl;
             std::cin.ignore();
             std::getline(std::cin, text);
-            //text = Utils::uniformizarString(text);
+            std::cout << std::endl;
             busc->buscarPorFrase(text);
             delete busc;
+            std::cout << std::endl;
             break;
         case 6:
             return 0;

@@ -43,13 +43,13 @@ int Indexer::indexarCancionesDesde(int mode){
         cout << "Validando Header.. " << header << endl;
         int size;
         if(!(size = Validator::validateHeader(header))){
-            std::cout << "Error en header. Descartado." << endl;
+            std::cout << "Error en header. Descartado." << std::endl;
         }else{
-            std::cout << "Header OK." << endl << "Verificando si ya esta indexada..";
+            std::cout << "Header OK." << std::endl << "Verificando si ya esta indexada..";
             if (this->estaIndexado(header)){
                 std::cout << "Archivo ya indexado. Descartado" << endl;
             }else{
-                std::cout << "OK." << endl;
+                std::cout << "OK." << std::endl;
                 unsigned int songPosition = this->copyToMaster(*it, masterName);
                 this->indexarAutores(header,songPosition);
                 this->indexarTitulo(header,songPosition);
@@ -80,7 +80,7 @@ int Indexer::estaIndexado(std::string header){
     s = Utils::getTituloFromHeader(header);
     clave = Utils::getClaveFromHeader(header);
     std::list<unsigned  int> refs;
-    titulos->recuperar(s,&refs);
+    titulos->recuperarPlus(s,&refs);
     std::list<unsigned int>::iterator it;
     std::ifstream master;
     std::string header2;
