@@ -15,6 +15,7 @@ class IndiceAutor{
         int recuperar(std::string autor, std::list<unsigned int> *lista);
         int eliminarTodo();
         int pack();
+        int packAppend();
     private:
         unsigned int obtenerId(std::string palabra);
         int guardarOcurrencia(AutorOcurrencia* ocur);
@@ -22,6 +23,7 @@ class IndiceAutor{
         unsigned int getRefLista();
         int guardarRefLista(std::list<unsigned int>* lista);
         ArbolBmas<AutorReferencias> *arbol;
+        int copylist(unsigned int reflista,std::list<unsigned int>*lista);
 
         //UN ARBOL
         std::string temporalOcurrencias;
