@@ -23,8 +23,7 @@
 #define TEST_FILE_TABLE "./test_file_TESTTABLEFILE"
 
 // Tamano del bloque
-#define MAX_BLOCK_SIZE (512)
-#define MAX_REGS_PER_BLOCK (10)
+#define HASH_MAX_BLOCK_SIZE (128)
 
 // Constante para el tamanio de bloque utilizado por los nodos en el arbol
 #define ARBOL_TAMANIO_BLOQUE_CONFIG

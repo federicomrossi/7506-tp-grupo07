@@ -13,7 +13,7 @@ IndiceTitulo::IndiceTitulo(std::string path){
     this->listaRefs = path + ".titulosRef";
     this->tableName =path+".hashTable";
     this->blocksName=path+".hashTitulos";
-    this->hash = new BlockTable<TituloReferencias>(tableName,blocksName, 50);
+    this->hash = new BlockTable<TituloReferencias>(tableName,blocksName, HASH_MAX_BLOCK_SIZE);
 }
 
 IndiceTitulo::IndiceTitulo(){
@@ -74,6 +74,7 @@ int IndiceTitulo::guardarOcurrencia(AutorOcurrencia* ocur){
 int IndiceTitulo::pack(){
     if(Utils::existeArchivo(temporalOcurrencias)){
         std::cout << "Indexando titulos...";
+        std::cout.flush();
         SortExterno<AutorOcurrencia>* sort = new SortExterno<AutorOcurrencia>(this->temporalOcurrencias,4096);
         sort->ordenar();
         delete sort;
@@ -126,6 +127,7 @@ int IndiceTitulo::pack(){
 int IndiceTitulo::packAppend(){
     if(Utils::existeArchivo(temporalOcurrencias)){
         std::cout << "Indexando titulos...";
+        std::cout.flush();
         SortExterno<AutorOcurrencia>* sort = new SortExterno<AutorOcurrencia>(this->temporalOcurrencias,4096);
         sort->ordenar();
         delete sort;
@@ -282,7 +284,7 @@ int IndiceTitulo::eliminarTodo(){
     remove(tableName.c_str());
     remove(blocksName.c_str());
     delete this->hash;
-    this->hash = new BlockTable<TituloReferencias>(tableName,blocksName,50);
+    this->hash = new BlockTable<TituloReferencias>(tableName,blocksName,HASH_MAX_BLOCK_SIZE);
 
     return 0;
 }

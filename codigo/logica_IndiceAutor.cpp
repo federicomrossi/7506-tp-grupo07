@@ -76,6 +76,7 @@ int IndiceAutor::guardarOcurrencia(AutorOcurrencia* ocur){
 
 int IndiceAutor::pack(){
     std::cout << "Indexando autores...";
+    std::cout.flush();
     if(Utils::existeArchivo(temporalOcurrencias)){
         SortExterno<AutorOcurrencia>* sort = new SortExterno<AutorOcurrencia>(this->temporalOcurrencias,4096);
         SortExterno<AutorId>* sort2 = new SortExterno<AutorId>(this->autores,4096);
@@ -140,6 +141,7 @@ int IndiceAutor::pack(){
 int IndiceAutor::packAppend(){
     if(Utils::existeArchivo(temporalOcurrencias)){
         std::cout << "Indexando autores...";
+        std::cout.flush();
         SortExterno<AutorOcurrencia>* sort = new SortExterno<AutorOcurrencia>(this->temporalOcurrencias,4096);
         SortExterno<AutorId>* sort2 = new SortExterno<AutorId>(this->autores,4096);
         sort->ordenar();
