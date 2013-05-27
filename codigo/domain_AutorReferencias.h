@@ -3,6 +3,13 @@
 
 #include "domain_RegistroGenerico.h"
 
+
+/**
+*   Autor: Pablo Rodriguez
+*
+*   AutorReferencias representa un de (idAutor, ref1, ref2, ref3,ref4,ref5,refLista)
+*   Es lo que se inserta en el arbol de indice de autor
+*/
 class AutorReferencias : public RegistroGenerico {
     public:
         AutorReferencias(unsigned int clave);

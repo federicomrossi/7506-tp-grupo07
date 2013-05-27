@@ -7,6 +7,13 @@
 #include "logica_IndiceTitulo.h"
 #include "logica_RTTgenerator.h"
 
+
+/**
+*   Autor: Pablo Rodriguez
+*
+*   Es la clase madre de la Indexacion. Copia los temas al archivo maestro y va agregando las ocurrencias
+*   a los diferentes titulos
+*/
 class Indexer{
     public:
         Indexer();

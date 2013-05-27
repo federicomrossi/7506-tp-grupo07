@@ -7,6 +7,13 @@
 #include "domain_RTTreferencia.h"
 #include <list>
 
+
+/**
+*   Autor: Pablo Rodriguez
+*
+*   Es la clase que resuelve la generacion de RTT. Posee un arbol B+. Ademas genera listas invertidas
+*   de documentos y posiciones.
+*/
 class RTTgenerator{
     public:
         RTTgenerator(std::string path);

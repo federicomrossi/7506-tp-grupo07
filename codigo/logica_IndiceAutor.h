@@ -8,6 +8,13 @@
 #include "domain_AutorReferencias.h"
 #include <list>
 
+
+
+/**
+*   Autor: Pablo Rodriguez
+*
+*   Es la clase que contiene la indexacion por Autor. Posee un arbol B+
+*/
 class IndiceAutor{
     public:
         IndiceAutor(std::string path);

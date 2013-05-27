@@ -7,6 +7,13 @@
 #include <list>
 #include "logica_BlockTable.h"
 
+
+
+/**
+*   Autor: Pablo Rodriguez
+*
+*   Es la clase que contiene la indexacion por Titulo. Posee un Hash Extensible.
+*/
 class IndiceTitulo{
     public:
         IndiceTitulo(std::string path);

@@ -3,6 +3,13 @@
 #include "logica_Comparable.h"
 #include <iostream>
 
+
+
+/**
+*   Autor: Pablo Rodriguez
+*
+*   AutorOcurrencia representa un par de (idAutor, refDocumento)
+*/
 class AutorOcurrencia : public Comparable{
     public:
         AutorOcurrencia(unsigned int autorId, unsigned int documentoId);

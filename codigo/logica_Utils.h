@@ -5,6 +5,11 @@
 #include <list>
 #include <string>
 
+/**
+*   Autor: Pablo Rodriguez
+*
+*   Contiene metodos staticos que son de utilidad para el manejo del header y strings
+*/
 class Utils{
     public:
         static int splitString(std::string s, char delimitador, std::list<std::string> *ptr);

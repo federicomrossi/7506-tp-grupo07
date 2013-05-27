@@ -2,6 +2,13 @@
 #define DOMAIN_TITULOREFERENCIAS_H_INCLUDED
 #include "domain_RegistroGenerico.h"
 
+
+/**
+*   Autor: Pablo Rodriguez
+*
+*   TituloReferencias representa un (idTitulo, ref1, ref2, ref3, refLista)
+*   Se utiliza en el indice de titulo. Es lo que se inserta en el hash.
+*/
 class TituloReferencias : public RegistroGenerico {
     public:
         TituloReferencias(unsigned int clave);
@@ -23,7 +30,7 @@ class TituloReferencias : public RegistroGenerico {
 
         // Devuelve el tamanio en bytes que ocuparia persistir la clase.
         static size_t getTamanioEnBytes();
-        
+
     private:
         unsigned int refs[3];
         unsigned int refLista;

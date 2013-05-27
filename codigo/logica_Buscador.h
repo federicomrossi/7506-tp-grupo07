@@ -6,6 +6,13 @@
 #include "logica_IndiceTitulo.h"
 #include "logica_RTTgenerator.h"
 
+
+/**
+*   Autor: Pablo Rodriguez
+*
+*   Es la clase madre en donde se resuelven las busquedas por autor, titulo y RTT. Delega parte de su
+*   comportamiento en los diferentes indices.
+*/
 class Buscador{
     public:
         Buscador();

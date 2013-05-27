@@ -4,6 +4,11 @@
 #include "logica_Comparable.h"
 #include <iostream>
 
+/**
+*   Autor: Pablo Rodriguez
+*
+*   AutorId representa un par de (idAutor, Autor)
+*/
 class AutorId : public Comparable {
     public:
         AutorId(const char* autor, unsigned int id);

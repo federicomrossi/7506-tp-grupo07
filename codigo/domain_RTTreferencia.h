@@ -3,6 +3,13 @@
 
 #include "domain_RegistroGenerico.h"
 
+/**
+*   Autor: Pablo Rodriguez
+*
+*   RTTreferncia representa un par de (idPalabra, refLista)
+*
+*   Es lo que se inserta en el arbol de RTT.
+*/
 class RTTreferencia : public RegistroGenerico {
     public:
         RTTreferencia(unsigned int clave);
@@ -15,7 +22,7 @@ class RTTreferencia : public RegistroGenerico {
 
         // Devuelve el tamanio en bytes que ocuparia persistir la clase.
         static size_t getTamanioEnBytes();
-        
+
     private:
         unsigned int refLista;
 

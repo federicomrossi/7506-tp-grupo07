@@ -36,28 +36,28 @@ int Indexer::indexarCancionesDesde(int mode){
     dirH->getFiles(fromPath.c_str());
     std::list<string> *archivos = dirH->getFileList();
     std::list<string>::iterator it;
-    for(it = archivos->begin(); it != archivos->end(); it++){
+    for(it = archivos->begin(); it != archivos->end(); it++){ //Recorro todos los archivos
         cout << "Indexando archivo..  " << *it << endl;
         std::string header = fileH->getFirstLine(*it);
         cout << "Validando Header.. " << header << endl;
         int size;
-        if(!(size = Validator::validateHeader(header))){
+        if(!(size = Validator::validateHeader(header))){  //valido header
             std::cout << "Error en header. Descartado." << std::endl;
         }else{
             std::cout << "Header OK." << std::endl << "Verificando si ya esta indexada..";
-            if (this->estaIndexado(header)){
+            if (this->estaIndexado(header)){ //verifico si ya esta indexada
                 std::cout << "Archivo ya indexado. Descartado" << endl;
             }else{
                 std::cout << "OK." << std::endl;
-                unsigned int songPosition = this->copyToMaster(*it, masterName);
-                this->indexarAutores(header,songPosition);
-                this->indexarTitulo(header,songPosition);
-                this->generateRTT(*it,songPosition);
+                unsigned int songPosition = this->copyToMaster(*it, masterName); //copio al archivo mestro la cancion
+                this->indexarAutores(header,songPosition); //agrego ocurrencia de autor
+                this->indexarTitulo(header,songPosition);//agrego ocurrencia de titulo
+                this->generateRTT(*it,songPosition);//agrego ocurrencia de rtt
             }
         }
     }
-    if(mode){
-        autores->packAppend();
+    if(mode){ //verifico si es modo scratch o append
+        autores->packAppend();//guardo en arboles y hash
         titulos->packAppend();
         rtt->packAppend();
     }else{

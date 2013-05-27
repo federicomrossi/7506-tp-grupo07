@@ -3,6 +3,11 @@
 
 #include <iostream>
 
+/**
+*   Autor: Pablo Rodriguez
+*
+*   Es la encargada de imprimir el menu y actuar en funcion de la opcion elegida
+*/
 class Menu
 {
     public:
