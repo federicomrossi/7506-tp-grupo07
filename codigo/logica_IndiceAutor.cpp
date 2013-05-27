@@ -87,9 +87,9 @@ int IndiceAutor::pack(){
         std::ifstream file;
         file.open(this->temporalOcurrencias.c_str());
         AutorOcurrencia aid;
-        unsigned int autor;
+        unsigned int autor = 0;
         unsigned int cant = 0;
-        unsigned int refLista;
+        unsigned int refLista = 0;
         std::list<unsigned int>* lista;
         arbol->abrir(this->arbolName.c_str());
         file >> aid;

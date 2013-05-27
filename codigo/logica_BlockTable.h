@@ -224,7 +224,7 @@ void BlockTable<T>::duplicateTable(){
 		tmpBlockReference[i] = this->blockReferences[i];
 		tmpBlockReference[this->size+i] = this->blockReferences[i];
 	}
-	delete this->blockReferences;
+	delete [] this->blockReferences;
 	this->blockReferences = tmpBlockReference;
 	this->size = newBlockTableSize;
 }
@@ -232,7 +232,7 @@ void BlockTable<T>::duplicateTable(){
 template <class T>
 BlockTable<T>::~BlockTable(){
 	this->write();
-	free(this->blockReferences);
+	delete [] this->blockReferences;
 	delete [] this->blockPath;
 	delete [] this->filePath;
 }

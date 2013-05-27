@@ -22,7 +22,7 @@ class VarBuffer
 {
     
 public:
-    VarBuffer(unsigned int maxSize);
+    VarBuffer(const unsigned int maxSize);
     ~VarBuffer();
     void clear();
     int read(fstream &file);

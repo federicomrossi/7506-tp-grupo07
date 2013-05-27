@@ -203,6 +203,9 @@ ArbolBmas< Tipo >::~ArbolBmas()
 template < typename Tipo >
 void ArbolBmas< Tipo >::abrir(const char* nombre_archivo)
 {
+	// Comprobamos que no se encuentre ya abierto
+	if(this->estaAbierto) return;
+
 	this->estaAbierto = true;
 
 	// Creamos un archivo de bloques
@@ -239,7 +242,11 @@ void ArbolBmas< Tipo >::abrir(const char* nombre_archivo)
 template < typename Tipo >
 void ArbolBmas< Tipo >::cerrar()
 {
+	if(!this->estaAbierto) return;
 	this->guardarMetadata();
+	this->estaAbierto = false;
+	delete this->raiz;
+	delete this->archivo;
 }
 
 
@@ -346,7 +353,10 @@ bool ArbolBmas< Tipo >::actualizar(const uint clave, Tipo & registro)
 template < typename Tipo > 
 void ArbolBmas< Tipo >::eliminar()
 {
+	this->estaAbierto = false;
 	this->archivo->borrarArchivo();
+	delete this->raiz;
+	delete this->archivo;
 }
 
 

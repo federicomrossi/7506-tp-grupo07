@@ -79,8 +79,8 @@ int RTTgenerator::pack(){
         std::ifstream file;
         file.open(this->temporalOcurrencias.c_str());
         RTTocurrencia ocur;
-        unsigned int idPalabra;
-        unsigned int idDoc;
+        unsigned int idPalabra = 0;
+        unsigned int idDoc = 0;
         unsigned int cantDocs = 0;
         unsigned int cantPos = 0;
         unsigned int refListaDocs;

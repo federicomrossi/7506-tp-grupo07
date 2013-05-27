@@ -9,7 +9,7 @@
 #include "fisica_VarBuffer.h"
 #include <string.h>
 
-VarBuffer::VarBuffer(unsigned int maxSize)
+VarBuffer::VarBuffer(const unsigned int maxSize)
 {
     this->bufferSize = 0;
     buffer = new char[maxSize];
