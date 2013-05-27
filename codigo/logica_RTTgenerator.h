@@ -14,6 +14,7 @@ class RTTgenerator{
         int pack();
         int eliminarTodo();
         int recuperar(std::string frase, std::list<unsigned int> *lista);
+        int packAppend();
     private:
         int esIndexable(std::string palabra);
         unsigned int obtenerId(std::string palabra);
@@ -24,6 +25,7 @@ class RTTgenerator{
         int guardarListaPos(std::list<unsigned int>* lista);
         int guardarListaDocs(std::list<RTTreferencia*>* lista);
         unsigned int intersecarListas(std::list<std::list<RTTreferencia*>*>* listaMadre);
+        int copyList(unsigned int refLista,std::list<RTTreferencia*>* lista);
 
         ArbolBmas<RTTreferencia> *arbol;
         std::string temporalOcurrencias;

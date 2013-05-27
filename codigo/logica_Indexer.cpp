@@ -57,12 +57,17 @@ int Indexer::indexarCancionesDesde(int mode){
             }
         }
     }
-    autores->pack();
-    titulos->pack();
-    rtt->pack();
     if(mode){
-        //COSAS DE APPEND
+        autores->packAppend();
+     //   titulos->packAppend();
+        rtt->packAppend();
+    }else{
+        autores->pack();
+        titulos->pack();
+        rtt->pack();
     }
+
+
     delete dirH;
     delete fileH;
     return 0;

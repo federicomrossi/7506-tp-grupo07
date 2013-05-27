@@ -50,6 +50,8 @@ class BlockTable{
 		bool canAddBlock(Block<T>* aBlock); //Tengo referencias libres? true significa que no hace falta duplicar
 		void redisperse(Block<T>* anOldBlock,Block<T>* aNewBlock); //redisperso los registros del bloque viejo al bloque nuevo
 
+		void actualizar(T* & newReg);
+
 		void prueba(Block<T>*);
 	protected:
 		int size;
@@ -246,6 +248,16 @@ void BlockTable<T>::redisperse(Block<T>* anOldBlock, Block<T>* aNewBlock){
 }
 
 
+template <class T>
+void BlockTable<T>::actualizar(T* & newReg){
+	this->read();
+	int pos = HashExtensible::doHash(newReg->getClave(),this->getSize());
+	int tmpBlockNumber = this->blockReferences[pos];
+	// No me importa el tamanio de dispersion
+	Block<T> tmpBlock(0,tmpBlockNumber,this->blockSize);
+	tmpBlock.read();
+	tmpBlock.actualizar(newReg);
+}
 
 template <class T>
 void BlockTable<T>::duplicateTable(){
