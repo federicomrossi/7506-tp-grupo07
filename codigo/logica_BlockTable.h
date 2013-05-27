@@ -22,9 +22,6 @@
 #include "logica_HashExtensible.h"
 #include <string.h>
 
-#define PRINT_REF(X) cout << X << "blockReferences" ; for(int i=0;i<this->getSize();i++) cout << " '" << this->blockReferences[i] << "'"; cout << endl
-
-
 
 using namespace std;
 
@@ -60,11 +57,6 @@ class BlockTable{
 		char *blockPath;
 		int blockSize;
 		bool firstTime;
-
-	//private:
-	//	struct Metadata{
-	//		list<Reg> regList;
-	//	};
 };
 
 template <class T>
@@ -86,13 +78,13 @@ void BlockTable<T>::read(){
 	if (!archivo.is_open())
 		archivo.open(this->filePath,ios::out|ios::binary);
 
-	archivo.seekg(0,archivo.end); //TODO: revisar que esto ande bien!
+	archivo.seekg(0,archivo.end);
 	this->size = archivo.tellg() / sizeof(int);
 
 	if(this->blockReferences)
 		delete [] this->blockReferences;
 
-	if(this->size > 0){ //TODO: revisar que esto ande bien!
+	if(this->size > 0){
 		archivo.seekg(0,archivo.beg);
 		this->blockReferences= new int[this->size]();
 		archivo.read((char*)this->blockReferences, this->size * sizeof(int));
@@ -100,14 +92,8 @@ void BlockTable<T>::read(){
 		cerr << "*** No se puede crear archivo, error del sistema:" << this->size << " path: "<< this->filePath << endl;
 	}else{
 		this->size = 1;
-		//this->blockReferences = (int*) calloc(this->size, sizeof(int));;
 		this->blockReferences = new int[this->size]();
 	}
-	for (int i = 0; i < this->size ; i++ )
-	{
-		cout<< "  " << blockReferences[i];
-	}
-	cout << endl;
 	archivo.close();
 }
 
@@ -117,19 +103,13 @@ void BlockTable<T>::write(){
 	archivo.write((char*)this->blockReferences,sizeof(int)*this->size);
 	archivo.close();
 }
-
-//TODO: por que le paso un registro y no un id solo, osae, al crear un registro ya lo creo con un adres especifico, y si estoy buscando, no se ese adress!
 template <class T>
-bool BlockTable<T>::search(T*& aReg){ // TODO: persistencia
+bool BlockTable<T>::search(T*& aReg){
 	int pos=HashExtensible::doHash(aReg->getClave(),this->getSize());
 
 	int blockNumber=this->blockReferences[pos];
 
-	cout << "\tSearch doHash(regId=" << aReg->getClave() << ", size=" << this->getSize() <<") = "<< pos << endl;
-	PRINT_REF("\t\t (" << blockNumber << ")");
-
 	Block<T> aBlock(this->getSize(), blockNumber, this->blockPath, this->blockSize);
-	cout << "\t\t\t Read";
 	aBlock.read();
 
 	return aBlock.search(aReg);
@@ -148,17 +128,10 @@ int BlockTable<T>::countNumberOfReferences(int blockNumber){
 template <class T>
 int BlockTable<T>::insert(T *aReg){
 
-	//Aca le voy a tener que pasar un registro geneirco, donde dice getId , sera getClave();
 	int pos = HashExtensible::doHash(aReg->getClave(),this->getSize());
 	int tmpBlockNumber = this->blockReferences[pos];
 	int dispersionSize = this->getSize() / this->countNumberOfReferences(tmpBlockNumber);
-	cout << "\tInserto doHash(regId=" << aReg->getClave() << ", size=" << this->getSize() <<") = "<< pos << endl;
-	PRINT_REF("\t\t (" << tmpBlockNumber << ")");
-
 	Block<T> tmpBlock(dispersionSize, tmpBlockNumber, this->blockPath, this->blockSize);
-	//Cambiar esto adentro,
-	//tengo q pedirle al registro generico cuantos bytes va a ocupar para deserializarlo en una misma estructura y
-	//agregarlo a una lista
 	tmpBlock.read();
 
 	//Puede ser el caso de que el ID ya exista en el hash, en ese caso, no se agrega
@@ -166,40 +139,27 @@ int BlockTable<T>::insert(T *aReg){
 	T *searchReg = new T();
 	searchReg->setClave(aReg->getClave());
 	if(! tmpBlock.search(searchReg)){
-		cout << "agrego xq no esta"<<endl;
 		if (tmpBlock.easyInsert(*aReg)){
 			this->firstTime = false;
 			tmpBlock.Insert(*aReg);
-			cout << "\t\t\t\teasyInsert " << endl;
 			tmpBlock.write();
 		} else {
 			if(this->firstTime){
-				cout << "EXPLOTA TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" << endl;
+				cerr<< "el tamanio de bloque que se eligio es muy chico" <<endl;
 				exit(EXIT_FAILURE);
 				return -1;
 			}
-			cout << " como no es easy insert, tengo que ver que hago"<<endl;
-			cout << "el TD del bloque: "<<tmpBlock.getBlockNum()<< " es de :"<<dispersionSize<< endl;
-			cout << endl;
 			if (! this->canAddBlock(&tmpBlock)){
 				this->duplicateTable();
-								PRINT_REF("\t\t afterDuplicate:");
 			}
 			int lastBlockNum = tmpBlock.newBlockNum();
 			Block<T> anotherBlock(tmpBlock.duplicateDispersionSize(), lastBlockNum, this->blockPath, this->blockSize);
-						cout << "\t\t anotherBlock(TD="<< anotherBlock.getDispersionSize() << ", lastBlockNum=" << lastBlockNum << ", path=" << this->blockPath << ", size="<< this->blockSize << ")" << endl;
-
 			this->insertBlock(pos, lastBlockNum, tmpBlock.getDispersionSize());
-			cout << "\t\tinsertBlock(pos=" << pos << ", lastBlockNum=" << lastBlockNum << ", TD=" << tmpBlock.getDispersionSize() << ")" << endl;
-			//1PRINT_REF("\t\t after insertBlock:");
-
 			this->redisperse(&tmpBlock, &anotherBlock);
-
 			this->insert(aReg);
 		}
-	}else{ // TODO: hacer algo si esta insertado
-		cout << "************ Ya existe el id" << endl;
 	}
+	
 	delete searchReg;
 	return 0;
 }
@@ -211,7 +171,6 @@ int BlockTable<T>::getSize(){
 
 template <class T>
 bool BlockTable<T>::canAddBlock(Block<T>* aBlock){
-	cout << "\t\t TT:" << this->getSize() << " TD:" << aBlock->getDispersionSize() << endl;
 	return (aBlock->getDispersionSize()!=this->getSize());
 }
 
@@ -241,9 +200,7 @@ void BlockTable<T>::redisperse(Block<T>* anOldBlock, Block<T>* aNewBlock){
 			aNewBlock->Insert((*it));
 	}
 
-	cout << "\t\t\t\t(" << newAnOldBlock.getBlockNum() <<", TD:" <<  newAnOldBlock.getDispersionSize() << ") newAnOldBlock.write() ";
 	newAnOldBlock.write();
-	cout << "\t\t\t\t(" << aNewBlock->getBlockNum() <<", TD:" <<  aNewBlock->getDispersionSize() << ") aNewBlock.write() ";
 	aNewBlock->write();
 }
 
@@ -277,9 +234,7 @@ BlockTable<T>::~BlockTable(){
 	this->write();
 	free(this->blockReferences);
 	delete [] this->blockPath;
-	//free(this->blockPath);
 	delete [] this->filePath;
-	//free(this->filePath);
 }
 
 #endif

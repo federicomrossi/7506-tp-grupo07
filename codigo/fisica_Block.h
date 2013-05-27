@@ -174,14 +174,12 @@ short int Block<T>::getNumberOfRegs(){
 
 template <class T>
 bool Block<T>::easyInsert(T& aReg){
-	cout << "Easy insert ";
 	SerialBuffer aSerialBuffer(maxBlockSize);
 	this->getCurrentBuffer(&aSerialBuffer);
 
 	//unsigned short int preSize = aSerialBuffer.getBuffSize();
 	bool a = aReg.serializar(&aSerialBuffer);
 
-	cout << a << endl;
 	return a;
 
 	//if(aSerialBuffer.getBuffSize() - preSize == 0){
@@ -280,12 +278,10 @@ void Block<T>::write(){
 	SerialBuffer aSerialBuffer(maxBlockSize);
 	this->getCurrentBuffer(&aSerialBuffer);
 	archivo.escribirBloque(aSerialBuffer.getBuffer(),this->getBlockNum());
-	cout << "\t\t\t Bloque agregue" << endl;
 }
 
 
 
-/// SEGUIR CON ESTOOOOO
 template <class T>
 void Block<T>::read(){
 	ArchivoBloques archivo(maxBlockSize,this->filePath);
@@ -295,16 +291,11 @@ void Block<T>::read(){
 	SerialBuffer aSerialBuffer(maxBlockSize);
 	archivo.leerBloque(aSerialBuffer.getBuffer(),this->getBlockNum());
 	if(aSerialBuffer.unpack(&(this->numberOfRegs)))
-		cout << "ERROR DE UNPACK!!!" << endl;
-	//TODO: Liberar 
 	regsList.clear();
-	cout << "\t\t Block->numberOfRegs"<< this->numberOfRegs << endl;
 	for (int i=0; i < this->numberOfRegs;i++){
 		T reg;
 		reg.deserializar(&aSerialBuffer);
 		regsList.push_back(reg);
-		//aSerialBuffer.unpack(&(this->numberOfRegs));
-		//aSerialBuffer.unpack()
 	}
 }
 
@@ -380,7 +371,6 @@ int Block::redistribute(Block* aNewBlock,int tableSize){
 
 template <class T>
 Block<T>::~Block() {
-	//2free(this->filePath);
 	regsList.clear();
 	delete [] this->filePath;
 }
