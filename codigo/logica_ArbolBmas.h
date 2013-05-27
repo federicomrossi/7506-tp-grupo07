@@ -39,14 +39,15 @@ typedef unsigned int uint;
 
 namespace {
 
-	// Constante para el tamanio de bloque 
-	// utilizado por los registros en nodos
-	const int TAMANIO_BLOQUE = 512;
-
+	// Constante para el tamanio de bloque utilizado por los nodos en el arbol
+	#ifndef ARBOL_TAMANIO_BLOQUE_CONFIG
+	#define ARBOL_TAMANIO_BLOQUE_CONFIG
+	const int ARBOL_TAMANIO_BLOQUE = 512;
+	#endif
 
 	// Constante para el buffer
-	#define BUFFER_TAMANIO_CONFIG
-	const int BUFFER_TAMANIO = TAMANIO_BLOQUE;
+	#define ARBOL_BUFFER_TAMANIO_CONFIG
+	const int ARBOL_BUFFER_TAMANIO = ARBOL_TAMANIO_BLOQUE;
 
 	// Constantes para los numeros de bloque
 	const uint NUM_BLOQUE_METADATA = 0;
@@ -169,12 +170,12 @@ ArbolBmas< Tipo >::ArbolBmas() : nivel(0),
 	contBloques(NUM_BLOQUE_RAIZ_INICIAL), estaAbierto(false)
 {
 	// Creamos el buffer
-	this->buffer = new SerialBuffer(BUFFER_TAMANIO);
-	
+	this->buffer = new SerialBuffer(ARBOL_BUFFER_TAMANIO);
+
 	// Calculamos la cantidad maxima de registros por bloques en nodos hoja y
 	// en nodos internos del arbol
-	this->MAX_INTERNO = ((TAMANIO_BLOQUE - 30) / (12)) - 2;
-	this->MAX_HOJA = ((TAMANIO_BLOQUE - 36) / (6+Tipo::getTamanioEnBytes()))-1;
+	this->MAX_INTERNO = ((ARBOL_TAMANIO_BLOQUE - 30) / (12)) - 2;
+	this->MAX_HOJA = ((ARBOL_TAMANIO_BLOQUE - 36) / (6+Tipo::getTamanioEnBytes()))-1;
 }
 
 
@@ -205,7 +206,7 @@ void ArbolBmas< Tipo >::abrir(const char* nombre_archivo)
 	this->estaAbierto = true;
 
 	// Creamos un archivo de bloques
-	this->archivo = new ArchivoBloques(TAMANIO_BLOQUE, nombre_archivo);
+	this->archivo = new ArchivoBloques(ARBOL_TAMANIO_BLOQUE, nombre_archivo);
 
 	// Inicializamos el archivo de bloques o lo levantamos si ya existia
 	if(!this->archivo->existe())

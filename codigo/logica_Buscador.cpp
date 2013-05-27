@@ -2,7 +2,6 @@
 #include <list>
 #include "logica_Buscador.h"
 #include "logica_Utils.h"
-#include "config.h"
 
 
 Buscador::Buscador(){

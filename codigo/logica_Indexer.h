@@ -2,6 +2,7 @@
 #define INDEXER_H_INCLUDED
 
 #include <iostream>
+#include "config.h"
 #include "logica_IndiceAutor.h"
 #include "logica_IndiceTitulo.h"
 #include "logica_RTTgenerator.h"

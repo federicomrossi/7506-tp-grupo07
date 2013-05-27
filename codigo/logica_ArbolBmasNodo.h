@@ -32,11 +32,9 @@ typedef unsigned int uint;
 namespace {
 
 	// Constante para el buffer
-	#ifndef BUFFER_TAMANIO_CONFIG
-	#define BUFFER_TAMANIO_CONFIG
-
-	const int BUFFER_TAMANIO = 512;
-	
+	#ifndef ARBOL_BUFFER_TAMANIO_CONFIG
+	#define ARBOL_BUFFER_TAMANIO_CONFIG
+	const int ARBOL_BUFFER_TAMANIO = 512;
 	#endif
 }
 
@@ -136,7 +134,7 @@ struct Nodo
 template < typename Tipo >
 Nodo< Tipo >::Nodo() 
 {
-	this->buffer = new SerialBuffer(BUFFER_TAMANIO);
+	this->buffer = new SerialBuffer(ARBOL_BUFFER_TAMANIO);
 }
 
 

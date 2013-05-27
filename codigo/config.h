@@ -18,12 +18,16 @@
 
 //Archivo para guardar los bloques
 #define TEST_FILE "./test_file_TESTBLOCKFILE"
+
 // Archivo para guardar la tabla de referencia
 #define TEST_FILE_TABLE "./test_file_TESTTABLEFILE"
+
 // Tamano del bloque
-
-
 #define MAX_BLOCK_SIZE (512)
 #define MAX_REGS_PER_BLOCK (10)
+
+// Constante para el tamanio de bloque utilizado por los nodos en el arbol
+#define ARBOL_TAMANIO_BLOQUE_CONFIG
+const int ARBOL_TAMANIO_BLOQUE = 256;
 
 #endif /* CONFIG_H_ */

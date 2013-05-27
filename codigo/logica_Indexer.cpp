@@ -1,12 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "fisica_DirHandler.h"
 #include "logica_Indexer.h"
+#include "fisica_DirHandler.h"
 #include "logica_FileHandler.h"
 #include "logica_Validator.h"
 #include "logica_Utils.h"
-#include "config.h"
 
 Indexer::Indexer(){
     fromPath=SOURCE_PATH;
