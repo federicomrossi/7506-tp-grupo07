@@ -289,7 +289,6 @@ int RTTgenerator::recuperar(std::string frase, std::list<unsigned int> *lista){
     unsigned int cantDocs;
     unsigned int refListaDocs;
     arbol->abrir(this->arbolName.c_str());
-    arbol->imprimir();
     std::list<std::list<RTTreferencia*>*>* listaMadre = new std::list<std::list<RTTreferencia*>*>;
     for(std::list<std::string>::iterator it = palabras->begin(); it != palabras->end();it++){
         palabra = Utils::uniformizarString(*it);
@@ -327,52 +326,60 @@ int RTTgenerator::recuperar(std::string frase, std::list<unsigned int> *lista){
     std::list<RTTreferencia*> *listaDocs = *itMadre;
     std::list<RTTreferencia*>::iterator itDocs;
     unsigned int j = 0;
-    for(itDocs = listaDocs->begin(); itDocs != listaDocs->end(); itDocs++){
-        RTTreferencia* ocur = *itDocs;
-        unsigned int refPos = ocur->getRefLista();
-        unsigned int cantPos;
-        std::ifstream file;
-        file.open(this->listasInvertidasPosiciones.c_str());
-        file.seekg(refPos);
-        file.read((char*)&cantPos,sizeof(cantPos));
-        unsigned posOk = 0;
-        for(unsigned int i=0; i<cantPos; i++){
-            unsigned int posInicial;
-            file.read((char*)&posInicial,sizeof(posInicial));
-            itMadre = listaMadre->begin();
-            unsigned int posRelativa=1;
-            itMadre++;
-            while(itMadre != listaMadre->end() && !posOk){
-                std::list<RTTreferencia*> *listaDocs2 = *itMadre;
-                std::list<RTTreferencia*>::iterator itDocs2 = listaDocs2->begin();
-                for (unsigned int k=0;k<j;k++){
-                    itDocs2++;
-                }
-
-                RTTreferencia* ocur2 = *itDocs2;
-                unsigned int refPos2 = ocur2->getRefLista();
-                unsigned int cantPos2;
-                std::ifstream file2;
-                file2.open(this->listasInvertidasPosiciones.c_str());
-                file2.seekg(refPos2);
-                file2.read((char*)&cantPos2,sizeof(cantPos2));
-                for(unsigned int k=0; k<cantPos2;k++){
-                    unsigned int pos2;
-                    file2.read((char*)&pos2,sizeof(pos2));
-                    if(pos2 == posInicial + posRelativa ){
-                        posOk = 1;
-                    }
-                }
-                file2.close();
+    if(listaMadre->size() > 1){
+        for(itDocs = listaDocs->begin(); itDocs != listaDocs->end(); itDocs++){
+            RTTreferencia* ocur = *itDocs;
+            unsigned int refPos = ocur->getRefLista();
+            unsigned int cantPos;
+            std::ifstream file;
+            file.open(this->listasInvertidasPosiciones.c_str());
+            file.seekg(refPos);
+            file.read((char*)&cantPos,sizeof(cantPos));
+            unsigned posOk = 0;
+            for(unsigned int i=0; i<cantPos; i++){
+                unsigned int posInicial;
+                file.read((char*)&posInicial,sizeof(posInicial));
+                itMadre = listaMadre->begin();
+                unsigned int posRelativa=1;
                 itMadre++;
-                posRelativa++;
+                while(itMadre != listaMadre->end() && !posOk){
+                    std::list<RTTreferencia*> *listaDocs2 = *itMadre;
+                    std::list<RTTreferencia*>::iterator itDocs2 = listaDocs2->begin();
+                    for (unsigned int k=0;k<j;k++){
+                        itDocs2++;
+                    }
+
+                    RTTreferencia* ocur2 = *itDocs2;
+                    unsigned int refPos2 = ocur2->getRefLista();
+                    unsigned int cantPos2;
+                    std::ifstream file2;
+                    file2.open(this->listasInvertidasPosiciones.c_str());
+                    file2.seekg(refPos2);
+                    file2.read((char*)&cantPos2,sizeof(cantPos2));
+                    for(unsigned int k=0; k<cantPos2;k++){
+                        unsigned int pos2;
+                        file2.read((char*)&pos2,sizeof(pos2));
+                        if(pos2 == posInicial + posRelativa ){
+                            posOk = 1;
+                        }
+                    }
+                    file2.close();
+                    itMadre++;
+                    posRelativa++;
+                }
+            }
+            file.close();
+            if(posOk){
+                lista->push_back(ocur->getClave());
             }
         }
-        file.close();
-        if(posOk){
+    }else{
+        for(itDocs = listaDocs->begin(); itDocs != listaDocs->end(); itDocs++){
+            RTTreferencia* ocur = *itDocs;
             lista->push_back(ocur->getClave());
         }
     }
+
     //DELETES DE TODO LO QUE TIENE LISTA MADRE
     itMadre = listaMadre->begin();
     while(itMadre != listaMadre->end()){
