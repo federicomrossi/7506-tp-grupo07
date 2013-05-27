@@ -65,9 +65,64 @@ std::string Utils::uniformizarString(std::string source){
         }else if(c >= 'A' && c <= 'Z'){
             dest << (char)tolower(c);
         }else{
-            c = tolower(c);
-           // char con[] = {'á','é','í','ó','ú'};
-            //char sin[] = {'a','e','i','o','u'};
+            if (c == '\xc3') {
+                i++;
+                c = source.at(i);
+                switch (c) {
+                    case '\xa1':
+                        dest << 'a';
+                        break;
+                        
+                    case '\x81':
+                        dest << 'a';
+                        break;
+                        
+                    case '\xa9':
+                        dest << 'e';
+                        break;
+                        
+                    case '\x89':
+                        dest << 'e';
+                        break;
+                        
+                    case '\xad':
+                        dest << 'i';
+                        break;
+                        
+                    case '\x8d':
+                        dest << 'i';
+                        break;
+                        
+                    case '\xb3':
+                        dest << 'o';
+                        break;
+                        
+                    case '\x93':
+                        dest << 'o';
+                        break;
+                        
+                    case '\xba':
+                        dest << 'u';
+                        break;
+                        
+                    case '\x9a':
+                        dest << 'u';
+                        break;
+                        
+                    case '\xb1':
+                        dest << 'n';
+                        dest << 'i';
+                        break;
+                        
+                    case '\x91':
+                        dest << 'n';
+                        dest << 'i';
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
         }
     }
     return dest.str();
