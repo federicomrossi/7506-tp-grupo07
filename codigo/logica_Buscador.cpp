@@ -108,6 +108,7 @@ int Buscador::imprimirCancion(unsigned int ref){
         file.read(&c,sizeof(char));
         out.write(&c,sizeof(char));
     }
+    out << std::endl;
     file.close();
     out.close();
     return 0;
