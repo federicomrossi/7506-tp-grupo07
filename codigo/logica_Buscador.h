@@ -13,10 +13,12 @@ class Buscador{
         int buscarPorTitulo(std::string titulo);
         int buscarPorFrase(std::string frase);
     private:
+        int imprimirCancion(unsigned int ref);
         IndiceAutor *autores;
         IndiceTitulo *titulos;
         RTTgenerator *rtt;
         std::string destPath;
+        std::string outName;
 
 };
 
