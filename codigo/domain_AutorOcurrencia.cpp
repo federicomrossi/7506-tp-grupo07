@@ -39,7 +39,7 @@ std::ostream& operator << (std::ostream &out, AutorOcurrencia &ocur){
 }
 
 std::istream& operator >> (std::istream &out, AutorOcurrencia &ocur){
-    unsigned int p;
+    unsigned int p=0;
     out.read((char*) &p,sizeof(unsigned int));
     ocur.autorId = p;
     out.read((char*) &p,sizeof(unsigned int));
