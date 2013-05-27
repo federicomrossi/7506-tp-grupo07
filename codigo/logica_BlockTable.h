@@ -159,7 +159,7 @@ int BlockTable<T>::insert(T *aReg){
 			this->insert(aReg);
 		}
 	}
-	
+
 	delete searchReg;
 	return 0;
 }
@@ -219,7 +219,7 @@ void BlockTable<T>::actualizar(T* & newReg){
 template <class T>
 void BlockTable<T>::duplicateTable(){
 	int newBlockTableSize = this->size *2;
-	int *tmpBlockReference = (int*) calloc(newBlockTableSize, sizeof(int));
+	int *tmpBlockReference = new int[newBlockTableSize];//(int*) calloc(newBlockTableSize, sizeof(int));
 	for (int i = 0; i < this->size ; i++) {
 		tmpBlockReference[i] = this->blockReferences[i];
 		tmpBlockReference[this->size+i] = this->blockReferences[i];
