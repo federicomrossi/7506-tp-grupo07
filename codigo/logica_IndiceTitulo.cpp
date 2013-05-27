@@ -53,7 +53,8 @@ unsigned int IndiceTitulo::obtenerId(std::string titulo){
     file.close();
     delete aui;
     if(!found){
-        std::ofstream file2(titulos.c_str(), std::fstream::app);
+        std::ofstream file2;
+        file2.open(titulos.c_str(), std::fstream::app);
         id = file2.tellp();
         AutorId* aid = new AutorId(titulo.c_str(),id);
         file2 << *aid;
@@ -81,9 +82,9 @@ int IndiceTitulo::pack(){
         std::ifstream file;
         file.open(this->temporalOcurrencias.c_str());
         AutorOcurrencia aid;
-        unsigned int titulo;
+        unsigned int titulo=0;
         unsigned int cant = 0;
-        unsigned int refLista;
+        unsigned int refLista=0;
         std::list<unsigned int>* lista;
         file >> aid;
         while(!file.eof()){
@@ -134,9 +135,9 @@ int IndiceTitulo::packAppend(){
         std::ifstream file;
         file.open(this->temporalOcurrencias.c_str());
         AutorOcurrencia aid;
-        unsigned int titulo;
+        unsigned int titulo=0;
         unsigned int cant = 0;
-        unsigned int refLista;
+        unsigned int refLista=0;
         std::list<unsigned int>* lista;
         file >> aid;
         while(!file.eof()){
