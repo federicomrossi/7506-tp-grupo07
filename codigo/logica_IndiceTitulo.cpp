@@ -275,6 +275,7 @@ int IndiceTitulo::recuperar(std::string titulo, std::list<unsigned int> *lista){
             file.close();
         }
     }
+    delete ar;
     return 0;
 }
 
