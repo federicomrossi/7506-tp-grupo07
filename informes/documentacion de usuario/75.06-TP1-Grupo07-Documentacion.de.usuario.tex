@@ -25,6 +25,9 @@
 \usepackage{amssymb}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage{url}
+\usepackage{color}
+
 
 %% Fin PAQUETES
 
@@ -35,6 +38,7 @@
 \definecolor{gray95}{gray}{.95}
 \definecolor{gray75}{gray}{.75}
 \definecolor{gray50}{gray}{.50}
+\definecolor{gray25}{gray}{.25}
 \definecolor{keywords_blue}{rgb}{0.13,0.13,1}
 \definecolor{comments_green}{rgb}{0,0.5,0}
 \definecolor{strings_red}{rgb}{0.9,0,0}
@@ -120,10 +124,166 @@
 \newpage
 
 
+
+
 % INTRODUCCIÓN
 \section{Introducción}
 	
-	[ Colocar texto aquí ]
+	El siguiente documento tiene como objetivo proporcionar al usuario toda la información necesaria para la correcta instalación y utilización del software para el armado de un catálogo musical.
+	\par
+	Este documento va desde los recaudos a tomar previos a la compilación hasta la forma de utilización de la herramienta en si.
+\bigskip
+
+
+
+
+% REQUERIMIENTOS DEL SISTEMA
+\section{Requerimientos del sistema}
+
+	Antes de instalar y configurar el programa, asegúrese de que su sistema cumple los requisitos mínimos recomendados, los cuales se encuentran especificados a continuación:
+	\medskip
+
+\begin{itemize}
+\itemsep=5pt \topsep=0pt \partopsep=0pt \parskip=0pt \parsep=0pt
+
+	\item \textit{Sistemas operativos}: GNU/Linux (x86 y x86-64, distribuciones Linux basadas en RPM y DEB);
+
+	\item \textit{Controlador de versions}: GIT (\url{http://git-scm.com/});
+
+	\item \textit{Compilador}: g++ (\url{http://gcc.gnu.org/});
+
+	\item \textit{Herramientas}: Make (\url{http://www.gnu.org/software/make/}).
+
+\end{itemize}
+\bigskip
+
+
+
+
+% DESCARGA DEL SOFTWARE
+\section{Descarga del software}
+
+	Para obtener la ultima versión de este software, dirijase a la línea de comandos (terminal) de su sistema operativo e ingrese el siguiente comando:
+	\bigskip
+
+	\colorbox{gray95}{{\ttfamily\footnotesize
+	\$ git clone \url{git://github.com/federicomrossi/7506-tp-grupo07.git}\\}}
+	\bigskip
+
+	Esto descargará los archivos almacenados en el repositorio, ubicándose en la carpáta \textit{código} los archivos fuentes que hacen a la implementación del programa.
+\bigskip\medskip
+
+
+
+
+% PASOS PREVIOS A LA UTILIZACION
+\section{Pasos previos a la utilización}
+
+	Antes de poder hacer uso de la aplicación es necesario realizar unas pocas tareas previas para la puesta a punto de la misma. Las mismas serán detalladas en lo que sigue de esta sección.
+	\bigskip
+
+
+
+% PASOS PREVIOS A LA UTILIZACION - Configuracion del entorno
+\subsection{Configuración del entorno}
+
+	Previo a la compilación de la herramienta deberán configurase ciertos parámetros. Los mismos se encuentran en el archivo “<PONER ARCHIVO> DEFINITIVO>” de subdirectorio <PONER SUBDIRECTORIO DEFINITIVO>.
+	\par
+	Es condición necesaria la existencia de los subdirectorios configurados ya que la herramienta no se encarga de crearlos por si misma. Las rutas y parámetros que deben especificarse son:
+	\medskip
+
+
+\begin{itemize}
+\itemsep=5pt \topsep=0pt \partopsep=0pt \parskip=0pt \parsep=0pt
+
+	\item \textit{SOURCE\_PATH}: Directorio donde se encuentran los temas a indexar;
+
+	\item \textit{DEST\_PATH}: Directorio donde se escribirán los archivos del sistema;
+
+	\item \textit{MAX\_BLOCK\_SIZE} [REVISAR]: Tamaño de los bloques en los archivos;
+
+	\item \textit{MAX\_REGS\_PER\_BLOCK} [REVISAR]: Cantidad máxima de registros por bloque.
+
+\end{itemize}
+\bigskip
+
+
+
+% PASOS PREVIOS A LA UTILIZACION - Compilacion
+\subsection{Compilación}
+
+	Para la compilación simplemente abra una terminal, diríjase hacia el directorio en donde se realizo la clonación del software y sitúese en el subdirectorio \textit{código}. Luego, ejecute el siguiente comando:
+	\bigskip
+
+	\colorbox{gray95}{{\ttfamily\footnotesize
+	\$ make\\}}
+	\medskip
+
+	Esto dará comienzo al proceso de compilación de los archivos fuente.
+\bigskip\medskip
+
+
+
+
+% EJECUCION
+\section{Ejecución}
+
+	Una vez completada la compilación, se podrá correr el programa mediante el comando que sigue (recordar que la aplicación debe ser utilizada desde la misma terminal de línea de comados):
+	\bigskip
+
+	\colorbox{gray95}{{\ttfamily\footnotesize
+	\$ make run\\}}
+	\medskip
+
+
+
+% UTILIZACION DE LA INTERFAZ DEL PROGRAMA
+\section{Utilización de la interfaz del programa}
+
+	Al iniciar el programa se puede observar un menú principal como el que se muestra en la \textit{Figura 1}. En este se listan múltiples opciones, las cuales seran detalladas el los siguientes apartados.
+	\bigskip
+
+	[ COLOCAR IMAGEN ]
+	\bigskip
+
+
+
+% UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Indexacion de canciones
+\subsection{Indexación de canciones}
+
+	[ COLOCAR TEXTO AQUI ]
+\bigskip
+
+
+
+% UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Indexacion en modo append
+\subsection{Indexación de canciones en modo append}
+
+	[ COLOCAR TEXTO AQUI ]
+\bigskip
+
+
+
+% UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Busqueda de canciones por autor
+\subsection{Búsqueda de canciones por autor}
+
+	[ COLOCAR TEXTO AQUI ]
+\bigskip
+
+
+
+% UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Busqueda de canciones por titulo
+\subsection{Búsqueda de canciones por titulo}
+
+	[ COLOCAR TEXTO AQUI ]
+\bigskip
+
+
+
+% UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Busqueda de canciones por frase
+\subsection{Búsqueda de canciones por frase}
+
+	[ COLOCAR TEXTO AQUI ]
 \bigskip
 
 

@@ -25,6 +25,7 @@
 \usepackage{amssymb}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage{url}
 
 %% Fin PAQUETES
 
@@ -123,9 +124,30 @@
 % INTRODUCCIÓN
 \section{Introducción}
 	
-	[ Colocar texto aquí ]
+	El siguiente documento tiene como objetivo especificar y precisar los detalles técnicos de la realización de la primera parte del trabajo práctico. Se explican los problemas surgidos a la hora del diseño y las soluciones encaradas para solventar los mismos.
+	\par
+	Todos los archivos y códigos fuente aquí mencionados y relacionados al proyecto, así como también el presente informe, pueden ser encontrados y descargados del repositorio del grupo (\url{https://github.com/federicomrossi/7506-tp-grupo07}).
 \bigskip
 
 
+
+
+% REQUERIMIENTOS PLANTEADOS
+\section{Requerimientos planteados}
+
+	El trabajo solicitado se basa en la creación de un sistema para la generación de un catalogo a partir de archivos de letras de canciones de diversos autores. Dicho sistema debe ser capaz de realizar búsquedas por autor, titulo y frases, entregando como resultado los temas que coincidan con los parámetros ingresados.
+	\par
+	A su vez se exigieron ciertas condiciones para la realización del trabajo a la hora del manejo de las estructuras. El índice para la búsqueda por titulo debía estructurarse como un hash, por autor como un árbol B+ y los archivos de texto como bloques de registros variables.
+	\par
+	El producto final es una aplicación de consola que permite realizar las operaciones pedidas.
+
+
+
+% DIVISION DEL TRABAJO
+\section{División del trabajo}
+
+	El trabajo esta divido en tres capas funcionales: la física, la lógica y el front-end.
+	\par
+	A su vez, se la capa lógica esta formada por tres módulos principales, a saber, el árbol B+, el hash extensible y las estructuras de recuperación de textos.
 
 \end{document}
