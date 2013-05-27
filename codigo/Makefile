@@ -1,6 +1,4 @@
-## Makefile TEMPORAL para compilacion de TP Grupal realizado en lenguaje C++
-
-
+## Makefile para compilacion de TP Grupal realizado en lenguaje C++
 
 # CONFIGURACION
 ################

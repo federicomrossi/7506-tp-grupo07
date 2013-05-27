@@ -165,14 +165,14 @@
 % DESCARGA DEL SOFTWARE
 \section{Descarga del software}
 
-	Para obtener la ultima versión de este software, dirijase a la línea de comandos (terminal) de su sistema operativo e ingrese el siguiente comando:
+	Para obtener la última versión de este software, diríjase a la línea de comandos (terminal) de su sistema operativo e ingrese el siguiente comando:
 	\bigskip
 
 	\colorbox{gray95}{{\ttfamily\footnotesize
 	\$ git clone \url{git://github.com/federicomrossi/7506-tp-grupo07.git}\\}}
 	\bigskip
 
-	Esto descargará los archivos almacenados en el repositorio, ubicándose en la carpáta \textit{código} los archivos fuentes que hacen a la implementación del programa.
+	Esto descargará los archivos almacenados en el repositorio, ubicándose en la carpeta \textit{código} los archivos fuentes que hacen a la implementación del programa.
 \bigskip\medskip
 
 
@@ -189,7 +189,7 @@
 % PASOS PREVIOS A LA UTILIZACION - Configuracion del entorno
 \subsection{Configuración del entorno}
 
-	Previo a la compilación de la herramienta deberán configurase ciertos parámetros. Los mismos se encuentran en el archivo “<PONER ARCHIVO> DEFINITIVO>” de subdirectorio <PONER SUBDIRECTORIO DEFINITIVO>.
+	Previo a la compilación de la herramienta deberán configurarse ciertos parámetros, los cuales se encuentran inicialmente con valores por defecto. Los mismos se encuentran en el archivo ``\textit{config.h}'' ubicado en el directorio de archivos fuente ``\textit{codigo}''.
 	\par
 	Es condición necesaria la existencia de los subdirectorios configurados ya que la herramienta no se encarga de crearlos por si misma. Las rutas y parámetros que deben especificarse son:
 	\medskip
@@ -200,11 +200,11 @@
 
 	\item \textit{SOURCE\_PATH}: Directorio donde se encuentran los temas a indexar;
 
-	\item \textit{DEST\_PATH}: Directorio donde se escribirán los archivos del sistema;
+	\item \textit{DEST\_PATH}: Directorio donde se escribirán los archivos del sistema y el archivo ``\textit{salida.out}'' en el cual se depositan las letras de canciones producto de los resultados de las busquedas;
 
-	\item \textit{MAX\_BLOCK\_SIZE} [REVISAR]: Tamaño de los bloques en los archivos;
+	\item \textit{HASH\_MAX\_BLOCK\_SIZE}: Tamaño de los bloques en el hash;
 
-	\item \textit{MAX\_REGS\_PER\_BLOCK} [REVISAR]: Cantidad máxima de registros por bloque.
+	\item \textit{ARBOL\_TAMANIO\_BLOQUE}: Tamaño de los bloques que representan nodos en el Arbol B$^+$.
 
 \end{itemize}
 \bigskip
@@ -242,15 +242,15 @@
 % UTILIZACION DE LA INTERFAZ DEL PROGRAMA
 \section{Utilización de la interfaz del programa}
 
-	Al iniciar el programa se puede observar un menú principal como el que se muestra en la \textit{Figura 1}. En este se listan múltiples opciones, las cuales seran detalladas el los siguientes apartados. A cada opción se accede presionando el numero de opción seguido de enter.
+	Al iniciar el programa se puede observar un menú principal como el que se muestra en la \textit{Figura 1}. En este se listan múltiples opciones, las cuales serán detalladas en los siguientes apartados. A cada opción se accede presionando el numero de opción seguido de enter.
 	\bigskip
 
 	% Figura 1
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.80\textwidth]{images/menu.png}
+	\includegraphics[width=0.85\textwidth]{images/menu.png}
 	\medskip
-	\caption{Esquema de la estructuración en capas.}
+	\caption{Menú principal del programa.}
 \end{figure}
 \bigskip\smallskip
 
@@ -259,7 +259,7 @@
 % UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Indexacion de canciones
 \subsection{Indexación de canciones}
 
-	Para realizar la indexación inical de canciones debe dirigirse a la opción 1. La aplicación recorrerá el directorio de temas, generando todas las estructuras desde cero. Es necesario elegir esta opción cuando se realice la primera ejecución del programa.
+	Para realizar la indexación inicial de canciones debe dirigirse a la opción 1. La aplicación recorrerá el directorio de temas, generando todas las estructuras desde cero. Es necesario elegir esta opción cuando se realice la primera ejecución del programa.
 \bigskip
 
 
@@ -267,7 +267,7 @@
 % UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Indexacion en modo append
 \subsection{Indexación de canciones en modo append}
 
-	Esta es la opción 2 del menú, y recorre el directorio de temas pero, sólo indexa los temas nuevos en estructuras secundarias. En caso de notar problemas de performance en las búsquedas reindexar con la opción 1.
+	Este tipo de indexación se realiza desde la opción 2 del menú. Ál elegirla, se recorrerá el directorio de temas pero sólo se indexarán los temas nuevos que aparezcan. En caso de notar problemas de performance en las búsquedas reindexar con la opción 1.
 \bigskip
 
 
@@ -275,15 +275,15 @@
 % UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Busqueda de canciones por autor
 \subsection{Búsqueda de canciones por autor}
 
-	Esta corresponde a la opción 3 y busca canciones indexadas por autor. La búsqueda es exacta y deberá incluirse el nombre completo de la banda/autor.  Se retornarán por pantalla todos los temas que coincidan con la búsqueda.
+	Para realizar una buesqueda de canciones indexadas por autor elija la opción 3. La búsqueda es exacta y deberá incluirse el nombre completo de la banda/autor. Se retornarán por pantalla todos los temas que coincidan con la búsqueda, y se depositarán en el archivo ``\textit{salida.out}'' las letras de dichas canciones.
 \bigskip
 
 
 
 % UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Busqueda de canciones por titulo
-\subsection{Búsqueda de canciones por titulo}
+\subsection{Búsqueda de canciones por título}
 
-	Se accede a esta desde la opción 4 y se encarga de buscar canciones indexadas por título. La búsqueda es exacta y deberá incluirse el nombre completo del tema.  Se retornarán por pantalla todos los temas que coincidan con la búsqueda.
+	La opción 4 del menú permite buscar canciones indexadas por título. La búsqueda es exacta y deberá incluirse el nombre completo del tema. Se retornarán por pantalla todos los temas que coincidan con la búsqueda, y se depositarán en el archivo ``\textit{salida.out}'' las letras de dichas canciones.
 \bigskip
 
 
@@ -291,9 +291,16 @@
 % UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Busqueda de canciones por frase
 \subsection{Búsqueda de canciones por frase}
 
-	Ésta corresponde a la opción 5 y busca canciones por frase. La búsqueda es aproximada.  Se retornarán por pantalla todos los temas que coincidan con la búsqueda.
-\bigskip
+	Por último, la opción 5 permite la busqueda de canciones por frase. Se retornarán por pantalla todos los temas que coincidan con la búsqueda, y se depositarán en el archivo ``\textit{salida.out}'' las letras de dichas canciones.
+\bigskip\bigskip
 
+
+
+% RESTRICCIONES
+\section{Consideraciones finales}
+
+	Para finalizar, debe tenerse en cuenta que habiéndose especificado un tamaño específico de bloque y posterior a eso se realiza una indexación, luego, las reindexaciones en modo append, así como también las búsquedas, deben realizarse manteniendo esta configuración. Es decir, si se realiza una indexación, se sale del programa, se cambia el tamaño de bloque y se vuelve a abrir, la aplicación ya no se encontrará en condiciones de utilizar correctamente lo ya indexado. Queda en la responsabilidad del usuario mantener esta limitación dada por el programa.
+\bigskip
 
 
 \end{document}
