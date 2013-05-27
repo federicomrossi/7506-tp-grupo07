@@ -2,7 +2,8 @@
 #include <string.h>
 
 AutorId::AutorId(const char* autor, unsigned int id){
-    memcpy(this->autor,autor,100);
+    unsigned int cant = strlen(autor);
+    memcpy(this->autor,autor,cant+1);
     this->id =id;
 }
 
