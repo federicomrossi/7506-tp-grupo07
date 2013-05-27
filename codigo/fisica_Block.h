@@ -57,6 +57,8 @@ class Block {
 		// Cuando un bloque queda en overflow, necesito buscar el proximo bloque en donde pueda redispersar,  */
 		int getBlockInTable();
 		
+		void actualizar(T*& newReg);
+
 		//Si entra el registro devuelve verdadero, si no falso
 		bool easyInsert(T& aReg);
 
@@ -381,6 +383,17 @@ Block<T>::~Block() {
 	//2free(this->filePath);
 	regsList.clear();
 	delete [] this->filePath;
+}
+
+
+template <class T>
+void Block<T>::actualizar(T*& newReg){
+	typename list<T>::iterator it;
+	for (it = regsList.begin(); it != regsList.end(); it++){
+		if (it->getClave() == newReg->getClave()){
+			memcpy(&*it,newReg,sizeof(T));
+		}
+	}
 }
 
 #endif
