@@ -16,18 +16,21 @@ class IndiceTitulo{
         int recuperar(std::string titulo, std::list<unsigned int> *lista);
         int eliminarTodo();
         int pack();
+        int packAppend();
     private:
         unsigned int obtenerId(std::string palabra);
         int guardarOcurrencia(AutorOcurrencia* ocur);
         int printOcurrencias();
         unsigned int getRefLista();
         int guardarRefLista(std::list<unsigned int>* lista);
+        int copylist(unsigned int reflista,std::list<unsigned int>*lista);
         BlockTable<TituloReferencias>* hash;
 
         std::string temporalOcurrencias;
         std::string titulos;
         std::string listaRefs;
-        std::string hashName;
+        std::string tableName;
+        std::string blocksName;
 
 };
 

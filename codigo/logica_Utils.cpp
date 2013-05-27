@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <stdio.h>
 #include "logica_Utils.h"
 
@@ -70,4 +71,12 @@ std::string Utils::uniformizarString(std::string source){
         }
     }
     return dest.str();
+}
+
+int Utils::existeArchivo(std::string archivo){
+    std::ifstream file;
+    file.open(archivo.c_str());
+    bool existe = file.good();
+    file.close();
+    return existe;
 }

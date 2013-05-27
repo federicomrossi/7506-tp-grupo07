@@ -2,7 +2,6 @@
 #define INDEXER_H_INCLUDED
 
 #include <iostream>
-#include "logica_IndicePrimario.h"
 #include "logica_IndiceAutor.h"
 #include "logica_IndiceTitulo.h"
 #include "logica_RTTgenerator.h"
@@ -19,7 +18,6 @@ class Indexer{
         int indexarAutores(std::string header, unsigned int songPosition);
         int indexarTitulo(std::string header, unsigned int songPosition);
         int generateRTT(std::string songPath, unsigned int songPosition);
-        IndicePrimario *primario;
         IndiceAutor *autores;
         IndiceTitulo *titulos;
         RTTgenerator *rtt;

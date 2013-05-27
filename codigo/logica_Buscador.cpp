@@ -34,7 +34,6 @@ int Buscador::buscarPorAutor(std::string autor){
         file.seekg(*it);
         file.read((char*)&largo,sizeof(largo));
         getline(file,header);
-        cout << *it << std::endl;
         cout << header << std::endl;
     }
     file.close();
@@ -56,7 +55,6 @@ int Buscador::buscarPorTitulo(std::string titulo){
         file.seekg(*it);
         file.read((char*)&largo,sizeof(largo));
         getline(file,header);
-        cout << *it << std::endl;
         cout << header << std::endl;
     }
     file.close();
@@ -78,7 +76,6 @@ int Buscador::buscarPorFrase(std::string frase){
         file.seekg(*it);
         file.read((char*)&largo,sizeof(largo));
         getline(file,header);
-        cout << *it << std::endl;
         cout << header << std::endl;
     }
     file.close();

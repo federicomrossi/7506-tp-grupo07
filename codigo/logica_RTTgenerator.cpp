@@ -70,116 +70,124 @@ int RTTgenerator::guardarOcurrencia(RTTocurrencia* ocur){
 
 
 int RTTgenerator::pack(){
-    SortExterno<RTTocurrencia>* sort = new SortExterno<RTTocurrencia>(this->temporalOcurrencias,4096);
-    sort->ordenar();
-    delete sort;
-    std::ifstream file;
-    file.open(this->temporalOcurrencias.c_str());
-    RTTocurrencia ocur;
-    unsigned int idPalabra;
-    unsigned int idDoc;
-    unsigned int cantDocs = 0;
-    unsigned int cantPos = 0;
-    unsigned int refListaDocs;
-    unsigned int refListaPos;
-    std::list<RTTreferencia*>* listaDocs;
-    std::list<unsigned int>* listaPos;
-    arbol->abrir(this->arbolName.c_str());
-    file >> ocur;
-    while(!file.eof()){
-        idPalabra = ocur.getPalabraId();
-        cantDocs = 0;
-        RTTreferencia* ar = new RTTreferencia(idPalabra);
-        refListaDocs = this->getRefListaDocs();
-        ar->setRefLista(refListaDocs);
-        listaDocs = new std::list<RTTreferencia*>();
+    if(Utils::existeArchivo(temporalOcurrencias)){
+        std::cout << "Generando RTT...";
+        SortExterno<RTTocurrencia>* sort = new SortExterno<RTTocurrencia>(this->temporalOcurrencias,4096);
+        sort->ordenar();
+        delete sort;
+        std::ifstream file;
+        file.open(this->temporalOcurrencias.c_str());
+        RTTocurrencia ocur;
+        unsigned int idPalabra;
+        unsigned int idDoc;
+        unsigned int cantDocs = 0;
+        unsigned int cantPos = 0;
+        unsigned int refListaDocs;
+        unsigned int refListaPos;
+        std::list<RTTreferencia*>* listaDocs;
+        std::list<unsigned int>* listaPos;
+        arbol->abrir(this->arbolName.c_str());
+        file >> ocur;
+        while(!file.eof()){
+            idPalabra = ocur.getPalabraId();
+            cantDocs = 0;
+            RTTreferencia* ar = new RTTreferencia(idPalabra);
+            refListaDocs = this->getRefListaDocs();
+            ar->setRefLista(refListaDocs);
+            listaDocs = new std::list<RTTreferencia*>();
 
-        while((ocur.getPalabraId() == idPalabra) && !file.eof()){
-            idDoc = ocur.getDocumentoId();
-            cantPos = 0;
-            refListaPos = this->getRefListaPos();
-            RTTreferencia* refPos = new RTTreferencia(idDoc);
-            refPos->setRefLista(refListaPos);
-            listaPos = new std::list<unsigned int>;
-            while((ocur.getDocumentoId() == idDoc) && (ocur.getPalabraId() == idPalabra) && !file.eof()){
-                listaPos->push_back(ocur.getPosition());
-                cantPos++;
-                file >> ocur;
+            while((ocur.getPalabraId() == idPalabra) && !file.eof()){
+                idDoc = ocur.getDocumentoId();
+                cantPos = 0;
+                refListaPos = this->getRefListaPos();
+                RTTreferencia* refPos = new RTTreferencia(idDoc);
+                refPos->setRefLista(refListaPos);
+                listaPos = new std::list<unsigned int>;
+                while((ocur.getDocumentoId() == idDoc) && (ocur.getPalabraId() == idPalabra) && !file.eof()){
+                    listaPos->push_back(ocur.getPosition());
+                    cantPos++;
+                    file >> ocur;
+                }
+
+                this->guardarListaPos(listaPos);
+                delete listaPos;
+                listaDocs->push_back(refPos);
+                cantDocs++;
             }
-
-            this->guardarListaPos(listaPos);
-            delete listaPos;
-            listaDocs->push_back(refPos);
-            cantDocs++;
+            this->guardarListaDocs(listaDocs);
+            arbol->insertar(ar->getClave(),*ar);
+            delete ar;
+            delete listaDocs;
         }
-        this->guardarListaDocs(listaDocs);
-        arbol->insertar(ar->getClave(),*ar);
-        delete ar;
-        delete listaDocs;
+        arbol->cerrar();
+        remove(this->temporalOcurrencias.c_str());
+        std::cout << "OK" << std::endl;
     }
-    arbol->cerrar();
-    remove(this->temporalOcurrencias.c_str());
     return  0;
 }
 
 int RTTgenerator::packAppend(){
-    SortExterno<RTTocurrencia>* sort = new SortExterno<RTTocurrencia>(this->temporalOcurrencias,4096);
-    sort->ordenar();
-    delete sort;
-    std::ifstream file;
-    file.open(this->temporalOcurrencias.c_str());
-    RTTocurrencia ocur;
-    unsigned int idPalabra;
-    unsigned int idDoc;
-    unsigned int cantDocs = 0;
-    unsigned int cantPos = 0;
-    unsigned int refListaDocs;
-    unsigned int refListaPos;
-    std::list<RTTreferencia*>* listaDocs;
-    std::list<unsigned int>* listaPos;
-    arbol->abrir(this->arbolName.c_str());
-    file >> ocur;
-    while(!file.eof()){
-        idPalabra = ocur.getPalabraId();
-        cantDocs = 0;
-        RTTreferencia* ar = new RTTreferencia(idPalabra);
-        refListaDocs = this->getRefListaDocs();
-        listaDocs = new std::list<RTTreferencia*>;
+    if(Utils::existeArchivo(temporalOcurrencias)){
+        std::cout << "Generando RTT...";
+        SortExterno<RTTocurrencia>* sort = new SortExterno<RTTocurrencia>(this->temporalOcurrencias,4096);
+        sort->ordenar();
+        delete sort;
+        std::ifstream file;
+        file.open(this->temporalOcurrencias.c_str());
+        RTTocurrencia ocur;
+        unsigned int idPalabra;
+        unsigned int idDoc;
+        unsigned int cantDocs = 0;
+        unsigned int cantPos = 0;
+        unsigned int refListaDocs;
+        unsigned int refListaPos;
+        std::list<RTTreferencia*>* listaDocs;
+        std::list<unsigned int>* listaPos;
+        arbol->abrir(this->arbolName.c_str());
+        file >> ocur;
+        while(!file.eof()){
+            idPalabra = ocur.getPalabraId();
+            cantDocs = 0;
+            RTTreferencia* ar = new RTTreferencia(idPalabra);
+            refListaDocs = this->getRefListaDocs();
+            listaDocs = new std::list<RTTreferencia*>;
 
-        bool b = arbol->buscar(idPalabra,*ar);
-        if(b){
-            copyList(ar->getRefLista(),listaDocs);
-        }
-        ar->setRefLista(refListaDocs);
-        while((ocur.getPalabraId() == idPalabra) && !file.eof()){
-            idDoc = ocur.getDocumentoId();
-            cantPos = 0;
-            refListaPos = this->getRefListaPos();
-            RTTreferencia* refPos = new RTTreferencia(idDoc);
-            refPos->setRefLista(refListaPos);
-            listaPos = new std::list<unsigned int>;
-            while((ocur.getDocumentoId() == idDoc) && (ocur.getPalabraId() == idPalabra) && !file.eof()){
-                listaPos->push_back(ocur.getPosition());
-                cantPos++;
-                file >> ocur;
+            bool b = arbol->buscar(idPalabra,*ar);
+            if(b){
+                copyList(ar->getRefLista(),listaDocs);
             }
+            ar->setRefLista(refListaDocs);
+            while((ocur.getPalabraId() == idPalabra) && !file.eof()){
+                idDoc = ocur.getDocumentoId();
+                cantPos = 0;
+                refListaPos = this->getRefListaPos();
+                RTTreferencia* refPos = new RTTreferencia(idDoc);
+                refPos->setRefLista(refListaPos);
+                listaPos = new std::list<unsigned int>;
+                while((ocur.getDocumentoId() == idDoc) && (ocur.getPalabraId() == idPalabra) && !file.eof()){
+                    listaPos->push_back(ocur.getPosition());
+                    cantPos++;
+                    file >> ocur;
+                }
 
-            this->guardarListaPos(listaPos);
-            delete listaPos;
-            listaDocs->push_back(refPos);
-            cantDocs++;
+                this->guardarListaPos(listaPos);
+                delete listaPos;
+                listaDocs->push_back(refPos);
+                cantDocs++;
+            }
+            this->guardarListaDocs(listaDocs);
+            if(b){
+                arbol->actualizar(ar->getClave(),*ar);
+            }else{
+                arbol->insertar(ar->getClave(),*ar);
+            }
+            delete ar;
+            delete listaDocs;
         }
-        this->guardarListaDocs(listaDocs);
-        if(b){
-            arbol->actualizar(ar->getClave(),*ar);
-        }else{
-            arbol->insertar(ar->getClave(),*ar);
-        }
-        delete ar;
-        delete listaDocs;
+        arbol->cerrar();
+        remove(this->temporalOcurrencias.c_str());
+        std::cout << "OK" << std::endl;
     }
-    arbol->cerrar();
-    remove(this->temporalOcurrencias.c_str());
     return  0;
 }
 

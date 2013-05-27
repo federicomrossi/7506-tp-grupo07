@@ -12,6 +12,7 @@ class Utils{
         static int getAutoresFromHeader(std::string s, std::list<std::string>*);
         static std::string getTituloFromHeader(std::string header);
         static std::string uniformizarString(std::string source);
+        static int existeArchivo(std::string archivo);
 };
 
 #endif // UTILS_H_INCLUDED

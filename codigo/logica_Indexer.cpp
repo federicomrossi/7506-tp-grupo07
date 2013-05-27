@@ -5,7 +5,6 @@
 #include "logica_Indexer.h"
 #include "logica_FileHandler.h"
 #include "logica_Validator.h"
-#include "logica_IndicePrimario.h"
 #include "logica_Utils.h"
 
 Indexer::Indexer(){
@@ -49,7 +48,7 @@ int Indexer::indexarCancionesDesde(int mode){
             if (this->estaIndexado(header)){
                 std::cout << "Archivo ya indexado. Descartado" << endl;
             }else{
-                std::cout << "OK." << endl << "Indexando..";
+                std::cout << "OK." << endl;
                 unsigned int songPosition = this->copyToMaster(*it, masterName);
                 this->indexarAutores(header,songPosition);
                 this->indexarTitulo(header,songPosition);
@@ -59,7 +58,7 @@ int Indexer::indexarCancionesDesde(int mode){
     }
     if(mode){
         autores->packAppend();
-     //   titulos->packAppend();
+        titulos->packAppend();
         rtt->packAppend();
     }else{
         autores->pack();
@@ -75,15 +74,28 @@ int Indexer::indexarCancionesDesde(int mode){
 
 
 int Indexer::estaIndexado(std::string header){
-    IndicePrimario *ind = new IndicePrimario;
     std::string s;
-    s = Utils::getClaveFromHeader(header);
-    std::cout << s << endl;
-    if(ind->recuperar(s)){
-        delete ind;
-        return 1;
+    std::string clave;
+    s = Utils::getTituloFromHeader(header);
+    clave = Utils::getClaveFromHeader(header);
+    std::list<unsigned  int> refs;
+    titulos->recuperar(s,&refs);
+    std::list<unsigned int>::iterator it;
+    std::ifstream master;
+    std::string header2;
+    std::string clave2;
+    for(it = refs.begin();it != refs.end();it++){
+        master.open(this->masterName.c_str());
+        master.seekg(*it);
+        unsigned int size;
+        master.read((char*) &size,sizeof(unsigned int));
+        getline(master,header2);
+        clave2 = Utils::getClaveFromHeader(header2);
+        master.close();
+        if(!clave.compare(clave2)){
+            return 1;
+        }
     }
-    delete ind;
     return 0;
 }
 
