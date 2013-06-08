@@ -20,6 +20,7 @@ class Buscador{
         int buscarPorAutor(std::string autor);
         int buscarPorTitulo(std::string titulo);
         int buscarPorFrase(std::string frase);
+        int listarTodo();
     private:
         int imprimirCancion(unsigned int ref);
         IndiceAutor *autores;

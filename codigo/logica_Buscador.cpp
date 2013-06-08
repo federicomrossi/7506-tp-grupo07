@@ -124,3 +124,32 @@ int Buscador::imprimirCancion(unsigned int ref){
     out.close();
     return 0;
 }
+
+int Buscador::listarTodo(){
+    std::ifstream file;
+    std::string fileName = destPath + ".master";
+    file.open(fileName.c_str());
+    if(!file.good()){
+         cout << "No hay temas indexados." << std::endl;
+         return 0;
+    }
+    std::string header;
+    unsigned int largo =0;
+    unsigned int pos=0;
+    int flag = 0;
+    cout << "Se encuentran indexados los siguientes temas:" << std::endl;
+    file.read((char*)&largo,sizeof(largo));
+    while(!file.eof()){
+        flag = 1;
+        pos = file.tellg();
+        pos = pos + largo;
+        getline(file,header);
+        cout << header << std::endl;
+        file.seekg(pos);
+        file.read((char*)&largo,sizeof(largo));
+    }
+    if(!flag){
+        cout << "No hay temas indexados." << std::endl;
+    }
+    return 0;
+}
