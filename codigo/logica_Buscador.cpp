@@ -151,5 +151,6 @@ int Buscador::listarTodo(){
     if(!flag){
         cout << "No hay temas indexados." << std::endl;
     }
+    cout  << std::endl;
     return 0;
 }
