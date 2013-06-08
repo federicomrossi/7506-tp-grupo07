@@ -27,6 +27,7 @@ class IndiceTitulo{
         int packAppend();
     private:
         unsigned int obtenerId(std::string palabra);
+        int buscarId(std::string titulo);
         int guardarOcurrencia(AutorOcurrencia* ocur);
         int printOcurrencias();
         unsigned int getRefLista();

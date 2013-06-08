@@ -22,6 +22,7 @@ int Buscador::buscarPorAutor(std::string autor){
     std::list<unsigned int> *listilla;
     listilla = new std::list<unsigned int>;
     autores->recuperar(autor,listilla);
+    remove(outName.c_str());
     if(listilla->size() == 0){
         cout << "No se encontraron temas" << std::endl;
         delete listilla;
@@ -33,7 +34,6 @@ int Buscador::buscarPorAutor(std::string autor){
     file.open(fileName.c_str());
     std::string header;
     unsigned int largo;
-    remove(outName.c_str());
     for (std::list<unsigned int>::iterator it = listilla->begin();it != listilla->end();it++){
         file.seekg(*it);
         file.read((char*)&largo,sizeof(largo));
@@ -51,6 +51,7 @@ int Buscador::buscarPorTitulo(std::string titulo){
     std::list<unsigned int> *listilla;
     listilla = new std::list<unsigned int>;
     titulos->recuperar(titulo,listilla);
+    remove(outName.c_str());
     if(listilla->size() == 0){
         cout << "No se encontraron temas" << std::endl;
         delete listilla;
@@ -62,7 +63,6 @@ int Buscador::buscarPorTitulo(std::string titulo){
     file.open(fileName.c_str());
     std::string header;
     unsigned int largo;
-    remove(outName.c_str());
     for (std::list<unsigned int>::iterator it = listilla->begin();it != listilla->end();it++){
         file.seekg(*it);
         file.read((char*)&largo,sizeof(largo));
@@ -80,6 +80,7 @@ int Buscador::buscarPorFrase(std::string frase){
     std::list<unsigned int> *listilla;
     listilla = new std::list<unsigned int>;
     rtt->recuperar(frase,listilla);
+    remove(outName.c_str());
     if(listilla->size() == 0){
         cout << "No se encontraron temas" << std::endl;
         delete listilla;
@@ -91,7 +92,6 @@ int Buscador::buscarPorFrase(std::string frase){
     file.open(fileName.c_str());
     std::string header;
     unsigned int largo;
-    remove(outName.c_str());
     for (std::list<unsigned int>::iterator it = listilla->begin();it != listilla->end();it++){
         file.seekg(*it);
         file.read((char*)&largo,sizeof(largo));

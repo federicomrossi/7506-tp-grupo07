@@ -64,6 +64,35 @@ unsigned int IndiceTitulo::obtenerId(std::string titulo){
     return id;
 }
 
+int IndiceTitulo::buscarId(std::string titulo){
+    std::ifstream file;
+    std::string p;
+    int found = 0;
+    unsigned int id =0;
+    file.open(this->titulos.c_str());
+    if(!file.good()){
+        return -1;
+    }
+    AutorId* aui = new AutorId();
+    if(file.good()){
+        file >> *aui;
+        while(!file.eof() && !found){
+            id = aui->getId();
+            const char* c=aui->getAutor();
+            if(!strcmp(c,titulo.c_str())){
+                found=1;
+            }
+            file >> *aui;
+        }
+    }
+    file.close();
+    delete aui;
+    if(!found){
+        return -1;
+    }
+    return id;
+}
+
 int IndiceTitulo::guardarOcurrencia(AutorOcurrencia* ocur){
     std::ofstream file;
     file.open(temporalOcurrencias.c_str(),std::fstream::app);
@@ -252,7 +281,11 @@ int IndiceTitulo::recuperarPlus(std::string titulo,std::list<unsigned int> *list
 }
 
 int IndiceTitulo::recuperar(std::string titulo, std::list<unsigned int> *lista){
-    unsigned int clave = this->obtenerId(titulo);
+    int clave2 = this->buscarId(titulo);
+    if(clave2 == -1){
+        return 0;
+    }
+    unsigned int clave = (unsigned int) clave2;
     TituloReferencias* ar = new TituloReferencias();
     ar->setClave(clave);
     bool b = hash->search(ar);
