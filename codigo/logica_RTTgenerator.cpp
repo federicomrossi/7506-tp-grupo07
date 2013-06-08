@@ -154,7 +154,7 @@ int RTTgenerator::pack(){
 
 int RTTgenerator::packAppend(){
     if(Utils::existeArchivo(temporalOcurrencias)){
-        std::cout << "Generando RTT...";
+        std::cout << "Actualizando RTT...";
         std::cout.flush();
         SortExterno<RTTocurrencia>* sort = new SortExterno<RTTocurrencia>(this->temporalOcurrencias,4096);
         sort->ordenar();

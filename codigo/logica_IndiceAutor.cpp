@@ -104,65 +104,67 @@ int IndiceAutor::guardarOcurrencia(AutorOcurrencia* ocur){
 }
 
 int IndiceAutor::pack(){
-    std::cout << "Indexando autores...";
-    std::cout.flush();
     if(Utils::existeArchivo(temporalOcurrencias)){
-        SortExterno<AutorOcurrencia>* sort = new SortExterno<AutorOcurrencia>(this->temporalOcurrencias,4096);
-        SortExterno<AutorId>* sort2 = new SortExterno<AutorId>(this->autores,4096);
-        sort->ordenar();
-        sort2->ordenar();
-        delete sort;
-        delete sort2;
-        std::ifstream file;
-        file.open(this->temporalOcurrencias.c_str());
-        AutorOcurrencia aid;
-        unsigned int autor = 0;
-        unsigned int cant = 0;
-        unsigned int refLista = 0;
-        std::list<unsigned int>* lista;
-        arbol->abrir(this->arbolName.c_str());
-        file >> aid;
-        while(!file.eof()){
-            autor = aid.getAutorId();
-            cant = 0;
-            AutorReferencias* ar = new AutorReferencias(autor);
-            refLista = this->getRefLista();
-            lista = new std::list<unsigned int>();
-            while((aid.getAutorId() == autor) && !file.eof()){
-                switch(cant){
-                    case 0: ar->setRef1(aid.getDocumentoId());
-                            break;
-                    case 1:
-                            ar->setRef2(aid.getDocumentoId());
-                            break;
-                    case 2:
-                            ar->setRef3(aid.getDocumentoId());
-                            break;
-                    case 3:
-                            ar->setRef4(aid.getDocumentoId());
-                            break;
-                    case 4:
-                            ar->setRef5(aid.getDocumentoId());
-                            break;
-                    case 5: ar->setRefLista(refLista);
-                    default: lista->push_back(aid.getDocumentoId());
+        std::cout << "Indexando autores...";
+        std::cout.flush();
+        if(Utils::existeArchivo(temporalOcurrencias)){
+            SortExterno<AutorOcurrencia>* sort = new SortExterno<AutorOcurrencia>(this->temporalOcurrencias,4096);
+            SortExterno<AutorId>* sort2 = new SortExterno<AutorId>(this->autores,4096);
+            sort->ordenar();
+            sort2->ordenar();
+            delete sort;
+            delete sort2;
+            std::ifstream file;
+            file.open(this->temporalOcurrencias.c_str());
+            AutorOcurrencia aid;
+            unsigned int autor = 0;
+            unsigned int cant = 0;
+            unsigned int refLista = 0;
+            std::list<unsigned int>* lista;
+            arbol->abrir(this->arbolName.c_str());
+            file >> aid;
+            while(!file.eof()){
+                autor = aid.getAutorId();
+                cant = 0;
+                AutorReferencias* ar = new AutorReferencias(autor);
+                refLista = this->getRefLista();
+                lista = new std::list<unsigned int>();
+                while((aid.getAutorId() == autor) && !file.eof()){
+                    switch(cant){
+                        case 0: ar->setRef1(aid.getDocumentoId());
+                                break;
+                        case 1:
+                                ar->setRef2(aid.getDocumentoId());
+                                break;
+                        case 2:
+                                ar->setRef3(aid.getDocumentoId());
+                                break;
+                        case 3:
+                                ar->setRef4(aid.getDocumentoId());
+                                break;
+                        case 4:
+                                ar->setRef5(aid.getDocumentoId());
+                                break;
+                        case 5: ar->setRefLista(refLista);
+                        default: lista->push_back(aid.getDocumentoId());
+                    }
+                    cant++;
+                    file >> aid;
                 }
-                cant++;
-                file >> aid;
+                ar->setCant(cant);
+                if(cant > 5){
+                    this->guardarRefLista(lista);
+                }else{
+                    ar->setRefLista(UINT_MAX);
+                }
+                arbol->insertar(ar->getClave(),*ar);
+                delete ar;
+                delete lista;
             }
-            ar->setCant(cant);
-            if(cant > 5){
-                this->guardarRefLista(lista);
-            }else{
-                ar->setRefLista(UINT_MAX);
-            }
-            arbol->insertar(ar->getClave(),*ar);
-            delete ar;
-            delete lista;
+            arbol->cerrar();
+            remove(this->temporalOcurrencias.c_str());
+            std::cout << "OK"<< std::endl;
         }
-        arbol->cerrar();
-        remove(this->temporalOcurrencias.c_str());
-        std::cout << "OK"<< std::endl;
     }
     return  0;
 }
