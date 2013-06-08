@@ -62,6 +62,35 @@ unsigned int IndiceAutor::obtenerId(std::string autor){
     return id;
 }
 
+int IndiceAutor::buscarId(std::string autor){
+    std::ifstream file;
+    std::string p;
+    int found = 0;
+    unsigned int id =0;
+    file.open(this->autores.c_str());
+    if(!file.good()){
+        return -1;
+    }
+    AutorId* aui = new AutorId();
+    if(file.good()){
+        file >> *aui;
+        while(!file.eof() && !found){
+            id = aui->getId();
+            const char* c=aui->getAutor();
+            if(!strcmp(c,autor.c_str())){
+                found=1;
+            }
+            file >> *aui;
+        }
+    }
+    file.close();
+    delete aui;
+    if(!found){
+        return -1;
+    }
+    return id;
+}
+
 /*unsigned int IndiceAutor::obtenerIdBinary(std::string autor){
 return 0;
 }*/
@@ -263,7 +292,11 @@ int IndiceAutor::printOcurrencias(){
 
 
 int IndiceAutor::recuperar(std::string autor, std::list<unsigned int> *lista){
-    unsigned int clave = this->obtenerId(autor);
+    int clave2 = this->buscarId(autor);
+    if(clave2 == -1){
+        return 0;
+    }
+    unsigned int clave = (unsigned int) clave2;
     arbol->abrir(this->arbolName.c_str());
     AutorReferencias* ar = new AutorReferencias();
     bool b = arbol->buscar(clave, *ar);

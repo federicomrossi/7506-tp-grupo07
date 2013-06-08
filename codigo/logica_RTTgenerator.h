@@ -26,6 +26,7 @@ class RTTgenerator{
     private:
         int esIndexable(std::string palabra);
         unsigned int obtenerId(std::string palabra);
+        int buscarId(std::string palabra);
         int guardarOcurrencia(RTTocurrencia* ocur);
         int printOcurrencias();
         unsigned int getRefListaDocs();
