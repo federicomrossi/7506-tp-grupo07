@@ -19,12 +19,14 @@ Buscador::~Buscador(){
 }
 
 int Buscador::buscarPorAutor(std::string autor){
-
-
-
     std::list<unsigned int> *listilla;
     listilla = new std::list<unsigned int>;
     autores->recuperar(autor,listilla);
+    if(listilla->size() == 0){
+        cout << "No se encontraron temas" << std::endl;
+        delete listilla;
+        return 0;
+    }
     cout << "Se encontraron los siguientes temas" << std::endl;
     std::ifstream file;
     std::string fileName = destPath + ".master";
@@ -49,6 +51,11 @@ int Buscador::buscarPorTitulo(std::string titulo){
     std::list<unsigned int> *listilla;
     listilla = new std::list<unsigned int>;
     titulos->recuperar(titulo,listilla);
+    if(listilla->size() == 0){
+        cout << "No se encontraron temas" << std::endl;
+        delete listilla;
+        return 0;
+    }
     cout << "Se encontraron los siguientes temas" << std::endl;
     std::ifstream file;
     std::string fileName = destPath + ".master";
@@ -73,6 +80,11 @@ int Buscador::buscarPorFrase(std::string frase){
     std::list<unsigned int> *listilla;
     listilla = new std::list<unsigned int>;
     rtt->recuperar(frase,listilla);
+    if(listilla->size() == 0){
+        cout << "No se encontraron temas" << std::endl;
+        delete listilla;
+        return 0;
+    }
     cout << "Se encontraron los siguientes temas" << std::endl;
     std::ifstream file;
     std::string fileName = destPath + ".master";
