@@ -60,7 +60,7 @@ std::string Utils::uniformizarString(std::string source){
     char c;
     for(unsigned int i=0; i < source.size();i++){
         c = source.at(i);
-        if(c >= 'a' && c <= 'z'){
+        if((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')){
             dest << c;
         }else if(c >= 'A' && c <= 'Z'){
             dest << (char)tolower(c);
@@ -72,53 +72,53 @@ std::string Utils::uniformizarString(std::string source){
                     case '\xa1':
                         dest << 'a';
                         break;
-                        
+
                     case '\x81':
                         dest << 'a';
                         break;
-                        
+
                     case '\xa9':
                         dest << 'e';
                         break;
-                        
+
                     case '\x89':
                         dest << 'e';
                         break;
-                        
+
                     case '\xad':
                         dest << 'i';
                         break;
-                        
+
                     case '\x8d':
                         dest << 'i';
                         break;
-                        
+
                     case '\xb3':
                         dest << 'o';
                         break;
-                        
+
                     case '\x93':
                         dest << 'o';
                         break;
-                        
+
                     case '\xba':
                         dest << 'u';
                         break;
-                        
+
                     case '\x9a':
                         dest << 'u';
                         break;
-                        
+
                     case '\xb1':
                         dest << 'n';
                         dest << 'i';
                         break;
-                        
+
                     case '\x91':
                         dest << 'n';
                         dest << 'i';
                         break;
-                        
+
                     default:
                         break;
                 }
