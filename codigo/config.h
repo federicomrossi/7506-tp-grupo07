@@ -32,5 +32,6 @@ const int ARBOL_TAMANIO_BLOQUE = 256;
 // Archivo para guardar la tabla de referencia
 #define TEST_FILE_TABLE "./test_file_TESTTABLEFILE"
 
-
+//Maximo numero de veces que se puede dispersar la tabla
+#define MAX_DUPLICATION_TIMES (25)
 #endif
