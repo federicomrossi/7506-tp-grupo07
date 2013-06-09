@@ -152,6 +152,7 @@ int BlockTable<T>::insert(T *aReg){
 				return -1;
 			}
 			if (! this->canAddBlock(&tmpBlock)){
+
 				if (this->numberOfDuplications<MAX_DUPLICATION_TIMES){
 					this->duplicateTable();	
 					this->numberOfDuplications++;
@@ -160,8 +161,10 @@ int BlockTable<T>::insert(T *aReg){
 					exit(EXIT_FAILURE);
 				}
 			}
+			this->numberOfDuplications=0;
 			int lastBlockNum = tmpBlock.newBlockNum();
 			Block<T> anotherBlock(tmpBlock.duplicateDispersionSize(), lastBlockNum, this->blockPath, this->blockSize);
+			0
 			this->insertBlock(pos, lastBlockNum, tmpBlock.getDispersionSize());
 			this->redisperse(&tmpBlock, &anotherBlock);
 			this->insert(aReg);
