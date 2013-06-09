@@ -70,8 +70,14 @@ int Menu::ingresarOpcion(int opcion){
             std::getline(std::cin, text);
             text = Utils::uniformizarString(text);
             std::cout << std::endl;
-            busc->buscarPorAutor(text);
-            std::cout << std::endl;
+            while (text.compare("0")){
+                busc->buscarPorAutor(text);
+                std::cout << std::endl;
+                std::cout << "Ingrese el autor a buscar / Ingrese '0' para volver al menú principal" << std::endl;
+                std::getline(std::cin, text);
+                text = Utils::uniformizarString(text);
+                std::cout << std::endl;
+            }
             delete busc;
             break;
         case 4:
@@ -81,7 +87,14 @@ int Menu::ingresarOpcion(int opcion){
             std::getline(std::cin, text);
             text = Utils::uniformizarString(text);
             std::cout << std::endl;
-            busc->buscarPorTitulo(text);
+            while (text.compare("0")){
+                busc->buscarPorTitulo(text);
+                std::cout << std::endl;
+                std::cout << "Ingrese el titulo a buscar / Ingrese '0' para volver al menú principal" << std::endl;
+                std::getline(std::cin, text);
+                text = Utils::uniformizarString(text);
+                std::cout << std::endl;
+            }
             delete busc;
             std::cout << std::endl;
             break;
@@ -91,7 +104,13 @@ int Menu::ingresarOpcion(int opcion){
             std::cin.ignore();
             std::getline(std::cin, text);
             std::cout << std::endl;
-            busc->buscarPorFrase(text);
+            while (text.compare("0")){
+                busc->buscarPorFrase(text);
+                std::cout << std::endl;
+                std::cout << "Ingrese la frase a buscar / Ingrese '0' para volver al menú principal" << std::endl;
+                std::getline(std::cin, text);
+                std::cout << std::endl;
+            }
             delete busc;
             std::cout << std::endl;
             break;
