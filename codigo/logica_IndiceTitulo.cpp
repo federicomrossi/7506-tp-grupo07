@@ -202,6 +202,9 @@ int IndiceTitulo::packAppend(){
             }else{
                 ar->setRefLista(UINT_MAX);
             }
+			if (b){
+				hash->actualizar(*ar);		
+			}
             hash->insert(ar);
             delete ar;
             delete lista;

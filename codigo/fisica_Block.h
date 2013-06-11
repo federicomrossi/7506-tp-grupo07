@@ -228,8 +228,8 @@ template <class T>
 void Block<T>::actualizar(T& newReg){
 	typename list<T>::iterator it;
 	for (it = regsList.begin(); it != regsList.end(); it++){
-		if (it->getClave() == newReg.getClave()){
-			(*it) = newReg;	
+		if (it->getClave() == newReg.getClave()){;
+			*it = newReg;
 		}
 	}
 }

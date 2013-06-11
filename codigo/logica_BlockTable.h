@@ -164,7 +164,6 @@ int BlockTable<T>::insert(T *aReg){
 			this->numberOfDuplications=0;
 			int lastBlockNum = tmpBlock.newBlockNum();
 			Block<T> anotherBlock(tmpBlock.duplicateDispersionSize(), lastBlockNum, this->blockPath, this->blockSize);
-			0
 			this->insertBlock(pos, lastBlockNum, tmpBlock.getDispersionSize());
 			this->redisperse(&tmpBlock, &anotherBlock);
 			this->insert(aReg);
@@ -225,6 +224,7 @@ void BlockTable<T>::actualizar(T & newReg){
 	Block<T> tmpBlock(0,tmpBlockNumber,this->blockPath,this->blockSize);
 	tmpBlock.read();
 	tmpBlock.actualizar(newReg);
+	tmpBlock.write();
 }
 
 template <class T>
