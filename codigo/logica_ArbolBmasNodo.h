@@ -17,27 +17,11 @@
 #include "logica_ArbolBmasNodo.h"
 #include "fisica_ArchivoBloques.h"
 #include "fisica_SerialBuffer.h"
+#include "runtimeConfig.h"
 
 
 // Definicion de tipo uint para utilizar nombre mas corto
-typedef unsigned int uint; 
-
-
-
-
-/* ****************************************************************************
- * CONFIGURACION
- * ***************************************************************************/
-
-namespace {
-
-	// Constante para el buffer
-	#ifndef ARBOL_BUFFER_TAMANIO_CONFIG
-	#define ARBOL_BUFFER_TAMANIO_CONFIG
-	const int ARBOL_BUFFER_TAMANIO = 512;
-	#endif
-}
-
+typedef unsigned int uint;
 
 
 /* ****************************************************************************
@@ -134,7 +118,7 @@ struct Nodo
 template < typename Tipo >
 Nodo< Tipo >::Nodo() 
 {
-	this->buffer = new SerialBuffer(ARBOL_BUFFER_TAMANIO);
+	this->buffer = new SerialBuffer(arbolBlockSize());
 }
 
 
