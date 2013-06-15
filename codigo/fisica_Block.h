@@ -19,8 +19,8 @@ Esta informacion incluye:
 #include <stdlib.h>
 #include "fisica_ArchivoBloques.h"
 #include "logica_HashExtensible.h"
-#include "config.h"
 #include "domain_RegistroGenerico.h"
+#include "runtimeConfig.h"
 #include "fisica_SerialBuffer.h"
 using namespace std;
 

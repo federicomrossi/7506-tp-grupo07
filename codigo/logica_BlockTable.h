@@ -153,7 +153,7 @@ int BlockTable<T>::insert(T *aReg){
 			}
 			if (! this->canAddBlock(&tmpBlock)){
 
-				if (this->numberOfDuplications<MAX_DUPLICATION_TIMES){
+				if (this->numberOfDuplications<maxDedupTimes()){
 					this->duplicateTable();	
 					this->numberOfDuplications++;
 				}else{

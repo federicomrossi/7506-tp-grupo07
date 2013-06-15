@@ -13,7 +13,7 @@ IndiceTitulo::IndiceTitulo(std::string path){
     this->listaRefs = path + ".titulosRef";
     this->tableName =path+".hashTable";
     this->blocksName=path+".hashTitulos";
-    this->hash = new BlockTable<TituloReferencias>(tableName,blocksName, HASH_MAX_BLOCK_SIZE);
+    this->hash = new BlockTable<TituloReferencias>(tableName,blocksName,hashBlockSize());
 }
 
 IndiceTitulo::IndiceTitulo(){
@@ -322,7 +322,7 @@ int IndiceTitulo::eliminarTodo(){
     remove(tableName.c_str());
     remove(blocksName.c_str());
     delete this->hash;
-    this->hash = new BlockTable<TituloReferencias>(tableName,blocksName,HASH_MAX_BLOCK_SIZE);
+    this->hash = new BlockTable<TituloReferencias>(tableName,blocksName,hashBlockSize());
 
     return 0;
 }
