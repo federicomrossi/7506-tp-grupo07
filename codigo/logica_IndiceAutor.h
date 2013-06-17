@@ -2,7 +2,6 @@
 #define INDICEAUTOR_H_INCLUDED
 
 #include <iostream>
-#include "config.h"
 #include "domain_AutorOcurrencia.h"
 #include "logica_ArbolBmas.h"
 #include "domain_AutorReferencias.h"

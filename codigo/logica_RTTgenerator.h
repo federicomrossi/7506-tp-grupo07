@@ -1,7 +1,6 @@
 #ifndef LOGICA_RTTGENERATOR_H_INCLUDED
 #define LOGICA_RTTGENERATOR_H_INCLUDED
 
-#include "config.h"
 #include "logica_ArbolBmas.h"
 #include "domain_RTTocurrencia.h"
 #include "domain_RTTreferencia.h"

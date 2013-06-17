@@ -6,14 +6,15 @@
 #include "logica_FileHandler.h"
 #include "logica_Validator.h"
 #include "logica_Utils.h"
+#include "runtimeConfig.h"
 
 Indexer::Indexer(){
-    fromPath=SOURCE_PATH;
-    destPath=DEST_PATH;
-    masterName = destPath+".master";
-    rtt = new RTTgenerator(destPath);
-    autores = new IndiceAutor(destPath);
-    titulos =  new IndiceTitulo(destPath);
+    this->fromPath=sourcePath();
+    this->dest=destPath();
+    masterName = dest+".master";
+    rtt = new RTTgenerator(dest);
+    autores = new IndiceAutor(dest);
+    titulos =  new IndiceTitulo(dest);
 }
 
 Indexer::~Indexer(){

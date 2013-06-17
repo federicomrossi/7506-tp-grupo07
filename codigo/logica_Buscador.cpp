@@ -2,14 +2,15 @@
 #include <list>
 #include "logica_Buscador.h"
 #include "logica_Utils.h"
+#include "runtimeConfig.h"
 
 
 Buscador::Buscador(){
-    destPath= DEST_PATH;
-    this->outName=destPath+"salida.out";
-    rtt = new RTTgenerator(destPath);
-    autores = new IndiceAutor(destPath);
-    titulos =  new IndiceTitulo(destPath);
+    this->dest = destPath();
+    this->outName=dest+"salida.out";
+    rtt = new RTTgenerator(dest);
+    autores = new IndiceAutor(dest);
+    titulos =  new IndiceTitulo(dest);
 }
 
 Buscador::~Buscador(){
@@ -30,7 +31,7 @@ int Buscador::buscarPorAutor(std::string autor){
     }
     cout << "Se encontraron los siguientes temas" << std::endl;
     std::ifstream file;
-    std::string fileName = destPath + ".master";
+    std::string fileName = dest + ".master";
     file.open(fileName.c_str());
     std::string header;
     unsigned int largo;
@@ -59,7 +60,7 @@ int Buscador::buscarPorTitulo(std::string titulo){
     }
     cout << "Se encontraron los siguientes temas" << std::endl;
     std::ifstream file;
-    std::string fileName = destPath + ".master";
+    std::string fileName = dest + ".master";
     file.open(fileName.c_str());
     std::string header;
     unsigned int largo;
@@ -88,7 +89,7 @@ int Buscador::buscarPorFrase(std::string frase){
     }
     cout << "Se encontraron los siguientes temas" << std::endl;
     std::ifstream file;
-    std::string fileName = destPath + ".master";
+    std::string fileName = dest + ".master";
     file.open(fileName.c_str());
     std::string header;
     unsigned int largo;
@@ -108,7 +109,7 @@ int Buscador::buscarPorFrase(std::string frase){
 int Buscador::imprimirCancion(unsigned int ref){
     std::ifstream file;
     std::ofstream out;
-    std::string fileName = destPath + ".master";
+    std::string fileName = dest+ ".master";
     file.open(fileName.c_str());
     out.open(outName.c_str(),std::fstream::app);
     unsigned int largo;
@@ -127,7 +128,7 @@ int Buscador::imprimirCancion(unsigned int ref){
 
 int Buscador::listarTodo(){
     std::ifstream file;
-    std::string fileName = destPath + ".master";
+    std::string fileName = dest + ".master";
     file.open(fileName.c_str());
     if(!file.good()){
          cout << "No hay temas indexados." << std::endl;

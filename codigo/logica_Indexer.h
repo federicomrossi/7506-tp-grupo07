@@ -2,7 +2,6 @@
 #define INDEXER_H_INCLUDED
 
 #include <iostream>
-#include "config.h"
 #include "logica_IndiceAutor.h"
 #include "logica_IndiceTitulo.h"
 #include "logica_RTTgenerator.h"
@@ -30,7 +29,7 @@ class Indexer{
         IndiceTitulo *titulos;
         RTTgenerator *rtt;
         std::string fromPath;
-        std::string destPath;
+        std::string dest;
         std::string masterName;
 };
 
