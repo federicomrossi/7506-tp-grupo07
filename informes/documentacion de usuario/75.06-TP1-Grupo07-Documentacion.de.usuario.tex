@@ -189,7 +189,7 @@
 % PASOS PREVIOS A LA UTILIZACION - Configuracion del entorno
 \subsection{Configuración del entorno}
 
-	Previo a la compilación de la herramienta deberán configurarse ciertos parámetros, los cuales se encuentran inicialmente con valores por defecto. Los mismos se encuentran en el archivo ``\textit{config.h}'' ubicado en el directorio de archivos fuente ``\textit{codigo}''.
+	Previo a la compilación de la herramienta deberán configurarse ciertos parámetros, los cuales se encuentran inicialmente con valores por defecto. Los mismos se encuentran en el archivo ``\textit{parametros.conf}'' ubicado en el directorio de archivos fuente ``\textit{codigo}''.
 	\par
 	Es condición necesaria la existencia de los subdirectorios configurados ya que la herramienta no se encarga de crearlos por si misma. Las rutas y parámetros que deben especificarse son:
 	\medskip
@@ -259,7 +259,7 @@
 % UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Indexacion de canciones
 \subsection{Indexación de canciones}
 
-	Para realizar la indexación inicial de canciones debe dirigirse a la opción 1. La aplicación recorrerá el directorio de temas, generando todas las estructuras desde cero. Es necesario elegir esta opción cuando se realice la primera ejecución del programa.
+	Para realizar la indexación inicial de canciones debe dirigirse a la opción 1. La aplicación recorrerá el directorio de temas, generando todas las estructuras desde cero. Es necesario elegir esta opción cuando se realice la primera ejecución del programa o cuando se realicen cambios en el archivos de configuración ``\textit{parametros.conf}''.
 \bigskip
 
 
@@ -267,7 +267,7 @@
 % UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Indexacion en modo append
 \subsection{Indexación de canciones en modo append}
 
-	Este tipo de indexación se realiza desde la opción 2 del menú. Ál elegirla, se recorrerá el directorio de temas pero sólo se indexarán los temas nuevos que aparezcan. En caso de notar problemas de performance en las búsquedas reindexar con la opción 1.
+	Este tipo de indexación se realiza desde la opción 2 del menú. Ál elegirla, se recorrerá el directorio de temas pero sólo se indexarán los temas nuevos que aparezcan. En caso de notar problemas de performance en las búsquedas reindexar con la opción 1. No utilizar esta opción si se realizaron cambios en el archivo de configuración ``\textit{parametros.conf}''.
 \bigskip
 
 
