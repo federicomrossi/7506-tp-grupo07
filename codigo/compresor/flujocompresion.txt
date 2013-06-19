@@ -1,0 +1,21 @@
+Cada contexto va a tener un BlockTable, un hash.
+Cada contexto (por ejemplo AB: ; MP: ... ) va a ser un bloque, y el caractera comprimir con su frecuencia, va a ser un registro
+Voy a comprimir un caracter:
+	agarro el caracter
+	me fijo el contexto mas alto que esta con algo ->buscarCtx();
+	me fijo en que contexto voy a comprimir-> getCtx(string ctxName)
+	busco frecLetra()
+		esta -> devuelvo esa frec
+		no esta ->	devuelvo escape
+					voy a ctx(ctxname-1,listaCaracteres a Excluir)
+					
+
+
+
+
+buscarCtx(){
+	(la primer iteracion, instancia el Ctx0)
+	(la segunda iteracion, instancia el Ctx1)
+	(la tercera iteracion , instancia el Ctx2)
+	( la N iteracion ,      instancia el CtxN-1)
+}	
