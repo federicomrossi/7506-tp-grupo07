@@ -20,6 +20,8 @@ class Ctx0: public Contexto {
 		unsigned int getFrec(char letra);
 		//Devuelve la suma de las frecuencias de todas las letras menos las excluidas
 		unsigned int getTotal(list<letraFrec>);
+		//Devuelve la suma de las frecuencias de todas las letras sin contar las exclusiones
+		unsigned int getTotal();
 		// Aumena en 1 la frecuencia del caracter 
 		void aumentarFrec(char letra);
 		~Ctx0(){};

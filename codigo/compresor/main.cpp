@@ -21,7 +21,8 @@ int main(){
 	cout<<"letra: " <<c<< " tiene frecuencia: "<<Cero->getFrec(c)<<endl;
 	}
 	fclose (pfile);
-
+	cout << "la frecuencia total del contexto 0 sin exclusion es "<< Cero->getTotal()<<endl;
+	cout << "ver que el resultado es FrecCaracterN + FrecEscape + FrecEOF ( igual a 1 )" <<endl;
 
 //string aux = "abcddefghiiiioiiiiii" ;
 //for (unsigned int i = 0 ; i< aux.length() ; i++){
