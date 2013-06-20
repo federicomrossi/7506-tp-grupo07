@@ -31,6 +31,8 @@ class Ctx0: public Contexto {
 
 		probabilidades getProbabilidadesEscape(string letrasContexto, ListaExclusion& listaExclusion);
 
+		int extraerCaracter(unsigned short probaAcumulada, string contextoActual, ListaExclusion &listaExclusion);
+
 
 		~Ctx0(){};
 		

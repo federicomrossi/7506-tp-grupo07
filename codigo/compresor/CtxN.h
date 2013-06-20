@@ -24,7 +24,8 @@ class CtxN : public Contexto{
 		//virtual unsigned int getTotal(std::list<letraFrec>, std::string letrasContexto)=0;
 		virtual probabilidades getProbabilidades(char letra,std::string letrasContexto,ListaExclusion&);
 		virtual probabilidades getProbabilidadesEscape(std::string letrasContexto,ListaExclusion&);
-		virtual int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion&);
+        virtual int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion&);
+
 	protected:
 		//ademas va a tener el orden del contexto por heredar d Contexto
 		short int ordenContexto;
