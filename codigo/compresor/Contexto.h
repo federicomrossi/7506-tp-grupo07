@@ -16,13 +16,9 @@ class Contexto{
 		virtual unsigned int getTotal(std::list<letraFrec>, std::string letrasContexto)=0;
 	protected:
 		short int ordenContexto;
-<<<<<<< HEAD
-=======
-		//Contexto * pContextoPrevio;
->>>>>>> 5137e90b15da6c842e4a572cfcbd4791d2495c37
 };
 
 
-//TODO: necesitaria agregar algun contexto o algo mas?
+
 
 #endif

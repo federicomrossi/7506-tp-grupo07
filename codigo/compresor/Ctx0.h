@@ -26,15 +26,11 @@ class Ctx0: public Contexto {
 		// Aumena en 1 la frecuencia del caracter 
 		void aumentarFrec(char letra);
 		~Ctx0(){};
+		
 	protected:
-<<<<<<< HEAD
-		unsigned short int probTotal;
-		//ya no necesito esto xq voy a estar trabajando con una lista
-		//CtxM1  pCtxPrevio;
-=======
+
 		unsigned int probTotal;
 		CtxM1  pCtxPrevio;
->>>>>>> 5137e90b15da6c842e4a572cfcbd4791d2495c37
 		// en la pos MAX_NUM_CARACTERES guardo el escape
 		unsigned int caracteres[MAX_NUM_CARACTERES];
 };
