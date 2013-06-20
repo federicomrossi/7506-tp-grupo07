@@ -20,6 +20,7 @@ public:
 	int inicializarDescompresion();
 	int descomprimir();
 
+
 private:
     ListaExclusion* listaExclusion;
     Aritmetico aritmetico;

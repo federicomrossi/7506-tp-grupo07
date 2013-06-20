@@ -79,3 +79,12 @@ unsigned int arbolBlockSize()
 {
     return stoi(readParam("ARBOL_TAMANIO_BLOQUE_CONFIG"));
 }
+
+unsigned int PPMCOrder()
+{
+    return stoi(readParam("PPMC_ORDER"));
+}
+
+
+
+

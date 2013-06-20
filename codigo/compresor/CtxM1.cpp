@@ -4,14 +4,53 @@
 
 using namespace std;
 CtxM1::CtxM1(){
-	this->probTotal=MAX_NUM_CARACTERES;
 	this->ordenContexto=-1;
 }
 
-unsigned int CtxM1::getFrec(char letra,string letrasContexto){
-	if (letra != EOF){
-		this->probTotal--;
-		return (this->probTotal);
-	}else
-		return 1;
-} 
+
+probabilidades CtxM1::getProbabilidadesEscape(string letrasContexto, ListaExclusion& listaExclusion){
+	probabilidades aux;
+	unsigned short int cantDistintos=MAX_NUM_CARACTERES;
+	unsigned int probAcum=0;
+	unsigned int probTotal=MAX_NUM_CARACTERES;
+	for (int i=0; i<MAX_NUM_CARACTERES ; i++){
+		if ( listaExclusion.estaExcluido((char)i)) {
+			probTotal--;
+			cantDistintos--;
+		}
+	}
+	aux.probaAcumulada=probAcum;
+	aux.probaTotal=probTotal;
+	aux.cantDistintos=cantDistintos;
+	return aux;
+}
+
+probabilidades CtxM1::getProbabilidades(char letra,string letrasContexto, ListaExclusion& listaExclusion){
+	probabilidades aux;
+	unsigned short int cantDistintos=MAX_NUM_CARACTERES;
+	unsigned int probAcum=0;
+	unsigned int probCaracter=0;
+	unsigned int probTotal=MAX_NUM_CARACTERES;
+	bool acumulo = true;
+	for (int i=0; i<MAX_NUM_CARACTERES ; i++){
+		if ( ((int)letra != i) ) {
+			if (!listaExclusion.estaExcluido((char)i)){
+				if (acumulo){
+					probAcum++ ;
+				}
+			}else{
+				probTotal--;
+				cantDistintos--;
+			}
+		}
+		else if((int)letra == i) {
+				probCaracter=1;
+				acumulo=false;
+		}
+	}
+	aux.probaCaracter=probCaracter;
+	aux.probaAcumulada=probAcum;
+	aux.probaTotal=probTotal;
+	aux.cantDistintos=cantDistintos;
+	return aux;
+}
