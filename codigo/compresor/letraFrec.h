@@ -1,17 +1,13 @@
 #ifndef LETRAFREC_H_
 #define LETRAFREC_H_
 
-#include <string>
-
-using namespace std;
-
 class letraFrec{
 	protected:
-		string letra;
+		char letra;
 		unsigned int frec;
 	public:
-		letraFrec(string letra);
-		string getLetra();
+		letraFrec(char letra);
+		char getLetra();
 		unsigned int getFrec();
 		void aumentarFrec();	
 };

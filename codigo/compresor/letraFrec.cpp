@@ -1,12 +1,12 @@
 #include "letraFrec.h"
-
-letraFrec::letraFrec(string letra){
+//si se agrego la letra, se la agrega con frecuencia 1 
+letraFrec::letraFrec(char letra){
 	this->letra = letra;
 	this->frec = 1;
 }
 
 
-string letraFrec::getLetra(){
+char letraFrec::getLetra(){
 	return (this->letra);
 }
 

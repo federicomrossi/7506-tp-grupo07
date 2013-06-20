@@ -7,7 +7,7 @@ Ctx1::Ctx1(){
 	this->ordenContexto=1;	
 }
 
-unsigned int Ctx1::getFrec(string letra, string letrasContexto){
+unsigned int Ctx1::getFrec(char letra, string letrasContexto){
 	return 0;
 }
 
@@ -19,7 +19,7 @@ return 0;}
 //si se encuentra el contexto deseado, busco con el iterador it2 sobre la clave que devolvio el contexto (it->first) si matchea, sumo uno, si no se agrega y se emite escape.
 //si no se encuentra el contexto deseado, se lo crea con un caracter de escape y se va al contexto mas bajo
 //TODO: esto
-void Ctx1::aumentarFrec(string letra, string letrasContexto){ 
+void Ctx1::aumentarFrec(char letra, string letrasContexto){ 
 	map<string, list<letraFrec> >::iterator it;
 	list<letraFrec>::iterator it2;
 	list<letraFrec> lista;
@@ -34,9 +34,10 @@ void Ctx1::aumentarFrec(string letra, string letrasContexto){
 				}
 			}
 		}else{
-			letraFrec esc("ESC");
-			lista.push_back(esc);
-			distintosContextos.insert(pair<string, list <letraFrec> >(letrasContexto,lista));
+			//no lo voy a necesitar mas, el escape nunca se genera, solo se calcula	
+			//letraFrec esc("ESC");
+			//lista.push_back(esc);
+			//distintosContextos.insert(pair<string, list <letraFrec> >(letrasContexto,lista));
 		}
 
 	}

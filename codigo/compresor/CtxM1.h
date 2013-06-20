@@ -17,9 +17,9 @@ class CtxM1:virtual public Contexto {
 		
 		//Devuelve un 0 y disminuye en uno la frecuencia total
 		//Devuelve un 1 si llego al final del archivo
-		unsigned int getFrec(std::string letra);
+		unsigned int getFrec(char letra);
 		//este nunca se va a llamar
-		void aumentarFrec(std::string letra);
+		void aumentarFrec(char letra){ } ;
 
 	protected:
 		unsigned short int probTotal;

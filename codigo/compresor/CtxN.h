@@ -17,10 +17,10 @@ using namespace std;
 class CtxN {
 	public:
 		CtxN() { };
-		virtual unsigned int getFrec(string letra,string letrasContexto)=0;
+		virtual unsigned int getFrec(char letra,string letrasContexto)=0;
 		//Devuelve la suma de las frecuencias de todas las letras menos las excluidas
 		virtual unsigned int getTotal(list<letraFrec>,string letrasContexto)=0;
-		virtual void aumentarFrec(string letra,string letrasContexto)=0;
+		virtual void aumentarFrec(char letra,string letrasContexto)=0;
 		virtual void exclusion(list<letraFrec>)=0;
 		virtual ~CtxN()	{ };
 	protected:

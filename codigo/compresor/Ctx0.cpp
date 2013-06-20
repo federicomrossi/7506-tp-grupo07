@@ -1,25 +1,25 @@
+#include <iostream>
 #include "Ctx0.h"
 
 using namespace std;
 
 Ctx0::Ctx0(){
 	this->ordenContexto=0;
+	this->probTotal=0;
 	for (int i=0; i<MAX_NUM_CARACTERES;i++)
 		caracteres[i]=0;	
+	CtxM1 pCtxPrevio;
 }
 
-void Ctx0::aumentarFrec(string letra){
-	if (letra != "ESC")
-		caracteres[static_cast<int>(letra[0])]++;
-	else 
-		caracteres[MAX_NUM_CARACTERES]++;
+void Ctx0::aumentarFrec(char letra){
+	caracteres[(int)letra]++;
 }
 
 void Ctx0::exclusion(list<letraFrec> listaFrecs){
 	list<letraFrec>::iterator it;
 	for (it = listaFrecs.begin() ; it != listaFrecs.end() ; it ++){
-		string aux = it->getLetra();
-		caracteres[static_cast<int>(aux[0])]=0;
+		char aux = it->getLetra();
+		caracteres[(int)aux]=0;
 	}
 }
 
@@ -29,15 +29,21 @@ unsigned int Ctx0::getTotal(list<letraFrec> listaFrecs){
 	for (int i=0; i<MAX_NUM_CARACTERES; i++){
 		cont += caracteres[i];
 	}
+	this->probTotal=cont;
 	return cont;
 }
 
-unsigned int Ctx0::getFrec(string letra){
-	if (letra != "ESC")
-	{	
-		return (caracteres[static_cast<int>(letra[0])]);
-	}else
-		return (caracteres[MAX_NUM_CARACTERES]);
+unsigned int Ctx0::getFrec(char letra){
+		std::cout<<"la frecuencai del escape aca es: "<<caracteres[MAX_NUM_CARACTERES]<<endl;
+		unsigned int aux= caracteres[(int)letra];
+		aumentarFrec(letra);
+		if ( aux != 0){
+			return (aux);
+		}
+		else{
+			//incremento el escape
+			caracteres[MAX_NUM_CARACTERES]++;
+			return(pCtxPrevio.getFrec(letra));
+		}
 }
-
 

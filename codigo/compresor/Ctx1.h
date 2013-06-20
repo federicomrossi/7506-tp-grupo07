@@ -16,9 +16,9 @@ class Ctx1: public CtxN{
 	public:
 		Ctx1();	
 		~Ctx1(){ };
-		unsigned int getFrec(string letra, string letrasContexto);
+		unsigned int getFrec(char letra, string letrasContexto);
 		unsigned int getTotal(list<letraFrec> , string letrasContexto);
-		void aumentarFrec(string letra, string letrasContexto);
+		void aumentarFrec(char letra, string letrasContexto);
 		void exclusion(list<letraFrec>);
 			
 

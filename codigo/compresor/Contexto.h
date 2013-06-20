@@ -10,10 +10,11 @@ class Contexto{
 		//metodo puramente virtual
 		Contexto() { };
 		virtual ~Contexto(){ };
-		virtual unsigned int getFrec(std::string letra)=0;
-		virtual void aumentarFrec(std::string letra)=0;
+		virtual unsigned int getFrec(char letra)=0;
+		virtual void aumentarFrec(char letra)=0;
 	protected:
 		short int ordenContexto;
+		Contexto * pContextoPrevio;
 };
 
 
