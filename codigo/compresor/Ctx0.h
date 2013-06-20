@@ -26,10 +26,10 @@ class Ctx0: public Contexto {
 		void aumentarFrec(char letra);
 		~Ctx0(){};
 	protected:
-		unsigned short int probTotal;
+		unsigned int probTotal;
 		CtxM1  pCtxPrevio;
 		// en la pos MAX_NUM_CARACTERES guardo el escape
-		int caracteres[MAX_NUM_CARACTERES];
+		unsigned int caracteres[MAX_NUM_CARACTERES];
 };
 
 #endif

@@ -14,7 +14,7 @@ class Contexto{
 		virtual void aumentarFrec(char letra)=0;
 	protected:
 		short int ordenContexto;
-		Contexto * pContextoPrevio;
+		//Contexto * pContextoPrevio;
 };
 
 
