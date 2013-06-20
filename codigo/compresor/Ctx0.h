@@ -4,6 +4,7 @@
 
 #include "Contexto.h"
 #include "letraFrec.h"
+#include <string>
 #include <list>
 #include "CtxM1.h"
 //este sera el contexto 0
@@ -17,9 +18,9 @@ class Ctx0: public Contexto {
 		//Llamado por el getTotal, excluye de la prob total
 		void exclusion(list<letraFrec>);
 		//Si esta la letra en el conexto devuelvo su frecuencia e incremento su frecuencia, caso contrario me muevo al Ctx-1, aumentando la frecuencia del escape 
-		unsigned int getFrec(char letra);
+		unsigned int getFrec(char letra,string letrasContexto);
 		//Devuelve la suma de las frecuencias de todas las letras menos las excluidas
-		unsigned int getTotal(list<letraFrec>);
+		unsigned int getTotal(list<letraFrec>, string letrasContexto);
 		//Devuelve la suma de las frecuencias de todas las letras sin contar las exclusiones
 		unsigned int getTotal();
 		// Aumena en 1 la frecuencia del caracter 
@@ -27,7 +28,8 @@ class Ctx0: public Contexto {
 		~Ctx0(){};
 	protected:
 		unsigned short int probTotal;
-		CtxM1  pCtxPrevio;
+		//ya no necesito esto xq voy a estar trabajando con una lista
+		//CtxM1  pCtxPrevio;
 		// en la pos MAX_NUM_CARACTERES guardo el escape
 		int caracteres[MAX_NUM_CARACTERES];
 };

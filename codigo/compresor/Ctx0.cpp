@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "Ctx0.h"
 
 using namespace std;
@@ -8,10 +9,9 @@ Ctx0::Ctx0(){
 	this->probTotal=0;
 	for (int i=0; i<MAX_NUM_CARACTERES;i++)
 		caracteres[i]=0;	
-	CtxM1 pCtxPrevio;
-t
+}
 
-void Ctx0::aumentarFrec(char letra){
+void Ctx0::aumentarFrec(char letra,string letrasContexto){
 	caracteres[(int)letra]++;
 	this->probTotal++;
 }
@@ -45,7 +45,7 @@ unsigned int Ctx0::getTotal(){
 }
 
 
-unsigned int Ctx0::getFrec(char letra){
+unsigned int Ctx0::getFrec(char letra,string letrasContexto){
 		std::cout<<"la frecuencai del escape aca es: "<<caracteres[MAX_NUM_CARACTERES]<<endl;
 		unsigned int aux= caracteres[(int)letra];
 		aumentarFrec(letra);
