@@ -26,6 +26,7 @@ public:
 	~Predictor();
 	probabilidades getProbabilidad(char caracter);
 
+
 private:
 
 	unsigned short int orden;
