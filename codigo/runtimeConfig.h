@@ -28,4 +28,6 @@ unsigned int hashBlockSize();
 
 unsigned int arbolBlockSize();
 
+unsigned int PPMCOrder();
+
 #endif
