@@ -72,52 +72,55 @@ void Ctx0::aumentarFrec(char letra,string letrasContexto){
 //}
 
 
-probabilidades Ctx0::getProbabilidades(char letra,string letrasContexto, listaExclusion& listaExclusion){
+probabilidades Ctx0::getProbabilidades(char letra,string letrasContexto, ListaExclusion& listaExclusion){
 	probabilidades aux;
-	bool esta= false;		
 	unsigned short int cantDistintos=0;
 	unsigned int probAcum=0;
 	unsigned int probCaracter=0;
 	unsigned int probTotal=0;
 	bool acumulo = true;
 	for (int i=0; i<MAX_NUM_CARACTERES ; i++){
-		if ( (letra != caracteres[(int)i]) && (caracteres[(int)i]==0) ) {
-			probTotal+=caracteres[(int)i];
-			if (acumulo){
-				probAcum+= caracteres[(int)i];
-				listaExclusion.excluir(letra);
+		if ( ((int)letra != i) && (caracteres[(int)i]!=0) ) {
+			if (!listaExclusion.estaExcluido((char)i)){
+				probTotal+=caracteres[(int)i];
+				if (acumulo){
+					probAcum+= caracteres[(int)i];
+					listaExclusion.excluirCaracter((char)i);
+				}
 				cantDistintos++;
-			}else if((letra == caracteres[(int)i]) && (caracteres[(int)i]==0)){
+			}
+		}
+		else if((int)letra == i) {
 				probTotal+=caracteres[(int)i];
 				probCaracter=caracteres[(int)i];
 				acumulo=false;
-				cantDistintos++;
-			}
+				if (probCaracter!=0)	
+					cantDistintos++;
 		}
 	}
 	aux.probaCaracter=probCaracter;
 	aux.probaAcumulada=probAcum;
-	aux.probTotal=probTotal;
+	aux.probaTotal=probTotal;
 	aux.cantDistintos=cantDistintos;
-	return probabilidades;
+	if (aux.probaCaracter==0)
+		listaExclusion.persistir();
+	return aux;
 }
 
-probabilidades Ctx0::getProbabilidadesEscape(string letrasContexto){
+probabilidades Ctx0::getProbabilidadesEscape(string letrasContexto,ListaExclusion& listaExclusion){
 	probabilidades aux;
-	bool esta= false;		
 	unsigned short int cantDistintos=0;
 	unsigned int probAcum=0;
 	unsigned int probTotal=0;
 	for (int i=0; i<MAX_NUM_CARACTERES ; i++){
-		if ( caracteres[(int)i]==0) {
+		if ( !listaExclusion.estaExcluido((char)i)) {
 			probTotal+=caracteres[(int)i];
-			probAcum+= caracteres[(int)i];
-			listaExclusion.excluir(letra);
-			cantDistintos++;
+			if(caracteres[i]>0)	
+				cantDistintos++;
 		}
 	}
 	aux.probaAcumulada=probAcum;
-	aux.probTotal=probTotal;
+	aux.probaTotal=probTotal;
 	aux.cantDistintos=cantDistintos;
-	return probabilidades;
+	return aux;
 }
