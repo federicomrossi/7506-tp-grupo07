@@ -8,16 +8,6 @@
 using namespace std;
 
 
-
-struct probabilidades {
-
-	unsigned short int probaCaracter;
-	unsigned short int probaAcumulada;
-	unsigned short int probaTotal;
-
-};
-
-
 class Predictor
 {
 public:
