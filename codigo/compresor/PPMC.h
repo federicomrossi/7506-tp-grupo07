@@ -11,13 +11,14 @@ class PPMC
 {
 public:
 
-	PPMC(int orden);
+	PPMC(unsigned short  int orden,std::string archivo);
 	~PPMC();
 	int comprimir(std::string archivoSource);
 	int descomprimir(std::string archivoSource);
 
 private:
     Predictor* predictor;
+    unsigned short orden;
 };
 
 #endif

@@ -1,8 +1,9 @@
 #include "PPMC.h"
 #include <fstream>
 
-PPMC::PPMC(int orden,std::string archivo){
+PPMC::PPMC(unsigned short int orden,std::string archivo){
     predictor = new Predictor(orden,archivo+".ppmc");
+    this->orden=orden;
 
 }
 
@@ -27,14 +28,14 @@ int PPMC::comprimir(string archivoSource){
         }
         file.read(&caracter,sizeof(caracter));
     }
-    predictor->finalizarCompresion();
+    predictor->finalizarCompresion(contextoActual);
     file.close();
     return 0;
 }
 
 int PPMC::descomprimir(string archivoDestino){
     ofstream file;
-    file.open(archivoDestino.c_str(),"a");
+    file.open(archivoDestino.c_str(),std::fstream::app);
     predictor->inicializarDescompresion();
     int finished = 0;
     int caracter = 0;
@@ -54,4 +55,5 @@ int PPMC::descomprimir(string archivoDestino){
         }
     }
     file.close();
+    return 0;
 }
