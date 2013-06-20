@@ -8,7 +8,7 @@ CtxM1::CtxM1(){
 	this->ordenContexto=-1;
 }
 
-unsigned int CtxM1::getFrec(char letra){
+unsigned int CtxM1::getFrec(char letra,string letrasContexto){
 	if (letra != EOF){
 		this->probTotal--;
 		return (this->probTotal);

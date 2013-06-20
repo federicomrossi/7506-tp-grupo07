@@ -18,7 +18,7 @@ int main(){
 	pfile= fopen("a.txt","r");
 	for(int i=0; c!=EOF ; i++){
 	c = fgetc (pfile);
-	cout<<"letra: " <<c<< " tiene frecuencia: "<<Cero->getFrec(c)<<endl;
+	cout<<"letra: " <<c<< " tiene frecuencia: "<<Cero->getFrec(c,"a")<<endl;
 	}
 	fclose (pfile);
 	cout << "la frecuencia total del contexto 0 sin exclusion es "<< Cero->getTotal()<<endl;

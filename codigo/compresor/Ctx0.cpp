@@ -28,7 +28,7 @@ void Ctx0::exclusion(list<letraFrec> listaFrecs){
 	caracteres[MAX_NUM_CARACTERES]-=cantidadDeCaracteres;
 }
 
-unsigned int Ctx0::getTotal(list<letraFrec> listaFrecs){
+unsigned int Ctx0::getTotal(list<letraFrec> listaFrecs,string letrasContexto){
 	unsigned int cont = 0;
 	this->exclusion(listaFrecs);
 	for (int i=0; i<=MAX_NUM_CARACTERES; i++){
@@ -48,14 +48,16 @@ unsigned int Ctx0::getTotal(){
 unsigned int Ctx0::getFrec(char letra,string letrasContexto){
 		std::cout<<"la frecuencai del escape aca es: "<<caracteres[MAX_NUM_CARACTERES]<<endl;
 		unsigned int aux= caracteres[(int)letra];
-		aumentarFrec(letra);
+		aumentarFrec(letra,letrasContexto);
 		if ( aux != 0){
 			return (aux);
 		}
 		else{
 			//incremento el escape
 			caracteres[MAX_NUM_CARACTERES]++;
-			return(pCtxPrevio.getFrec(letra));
+			//CAMBIAR ESTO
+			//TODO
+			return(0);
 		}
 }
 
