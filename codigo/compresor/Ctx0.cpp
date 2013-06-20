@@ -9,10 +9,11 @@ Ctx0::Ctx0(){
 	for (int i=0; i<MAX_NUM_CARACTERES;i++)
 		caracteres[i]=0;	
 	CtxM1 pCtxPrevio;
-}
+t
 
 void Ctx0::aumentarFrec(char letra){
 	caracteres[(int)letra]++;
+	this->probTotal++;
 }
 
 void Ctx0::exclusion(list<letraFrec> listaFrecs){
@@ -33,7 +34,6 @@ unsigned int Ctx0::getTotal(list<letraFrec> listaFrecs){
 	for (int i=0; i<=MAX_NUM_CARACTERES; i++){
 		cont += caracteres[i];
 	}
-	this->probTotal=cont;
 	return cont;
 }
 
