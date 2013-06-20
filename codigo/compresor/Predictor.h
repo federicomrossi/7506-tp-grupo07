@@ -4,18 +4,9 @@
 #include <iostream>
 #include <list>
 #include "Contexto.h"
+#include "compresion_Aritmetico.h"
 
 using namespace std;
-
-
-
-struct probabilidades {
-
-	unsigned short int probaCaracter;
-	unsigned short int probaAcumulada;
-	unsigned short int probaTotal;
-
-};
 
 
 class Predictor
@@ -24,12 +15,16 @@ public:
 
 	Predictor(unsigned short int orden);
 	~Predictor();
-	probabilidades getProbabilidad(char caracter);
+	int comprimir(char caracter,std::string contextoActual);
+	int finalizarCompresion(std::string contextoActual);
+	int inicializarDescompresion();
+	int descomprimir();
 
 private:
-
+    ListaExclusion* listaExclusion;
+    Aritmetico aritmetico;
 	unsigned short int orden;
-	list<Contexto> listaContextos;
+	list<Contexto*>* listaContextos;
 
 };
 
