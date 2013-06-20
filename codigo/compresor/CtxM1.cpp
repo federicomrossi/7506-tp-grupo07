@@ -9,9 +9,11 @@ CtxM1::CtxM1(){
 }
 
 unsigned int CtxM1::getFrec(char letra,string letrasContexto){
+
 	if (letra != EOF){
+		unsigned short int aux =this->probTotal;
 		this->probTotal--;
-		return (this->probTotal);
+		return (aux);
 	}else
 		return 1;
 } 
