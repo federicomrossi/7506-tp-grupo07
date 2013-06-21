@@ -21,7 +21,31 @@ probabilidades CtxN::getProbabilidadesEscape(std::string letrasContexto,ListaExc
 }
 
 int CtxN::extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion &listaExclusion){
-    return 0;
+    
+	unsigned int acumulada = 0;
+	std::string contextoAdapatado = this->adaptarContexto(contextoActual);
+	list<letraFrec> contexto = distintosContextos[contextoAdapatado];
+
+	for(list<letraFrec>::iterator it = contexto.begin(); it != contexto.end(); ++it) {
+		
+		if (probaAcumulada<acumulada) {
+			it--;
+			return (int)(*it).getLetra();
+		}
+
+		if(!listaExclusion.estaExcluido((*it).getLetra())) {
+			acumulada+=(*it).getFrec();
+		}
+
+		listaExclusion.excluirCaracter((*it).getLetra());
+	}
+
+	if (probaAcumulada<acumulada) {
+		return (int)(contexto.back().getLetra());
+	} else {
+		listaExclusion.persistir();
+		return -1;
+	}
 }
 
 // Funcion privada para adpatar el contexto segun el orden en el que nos encontremos
@@ -30,7 +54,3 @@ std::string CtxN::adaptarContexto(std::string contextoActual)
 	std::string contextoAdapatado = contextoActual.substr(contextoActual.length()-ordenContexto);
 	return contextoAdapatado;
 } 
-
-
-
-
