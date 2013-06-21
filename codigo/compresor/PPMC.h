@@ -3,20 +3,22 @@
 
 #include <iostream>
 #include <fstream>
-#include "../compresion_Aritmetico.h"
+#include <string>
+#include "Predictor.h"
 // FALTA INCLUIR CONTEXTOS (POSIBLEMENTE PREDICTOR.H)
 
 class PPMC
 {
 public:
 
-	PPMC();
+	PPMC(unsigned short  int orden,std::string archivo);
 	~PPMC();
-	int comprimir(fstream archivo);
-	int descomprimir(fstream archivo);
+	int comprimir(std::string archivoSource);
+	int descomprimir(std::string archivoSource);
 
 private:
-
+    Predictor* predictor;
+    unsigned short orden;
 };
 
 #endif

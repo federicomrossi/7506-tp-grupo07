@@ -8,7 +8,7 @@
 #include "letraFrec.h"
 #include <string>
 
-#define MAX_NUM_CARACTERES 256
+
 using namespace std;
 
 class CtxM1: public Contexto {
@@ -24,18 +24,16 @@ class CtxM1: public Contexto {
 		//este nunca se va a llamar
 		void aumentarFrec(char letra,std::string letrasContexto){ } ;
 		//unsigned int getTotal(std::list<letraFrec>, std::string letrasContexto){return 0; };
-	
-
 		//Devuelve en el campo probaTotal 257 - la cantidad de caracteres incluidos
 		//en el campo probaCaracter siempre tengo un 1
 		probabilidades getProbabilidades(char letra, std::string letrasContexto,ListaExclusion& listaExclusion);
 
 		probabilidades getProbabilidadesEscape(std::string letrasContexto,ListaExclusion&);
+
 		int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion &listaExclusion);
 
 	protected:
 		unsigned short int probTotal;
-	
 };
 
 #endif

@@ -14,20 +14,23 @@
 using namespace std;
 
 
-class CtxN {
+class CtxN : public Contexto{
 	public:
-		CtxN() { };
-		virtual unsigned int getFrec(char letra,string letrasContexto)=0;
-		//Devuelve la suma de las frecuencias de todas las letras menos las excluidas
-		virtual unsigned int getTotal(list<letraFrec>,string letrasContexto)=0;
-		virtual void aumentarFrec(char letra,string letrasContexto)=0;
-		virtual void exclusion(list<letraFrec>)=0;
-		virtual ~CtxN()	{ };
+		CtxN(){};
+		CtxN(short int orden);
+		virtual ~CtxN();
+
+		virtual void aumentarFrec(char letra,std::string letrasContexto);
+		//virtual unsigned int getTotal(std::list<letraFrec>, std::string letrasContexto)=0;
+		virtual probabilidades getProbabilidades(char letra,std::string letrasContexto,ListaExclusion&);
+		virtual probabilidades getProbabilidadesEscape(std::string letrasContexto,ListaExclusion&);
+        virtual int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion&);
+
 	protected:
-		//ademas va a tener el orden del contexto por heredar d Contexto 
+		//ademas va a tener el orden del contexto por heredar d Contexto
 		short int ordenContexto;
 		map <string, list<letraFrec> > distintosContextos;
 };
 
 
-#endif 
+#endif

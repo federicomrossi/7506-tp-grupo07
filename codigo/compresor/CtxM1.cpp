@@ -7,6 +7,9 @@ CtxM1::CtxM1(){
 	this->ordenContexto=-1;
 }
 
+int CtxM1::extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion&){
+    return 0;
+}
 
 probabilidades CtxM1::getProbabilidadesEscape(string letrasContexto, ListaExclusion& listaExclusion){
 	probabilidades aux;
@@ -55,7 +58,6 @@ probabilidades CtxM1::getProbabilidades(char letra,string letrasContexto, ListaE
 	return aux;
 }
 
-
 int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion &listaExclusion)
 {
 	
@@ -79,8 +81,4 @@ int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, L
 	}
 
 }
-
-
-
-
 

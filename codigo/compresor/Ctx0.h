@@ -8,7 +8,6 @@
 #include <list>
 //este sera el contexto 0
 //aca si tengo exclusion
-#define MAX_NUM_CARACTERES 257
 using namespace std;
 
 class Ctx0: public Contexto {
