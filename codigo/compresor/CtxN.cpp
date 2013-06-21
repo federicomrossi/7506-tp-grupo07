@@ -8,8 +8,23 @@ CtxN::CtxN(short int orden){
 CtxN::~CtxN(){
 }
 
-void CtxN::aumentarFrec(char letra,std::string letrasContexto){
-
+void CtxN::aumentarFrec(char letra,string letrasContexto){
+	map < string, list<letraFrec> >::iterator mapIt;
+	mapIt=distintosContextos.find(adaptarContexto(letrasContexto));
+	list <letraFrec> lista;
+	if (mapIt!=distintosContextos.end()){
+		lista = mapIt->second;
+		list <letraFrec>::iterator listIt;
+		for (listIt = lista.begin() ; listIt != lista.end() ; listIt++){
+			if ( letra == listIt->getLetra() ) {
+				listIt->aumentarFrec();
+			}
+		}
+	}else {
+		letraFrec unaLetra(letra);
+		lista.push_back(unaLetra);
+		distintosContextos.insert( pair < string, list <letraFrec> > (letrasContexto,lista));
+	}
 }
 
 probabilidades CtxN::getProbabilidades(char letra,std::string letrasContexto,ListaExclusion& listaExclusion){
@@ -54,7 +69,7 @@ probabilidades CtxN::getProbabilidades(char letra,std::string letrasContexto,Lis
 }
 
 //Tener en cuenta que si cantDistintos = 0 , entonces escape = 1
-probabilidades CtxN::getProbabilidadesEscape(std::string letrasContexto,ListaExclusion&){
+probabilidades CtxN::getProbabilidadesEscape(std::string letrasContexto,ListaExclusion& listaExclusion){
     probabilidades probas;
 	unsigned short int cantDistintos=0;
 	unsigned int probAcum=0;
@@ -65,7 +80,7 @@ probabilidades CtxN::getProbabilidadesEscape(std::string letrasContexto,ListaExc
 		list <letraFrec> lista = mapIt->second;
 		list <letraFrec>::iterator listIt;
 		for (listIt = lista.begin(); listIt != lista.end() ; listIt++){
-			if (!listaExclusion.estaExcluido(listIt->getChar())){
+			if (!listaExclusion.estaExcluido(listIt->getLetra())){
 				probTotal+=listIt->getFrec();
 				cantDistintos++;
 			}
@@ -78,6 +93,37 @@ probabilidades CtxN::getProbabilidadesEscape(std::string letrasContexto,ListaExc
     return probas;
 }
 
-int CtxN::extraerCaracter(unsigned short s, std::string s2, ListaExclusion&l){
-    return 0;
+int CtxN::extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion &listaExclusion){
+    
+	unsigned int acumulada = 0;
+	std::string contextoAdapatado = this->adaptarContexto(contextoActual);
+	list<letraFrec> contexto = distintosContextos[contextoAdapatado];
+
+	for(list<letraFrec>::iterator it = contexto.begin(); it != contexto.end(); ++it) {
+		
+		if (probaAcumulada<acumulada) {
+			it--;
+			return (int)(*it).getLetra();
+		}
+
+		if(!listaExclusion.estaExcluido((*it).getLetra())) {
+			acumulada+=(*it).getFrec();
+		}
+
+		listaExclusion.excluirCaracter((*it).getLetra());
+	}
+
+	if (probaAcumulada<acumulada) {
+		return (int)(contexto.back().getLetra());
+	} else {
+		listaExclusion.persistir();
+		return -1;
+	}
 }
+
+// Funcion privada para adpatar el contexto segun el orden en el que nos encontremos
+std::string CtxN::adaptarContexto(std::string contextoActual)
+{	
+	std::string contextoAdapatado = contextoActual.substr(contextoActual.length()-ordenContexto);
+	return contextoAdapatado;
+} 
