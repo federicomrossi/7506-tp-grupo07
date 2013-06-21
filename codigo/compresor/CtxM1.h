@@ -7,7 +7,11 @@
 #include "Contexto.h"
 #include "letraFrec.h"
 #include <string>
-class CtxM1:virtual public Contexto {
+
+#define MAX_NUM_CARACTERES 256
+using namespace std;
+
+class CtxM1: public Contexto {
 	public:
 		CtxM1();
 		~CtxM1(){};
@@ -26,7 +30,9 @@ class CtxM1:virtual public Contexto {
 		//en el campo probaCaracter siempre tengo un 1
 		probabilidades getProbabilidades(char letra, std::string letrasContexto,ListaExclusion& listaExclusion);
 
-		probabilidades getProbabilidadesEscape(std::string letrasContexto,ListaExclusion&); 
+		probabilidades getProbabilidadesEscape(std::string letrasContexto,ListaExclusion&);
+		int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion &listaExclusion);
+
 	protected:
 		unsigned short int probTotal;
 	

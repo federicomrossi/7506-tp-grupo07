@@ -6,10 +6,9 @@
 #include "letraFrec.h"
 #include <string>
 #include <list>
-#include "CtxM1.h"
 //este sera el contexto 0
 //aca si tengo exclusion
-#define MAX_NUM_CARACTERES 256
+#define MAX_NUM_CARACTERES 257
 using namespace std;
 
 class Ctx0: public Contexto {
