@@ -11,6 +11,8 @@ Ctx0::Ctx0(){
 		caracteres[i]=0;	
 }
 
+Ctx0::~Ctx0(){}
+
 void Ctx0::aumentarFrec(char letra,string letrasContexto){
 	caracteres[(int)letra]++;
 }
