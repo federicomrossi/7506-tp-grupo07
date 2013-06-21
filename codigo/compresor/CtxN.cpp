@@ -99,7 +99,7 @@ int CtxN::extraerCaracter(unsigned short probaAcumulada, std::string contextoAct
 	std::string contextoAdapatado = this->adaptarContexto(contextoActual);
 	list<letraFrec> contexto = distintosContextos[contextoAdapatado];
 
-	for(list<letraFrec>::iterator it = contexto.begin(); it != contexto.end(); ++it) {
+	for(list<letraFrec>::iterator it = contexto.begin(); it != contexto.end(); it++) {
 		
 		if (probaAcumulada<acumulada) {
 			it--;

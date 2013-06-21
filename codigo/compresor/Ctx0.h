@@ -13,6 +13,7 @@ using namespace std;
 class Ctx0: public Contexto {
 	public:
 		Ctx0();
+		~Ctx0();
 		//Llamado por el getTotal, excluye de la prob total
 		//void exclusion(list<letraFrec>);
 		//Si esta la letra en el conexto devuelvo su frecuencia, si no esta devuelvo 0 
@@ -30,9 +31,6 @@ class Ctx0: public Contexto {
 		probabilidades getProbabilidadesEscape(string letrasContexto, ListaExclusion& listaExclusion);
 
 		int extraerCaracter(unsigned short probaAcumulada, string contextoActual, ListaExclusion &listaExclusion);
-
-
-		~Ctx0(){};
 		
 	protected:
 
