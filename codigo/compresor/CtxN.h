@@ -18,18 +18,22 @@ class CtxN : public Contexto{
 	public:
 		CtxN(){};
 		CtxN(short int orden);
-		virtual ~CtxN();
+		~CtxN();
 
-		virtual void aumentarFrec(char letra,std::string letrasContexto);
+		void aumentarFrec(char letra,std::string letrasContexto);
 		//virtual unsigned int getTotal(std::list<letraFrec>, std::string letrasContexto)=0;
-		virtual probabilidades getProbabilidades(char letra,std::string letrasContexto,ListaExclusion&);
-		virtual probabilidades getProbabilidadesEscape(std::string letrasContexto,ListaExclusion&);
-        virtual int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion&);
+		probabilidades getProbabilidades(char letra,std::string letrasContexto,ListaExclusion&);
+		probabilidades getProbabilidadesEscape(std::string letrasContexto,ListaExclusion&);
+		int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion&);
 
 	protected:
 		//ademas va a tener el orden del contexto por heredar d Contexto
-		short int ordenContexto;
 		map <string, list<letraFrec> > distintosContextos;
+
+	private:
+		std::string adaptarContexto(std::string contextoActual);
+
+		
 };
 
 
