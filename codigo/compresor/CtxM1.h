@@ -22,11 +22,11 @@ class CtxM1: public Contexto {
 		//Devuelve un 1 si llego al final del archivo
 		//unsigned int getFrec(char letra,std::string letrasContexto);
 		//este nunca se va a llamar
-		void aumentarFrec(char letra,std::string letrasContexto){ } ;
+		void aumentarFrec(unsigned  char letra,std::string letrasContexto){ } ;
 		//unsigned int getTotal(std::list<letraFrec>, std::string letrasContexto){return 0; };
 		//Devuelve en el campo probaTotal 257 - la cantidad de caracteres incluidos
 		//en el campo probaCaracter siempre tengo un 1
-		probabilidades getProbabilidades(char letra, std::string letrasContexto,ListaExclusion *listaExclusion);
+		probabilidades getProbabilidades(unsigned char letra, std::string letrasContexto,ListaExclusion *listaExclusion);
 
 		probabilidades getProbabilidadesEscape(std::string letrasContexto,ListaExclusion *listaExclusion);
 

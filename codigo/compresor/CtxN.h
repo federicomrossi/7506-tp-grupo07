@@ -20,9 +20,9 @@ class CtxN : public Contexto{
 		CtxN(short int orden);
 		~CtxN();
 
-		void aumentarFrec(char letra,std::string letrasContexto);
+		void aumentarFrec(unsigned char letra,std::string letrasContexto);
 		//virtual unsigned int getTotal(std::list<letraFrec>, std::string letrasContexto)=0;
-		probabilidades getProbabilidades(char letra,std::string letrasContexto,ListaExclusion*);
+		probabilidades getProbabilidades(unsigned char letra,std::string letrasContexto,ListaExclusion*);
 		probabilidades getProbabilidadesEscape(std::string letrasContexto,ListaExclusion*);
 		int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion*);
 
@@ -33,7 +33,7 @@ class CtxN : public Contexto{
 	private:
 		std::string adaptarContexto(std::string contextoActual);
 
-		
+
 };
 
 

@@ -16,22 +16,22 @@ class Ctx0: public Contexto {
 		~Ctx0();
 		//Llamado por el getTotal, excluye de la prob total
 		//void exclusion(list<letraFrec>);
-		//Si esta la letra en el conexto devuelvo su frecuencia, si no esta devuelvo 0 
+		//Si esta la letra en el conexto devuelvo su frecuencia, si no esta devuelvo 0
 		//unsigned int getFrec(char letra,string letrasContexto);
 		//Devuelve la suma de las frecuencias de todas las letras menos las excluidas
 		//unsigned int getTotal(list<letraFrec>, string letrasContexto);
 		//Devuelve la suma de las frecuencias de todas las letras sin contar las exclusiones
 		//unsigned int getTotal();
-		// Aumena en 1 la frecuencia del caracter 
-		void aumentarFrec(char letra,string letrasContexto);
+		// Aumena en 1 la frecuencia del caracter
+		void aumentarFrec(unsigned char letra,string letrasContexto);
 
 
-		probabilidades getProbabilidades(char letra, string letrasContexto, ListaExclusion*);
+		probabilidades getProbabilidades(unsigned char letra, string letrasContexto, ListaExclusion*);
 
 		probabilidades getProbabilidadesEscape(string letrasContexto, ListaExclusion* listaExclusion);
 
 		int extraerCaracter(unsigned short probaAcumulada, string contextoActual, ListaExclusion *listaExclusion);
-		
+
 	protected:
 
 		unsigned int probTotal;

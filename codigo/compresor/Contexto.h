@@ -24,9 +24,9 @@ class Contexto{
 		Contexto() { };
 		virtual ~Contexto(){ };
 		//virtual unsigned int getFrec(char letra,std::string letrasContexto,ListaExclusion&)=0;
-		virtual void aumentarFrec(char letra,std::string letrasContexto)=0;
+		virtual void aumentarFrec(unsigned char letra,std::string letrasContexto)=0;
 		//virtual unsigned int getTotal(std::list<letraFrec>, std::string letrasContexto)=0;
-		virtual probabilidades getProbabilidades(char letra,std::string letrasContexto,ListaExclusion*)=0;
+		virtual probabilidades getProbabilidades(unsigned char letra,std::string letrasContexto,ListaExclusion*)=0;
 		virtual probabilidades getProbabilidadesEscape(std::string letrasContexto,ListaExclusion*)=0;
 		virtual int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion*)=0;
 	protected:

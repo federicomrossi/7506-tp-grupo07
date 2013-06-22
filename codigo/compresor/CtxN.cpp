@@ -8,7 +8,7 @@ CtxN::CtxN(short int orden){
 CtxN::~CtxN(){
 }
 
-void CtxN::aumentarFrec(char letra,string letrasContexto){
+void CtxN::aumentarFrec(unsigned char letra,string letrasContexto){
 
 	if (letrasContexto.length()<(unsigned short)ordenContexto) {
 		return;
@@ -31,7 +31,7 @@ void CtxN::aumentarFrec(char letra,string letrasContexto){
 	}
 }
 
-probabilidades CtxN::getProbabilidades(char letra,std::string letrasContexto,ListaExclusion *listaExclusion){
+probabilidades CtxN::getProbabilidades(unsigned char letra,std::string letrasContexto,ListaExclusion *listaExclusion){
     probabilidades probas;
 	unsigned short int cantDistintos=0;
 	unsigned int probAcum=0;
@@ -99,9 +99,9 @@ probabilidades CtxN::getProbabilidadesEscape(std::string letrasContexto,ListaExc
 
 int CtxN::extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion *listaExclusion){
 
-	if (contextoActual.length()<ordenContexto) {
+	if (contextoActual.length()<(unsigned)ordenContexto) {
 			return -1;
-		}
+    }
 	unsigned int acumulada = 0;
 	std::string contextoAdapatado = this->adaptarContexto(contextoActual);
 	list<letraFrec> contexto = distintosContextos[contextoAdapatado];

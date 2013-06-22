@@ -25,25 +25,25 @@ probabilidades CtxM1::getProbabilidadesEscape(string letrasContexto, ListaExclus
 	return aux;
 }
 
-probabilidades CtxM1::getProbabilidades(char letra,string letrasContexto, ListaExclusion *listaExclusion){
+probabilidades CtxM1::getProbabilidades(unsigned char letra,string letrasContexto, ListaExclusion *listaExclusion){
 	probabilidades aux;
 	unsigned short int cantDistintos=MAX_NUM_CARACTERES;
 	unsigned int probAcum=0;
 	unsigned int probCaracter=0;
 	unsigned int probTotal=MAX_NUM_CARACTERES;
 	bool acumulo = true;
-	for (int i=0; i<MAX_NUM_CARACTERES ; i++){
-		if ( ((int)letra != i) ) {
-			if (!listaExclusion->estaExcluido(i)){
+	for (unsigned int i=0; i<MAX_NUM_CARACTERES ; i++){
+		if ( ((unsigned int)letra != i) ) {
+			if (!listaExclusion->estaExcluido((int)i)){
 				if (acumulo){
 					probAcum++ ;
 				}
-			}else if (listaExclusion->estaExcluido(i)){
+			}else if (listaExclusion->estaExcluido((int)i)){
 				probTotal--;
 				cantDistintos--;
 			}
 		}
-		else if((int)letra == i) {
+		else if((unsigned int)letra == i) {
 				probCaracter=1;
 				acumulo=false;
 		}
@@ -57,7 +57,7 @@ probabilidades CtxM1::getProbabilidades(char letra,string letrasContexto, ListaE
 
 int CtxM1::extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion *listaExclusion)
 {
-	
+
 	unsigned int acumulada=0;
 
 	for (int i=0;i<MAX_NUM_CARACTERES;i++){

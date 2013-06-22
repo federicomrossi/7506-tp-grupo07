@@ -13,30 +13,30 @@ Ctx0::Ctx0(){
 
 Ctx0::~Ctx0(){}
 
-void Ctx0::aumentarFrec(char letra,string letrasContexto){
+void Ctx0::aumentarFrec(unsigned char letra,string letrasContexto){
 	caracteres[(unsigned int)letra]++;
 }
 
 
-probabilidades Ctx0::getProbabilidades(char letra,string letrasContexto, ListaExclusion *listaExclusion){
+probabilidades Ctx0::getProbabilidades(unsigned char letra,string letrasContexto, ListaExclusion *listaExclusion){
 	probabilidades aux;
 	unsigned short int cantDistintos=0;
 	unsigned int probAcum=0;
 	unsigned int probCaracter=0;
 	unsigned int probTotal=0;
 	bool acumulo = true;
-	for (int i=0; i<MAX_NUM_CARACTERES ; i++){
-		if ( ((int)letra != i) && (caracteres[(int)i]!=0) ) {
-			if (!listaExclusion->estaExcluido(i)){
-				probTotal+=caracteres[(int)i];
+	for (unsigned int i=0; i<MAX_NUM_CARACTERES ; i++){
+		if ( ((unsigned int)letra != i) && (caracteres[i]!=0) ) {
+			if (!listaExclusion->estaExcluido((int)i)){
+				probTotal+=caracteres[i];
 				if (acumulo){
-					probAcum+= caracteres[(int)i];
+					probAcum+= caracteres[i];
 				}
-				listaExclusion->excluirCaracter(i);
+				listaExclusion->excluirCaracter((int)i);
 				cantDistintos++;
 			}
 		}
-		else if(letra == i) {
+		else if((unsigned int)letra == i) {
 				probTotal+=caracteres[i];
 				probCaracter=caracteres[i];
 				acumulo=false;
@@ -60,7 +60,7 @@ probabilidades Ctx0::getProbabilidadesEscape(string letrasContexto,ListaExclusio
 	unsigned int probTotal=0;
 	for (int i=0; i<MAX_NUM_CARACTERES ; i++){
 		if ( !listaExclusion->estaExcluido(i)) {
-			probTotal+=caracteres[(int)i];
+			probTotal+=caracteres[i];
 			if(caracteres[i]>0)
 				cantDistintos++;
 		}
