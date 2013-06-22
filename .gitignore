@@ -1,3 +1,8 @@
 .DS_Store
 *.sublime-project
 *.sublime-workspace
+codigo/compresor/.cproject
+
+codigo/compresor/.project
+
+codigo/compresor/test.txt
