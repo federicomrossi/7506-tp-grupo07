@@ -9,6 +9,10 @@ CtxN::~CtxN(){
 }
 
 void CtxN::aumentarFrec(char letra,string letrasContexto){
+
+	if (letrasContexto.length()<ordenContexto) {
+		return;
+	}
 	map < string, list<letraFrec> >::iterator mapIt;
 	mapIt=distintosContextos.find(adaptarContexto(letrasContexto));
 	list <letraFrec> lista;

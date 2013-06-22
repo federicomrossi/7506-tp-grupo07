@@ -1,8 +1,15 @@
 .DS_Store
 *.sublime-project
 *.sublime-workspace
+*.o
 codigo/compresor/.cproject
 
 codigo/compresor/.project
 
 codigo/compresor/test.txt
+
+codigo/compresor/main.cpp
+
+codigo/compresor/main.cpp
+
+codigo/compresor/main.cpp
