@@ -8,11 +8,11 @@ Ctx0::Ctx0(){
 	this->ordenContexto=0;
 	this->probTotal=0;
 	for (int i=0; i<MAX_NUM_CARACTERES;i++)
-		caracteres[i]=0;	
+		caracteres[i]=0;
 }
 
 void Ctx0::aumentarFrec(char letra,string letrasContexto){
-	caracteres[(int)letra]++;
+	caracteres[(unsigned int)letra]++;
 }
 
 
@@ -23,22 +23,22 @@ probabilidades Ctx0::getProbabilidades(char letra,string letrasContexto, ListaEx
 	unsigned int probCaracter=0;
 	unsigned int probTotal=0;
 	bool acumulo = true;
-	for (int i=0; i<MAX_NUM_CARACTERES ; i++){
-		if ( ((int)letra != i) && (caracteres[(int)i]!=0) ) {
+	for (unsigned int i=0; i<MAX_NUM_CARACTERES ; i++){
+		if ( ((unsigned int)letra != i) && (caracteres[i]!=0) ) {
 			if (!listaExclusion.estaExcluido((char)i)){
-				probTotal+=caracteres[(int)i];
+				probTotal+=caracteres[i];
 				if (acumulo){
-					probAcum+= caracteres[(int)i];
+					probAcum+= caracteres[i];
 					listaExclusion.excluirCaracter((char)i);
 				}
 				cantDistintos++;
 			}
 		}
-		else if((int)letra == i) {
-				probTotal+=caracteres[(int)i];
-				probCaracter=caracteres[(int)i];
+		else if((unsigned int)letra == i) {
+				probTotal+=caracteres[i];
+				probCaracter=caracteres[i];
 				acumulo=false;
-				if (probCaracter!=0)	
+				if (probCaracter!=0)
 					cantDistintos++;
 		}
 	}
@@ -56,10 +56,10 @@ probabilidades Ctx0::getProbabilidadesEscape(string letrasContexto,ListaExclusio
 	unsigned short int cantDistintos=0;
 	unsigned int probAcum=0;
 	unsigned int probTotal=0;
-	for (int i=0; i<MAX_NUM_CARACTERES ; i++){
+	for (unsigned int i=0; i<MAX_NUM_CARACTERES ; i++){
 		if ( !listaExclusion.estaExcluido((char)i)) {
-			probTotal+=caracteres[(int)i];
-			if(caracteres[i]>0)	
+			probTotal+=caracteres[i];
+			if(caracteres[i]>0)
 				cantDistintos++;
 		}
 	}
@@ -85,7 +85,7 @@ int Ctx0::extraerCaracter(unsigned short probaAcumulada,  string contextoActual,
 
 		if (caracteres[i]!=0) {
 			listaExclusion.excluirCaracter((char)i);
-		} 
+		}
 
 	}
 

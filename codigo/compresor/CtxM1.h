@@ -7,7 +7,11 @@
 #include "Contexto.h"
 #include "letraFrec.h"
 #include <string>
-class CtxM1:virtual public Contexto {
+
+
+using namespace std;
+
+class CtxM1: public Contexto {
 	public:
 		CtxM1();
 		~CtxM1(){};
@@ -20,18 +24,16 @@ class CtxM1:virtual public Contexto {
 		//este nunca se va a llamar
 		void aumentarFrec(char letra,std::string letrasContexto){ } ;
 		//unsigned int getTotal(std::list<letraFrec>, std::string letrasContexto){return 0; };
-
-
 		//Devuelve en el campo probaTotal 257 - la cantidad de caracteres incluidos
 		//en el campo probaCaracter siempre tengo un 1
 		probabilidades getProbabilidades(char letra, std::string letrasContexto,ListaExclusion& listaExclusion);
 
 		probabilidades getProbabilidadesEscape(std::string letrasContexto,ListaExclusion&);
-		virtual int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion&);
+
+		int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion &listaExclusion);
 
 	protected:
 		unsigned short int probTotal;
-
 };
 
 #endif

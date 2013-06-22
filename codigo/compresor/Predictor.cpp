@@ -75,15 +75,24 @@ int Predictor::descomprimir(std::string contextoActual){
     std::list<Contexto*>::iterator it;
     unsigned short int probaAcumulada = 0;
     int caracter = -1;
-    unsigned short total=0;
+    probabilidades probas;
     for(it = listaContextos->begin();it != listaContextos->end();it++){
-        //total LLAMAR A GET TOTAL DEL CONTEXTO
-        probaAcumulada = aritmetico->descomprimir(total);
+        probas = (*it)->getProbabilidadesEscape(contextoActual,*listaExclusion);
+        probaAcumulada = aritmetico->descomprimir(probas.probaTotal+probas.cantDistintos);
         caracter = (*it)->extraerCaracter(probaAcumulada,contextoActual,*listaExclusion);
         if(caracter > -1){
-            (*it)->aumentarFrec(caracter, contextoActual);
+            probas = (*it)->getProbabilidades((char)caracter,contextoActual,*listaExclusion);
+            aritmetico->actualizarRangosDescompresion(probas.probaCaracter,probas.probaAcumulada,probas.probaTotal+probas.cantDistintos);
+            (*it)->aumentarFrec(caracter,contextoActual);
+            while(it != listaContextos->begin()){
+                it--;
+                (*it)->aumentarFrec(caracter, contextoActual);
+            }
             listaExclusion->reset();
             break;
+        }else{
+            probas = (*it)->getProbabilidadesEscape(contextoActual,*listaExclusion);
+            aritmetico->actualizarRangosDescompresion(probas.cantDistintos,probas.probaTotal,probas.probaTotal+probas.cantDistintos);
         }
     }
     return caracter;

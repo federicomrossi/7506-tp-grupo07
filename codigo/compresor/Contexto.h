@@ -5,6 +5,7 @@
 #include <list>
 #include "letraFrec.h"
 #include "ListaExclusion.h"
+#define MAX_NUM_CARACTERES 257
 //clase virtual para hacer polimorfismo
 
 

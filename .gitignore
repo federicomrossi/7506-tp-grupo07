@@ -1,3 +1,5 @@
 .DS_Store
 .gitignore
 temas2/
+*.sublime-project
+*.sublime-workspace

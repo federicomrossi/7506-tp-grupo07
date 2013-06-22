@@ -58,5 +58,27 @@ probabilidades CtxM1::getProbabilidades(char letra,string letrasContexto, ListaE
 	return aux;
 }
 
+int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion &listaExclusion)
+{
+	
+	unsigned int acumulada=0;
 
+	for (int i=0;i<MAX_NUM_CARACTERES;i++){
+		if (probaAcumulada<acumulada) {
+			return i-1;
+		}
+
+		if (!listaExclusion.estaExcluido((char)i)) {
+			acumulada++;
+		}
+	}
+
+	if (probaAcumulada<acumulada) {
+		return MAX_NUM_CARACTERES-1;
+	} else {
+		listaExclusion.persistir();
+		return -1;
+	}
+
+}
 
