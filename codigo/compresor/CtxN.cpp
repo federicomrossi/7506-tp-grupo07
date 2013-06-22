@@ -49,8 +49,8 @@ probabilidades CtxN::getProbabilidades(unsigned char letra,std::string letrasCon
 					probTotal+=listIt->getFrec();
 					if (acumulo){
 						probAcum+=listIt->getFrec();
-						listaExclusion->excluirCaracter(listIt->getLetra());
 						}
+					listaExclusion->excluirCaracter(listIt->getLetra());
 					cantDistintos++;
 				}
 			}else if (letra == listIt->getLetra()){
