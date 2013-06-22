@@ -5,6 +5,7 @@
 #include "CtxM1.h"
 #include "Ctx0.h"
 #include "CtxN.h"
+#include <stdio.h>
 
 #include <iterator>
 
@@ -35,19 +36,32 @@ Predictor::~Predictor(){
 }
 
 int Predictor::comprimir(char c,std::string contextoActual){
+    FILE *f;
+    f=fopen("logPPMC.txt","a");
     std::list<Contexto*>::iterator it;
     probabilidades probas;
+    fprintf(f,"Letra: %c \n",c);
     for(it = listaContextos->begin();it != listaContextos->end();it++){
         probas = (*it)->getProbabilidades(c, contextoActual,listaExclusion);
+        fprintf(f,"Probabilidad caracter: %d \n",probas.probaCaracter);
+        fprintf(f,"Probabilidad acumulada: %d \n",probas.probaAcumulada);
+        fprintf(f,"Probabilidad total: %d \n",probas.probaTotal);
         (*it)->aumentarFrec(c,contextoActual);
         if(probas.probaCaracter > 0){
-            aritmetico->comprimir(probas.probaCaracter,probas.probaAcumulada,probas.probaTotal+probas.cantDistintos);
-            listaExclusion->reset();
+            if((distance(it,listaContextos->end())) == 1){
+                fprintf(f,"Comprimo Caracter Probabilidad %d/%d \n",probas.probaCaracter,probas.probaTotal);
+                aritmetico->comprimir(probas.probaCaracter,probas.probaAcumulada,probas.probaTotal);
+            }else{
+                fprintf(f,"Comprimo Caracter Probabilidad %d/%d \n",probas.probaCaracter,probas.probaTotal+probas.cantDistintos);
+                aritmetico->comprimir(probas.probaCaracter,probas.probaAcumulada,probas.probaTotal+probas.cantDistintos);
+            }listaExclusion->reset();
             break;
         }else{
+            fprintf(f,"Comprimo Escape Probabilidad %d/%d \n",probas.cantDistintos,probas.probaTotal+probas.cantDistintos);
             aritmetico->comprimir(probas.cantDistintos,probas.probaTotal,probas.probaTotal+probas.cantDistintos);
         }
     }
+    fclose(f);
     return 0;
 }
 
@@ -57,7 +71,7 @@ int Predictor::finalizarCompresion(std::string contextoActual){
     for(it = listaContextos->begin();it != listaContextos->end();it++){
         probas = (*it)->getProbabilidadesEscape(contextoActual,listaExclusion);
         if((distance(it,listaContextos->end())) == 1){
-            aritmetico->comprimir(1,probas.probaTotal,probas.probaTotal+1);
+            aritmetico->comprimir(1,probas.probaTotal-1,probas.probaTotal);
         }else{
             aritmetico->comprimir(probas.cantDistintos,probas.probaTotal,probas.probaTotal+probas.cantDistintos);
         }
