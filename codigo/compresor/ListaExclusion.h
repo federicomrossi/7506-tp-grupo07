@@ -13,7 +13,9 @@ public:
 	ListaExclusion();
 	~ListaExclusion();
 	void excluirCaracter(char caracter);
+	void excluirCaracter(int caracter);
 	bool estaExcluido(char caracter);
+	bool estaExcluido(int caracter);
 	void persistir();
 	void reset();
 	void imprimir();

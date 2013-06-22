@@ -18,7 +18,7 @@ void Ctx0::aumentarFrec(char letra,string letrasContexto){
 }
 
 
-probabilidades Ctx0::getProbabilidades(char letra,string letrasContexto, ListaExclusion& listaExclusion){
+probabilidades Ctx0::getProbabilidades(char letra,string letrasContexto, ListaExclusion *listaExclusion){
 	probabilidades aux;
 	unsigned short int cantDistintos=0;
 	unsigned int probAcum=0;
@@ -27,11 +27,11 @@ probabilidades Ctx0::getProbabilidades(char letra,string letrasContexto, ListaEx
 	bool acumulo = true;
 	for (int i=0; i<MAX_NUM_CARACTERES ; i++){
 		if ( ((int)letra != i) && (caracteres[(int)i]!=0) ) {
-			if (!listaExclusion.estaExcluido((char)i)){
+			if (!listaExclusion->estaExcluido(i)){
 				probTotal+=caracteres[(int)i];
 				if (acumulo){
 					probAcum+= caracteres[(int)i];
-					listaExclusion.excluirCaracter((char)i);
+					listaExclusion->excluirCaracter(i);
 				}
 				cantDistintos++;
 			}
@@ -49,17 +49,17 @@ probabilidades Ctx0::getProbabilidades(char letra,string letrasContexto, ListaEx
 	aux.probaTotal=probTotal;
 	aux.cantDistintos=cantDistintos;
 	if (aux.probaCaracter==0)
-		listaExclusion.persistir();
+		listaExclusion->persistir();
 	return aux;
 }
 
-probabilidades Ctx0::getProbabilidadesEscape(string letrasContexto,ListaExclusion& listaExclusion){
+probabilidades Ctx0::getProbabilidadesEscape(string letrasContexto,ListaExclusion *listaExclusion){
 	probabilidades aux;
 	unsigned short int cantDistintos=0;
 	unsigned int probAcum=0;
 	unsigned int probTotal=0;
 	for (int i=0; i<MAX_NUM_CARACTERES ; i++){
-		if ( !listaExclusion.estaExcluido((char)i)) {
+		if ( !listaExclusion->estaExcluido(i)) {
 			probTotal+=caracteres[(int)i];
 			if(caracteres[i]>0)	
 				cantDistintos++;
@@ -71,7 +71,7 @@ probabilidades Ctx0::getProbabilidadesEscape(string letrasContexto,ListaExclusio
 	return aux;
 }
 
-int Ctx0::extraerCaracter(unsigned short probaAcumulada,  string contextoActual, ListaExclusion &listaExclusion)
+int Ctx0::extraerCaracter(unsigned short probaAcumulada,  string contextoActual, ListaExclusion *listaExclusion)
 {
 	unsigned int acumulada = 0;
 
@@ -81,12 +81,12 @@ int Ctx0::extraerCaracter(unsigned short probaAcumulada,  string contextoActual,
 			return i-1;
 		}
 
-		if (!listaExclusion.estaExcluido((char)i)) {
+		if (!listaExclusion->estaExcluido(i)) {
 			acumulada+= caracteres[i];
 		}
 
 		if (caracteres[i]!=0) {
-			listaExclusion.excluirCaracter((char)i);
+			listaExclusion->excluirCaracter(i);
 		} 
 
 	}
@@ -94,7 +94,7 @@ int Ctx0::extraerCaracter(unsigned short probaAcumulada,  string contextoActual,
 	if (probaAcumulada<acumulada) {
 		return MAX_NUM_CARACTERES-1;
 	} else {
-		listaExclusion.persistir();
+		listaExclusion->persistir();
 		return -1;
 	}
 

@@ -31,7 +31,7 @@ void CtxN::aumentarFrec(char letra,string letrasContexto){
 	}
 }
 
-probabilidades CtxN::getProbabilidades(char letra,std::string letrasContexto,ListaExclusion& listaExclusion){
+probabilidades CtxN::getProbabilidades(char letra,std::string letrasContexto,ListaExclusion *listaExclusion){
     probabilidades probas;
 	unsigned short int cantDistintos=0;
 	unsigned int probAcum=0;
@@ -45,11 +45,11 @@ probabilidades CtxN::getProbabilidades(char letra,std::string letrasContexto,Lis
 		list <letraFrec>::iterator listIt;
 		for (listIt=lista.begin() ; listIt!=lista.end() ; listIt++){
 			if (letra != listIt->getLetra()) {
-				if (!listaExclusion.estaExcluido(listIt->getLetra())){
+				if (!listaExclusion->estaExcluido(listIt->getLetra())){
 					probTotal+=listIt->getFrec();
 					if (acumulo){
 						probAcum+=listIt->getFrec();
-						listaExclusion.excluirCaracter(listIt->getLetra());
+						listaExclusion->excluirCaracter(listIt->getLetra());
 						}
 					cantDistintos++;
 				}
@@ -68,12 +68,12 @@ probabilidades CtxN::getProbabilidades(char letra,std::string letrasContexto,Lis
 	probas.probaTotal=probTotal;
 	probas.cantDistintos=cantDistintos;
 	if (probas.probaCaracter == 0)
-		listaExclusion.persistir();
+		listaExclusion->persistir();
     return probas;
 }
 
 //Tener en cuenta que si cantDistintos = 0 , entonces escape = 1
-probabilidades CtxN::getProbabilidadesEscape(std::string letrasContexto,ListaExclusion& listaExclusion){
+probabilidades CtxN::getProbabilidadesEscape(std::string letrasContexto,ListaExclusion *listaExclusion){
     probabilidades probas;
 	unsigned short int cantDistintos=0;
 	unsigned int probAcum=0;
@@ -84,7 +84,7 @@ probabilidades CtxN::getProbabilidadesEscape(std::string letrasContexto,ListaExc
 		list <letraFrec> lista = mapIt->second;
 		list <letraFrec>::iterator listIt;
 		for (listIt = lista.begin(); listIt != lista.end() ; listIt++){
-			if (!listaExclusion.estaExcluido(listIt->getLetra())){
+			if (!listaExclusion->estaExcluido(listIt->getLetra())){
 				probTotal+=listIt->getFrec();
 				cantDistintos++;
 			}
@@ -97,8 +97,11 @@ probabilidades CtxN::getProbabilidadesEscape(std::string letrasContexto,ListaExc
     return probas;
 }
 
-int CtxN::extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion &listaExclusion){
+int CtxN::extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion *listaExclusion){
     
+	if (contextoActual.length()<ordenContexto) {
+			return -1;
+		}
 	unsigned int acumulada = 0;
 	std::string contextoAdapatado = this->adaptarContexto(contextoActual);
 	list<letraFrec> contexto = distintosContextos[contextoAdapatado];
@@ -110,17 +113,17 @@ int CtxN::extraerCaracter(unsigned short probaAcumulada, std::string contextoAct
 			return (int)(*it).getLetra();
 		}
 
-		if(!listaExclusion.estaExcluido((*it).getLetra())) {
+		if(!listaExclusion->estaExcluido((*it).getLetra())) {
 			acumulada+=(*it).getFrec();
 		}
 
-		listaExclusion.excluirCaracter((*it).getLetra());
+		listaExclusion->excluirCaracter((*it).getLetra());
 	}
 
 	if (probaAcumulada<acumulada) {
 		return (int)(contexto.back().getLetra());
 	} else {
-		listaExclusion.persistir();
+		listaExclusion->persistir();
 		return -1;
 	}
 }

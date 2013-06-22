@@ -26,11 +26,11 @@ class Ctx0: public Contexto {
 		void aumentarFrec(char letra,string letrasContexto);
 
 
-		probabilidades getProbabilidades(char letra, string letrasContexto, ListaExclusion&);
+		probabilidades getProbabilidades(char letra, string letrasContexto, ListaExclusion*);
 
-		probabilidades getProbabilidadesEscape(string letrasContexto, ListaExclusion& listaExclusion);
+		probabilidades getProbabilidadesEscape(string letrasContexto, ListaExclusion* listaExclusion);
 
-		int extraerCaracter(unsigned short probaAcumulada, string contextoActual, ListaExclusion &listaExclusion);
+		int extraerCaracter(unsigned short probaAcumulada, string contextoActual, ListaExclusion *listaExclusion);
 		
 	protected:
 
