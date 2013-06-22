@@ -31,8 +31,8 @@ probabilidades Ctx0::getProbabilidades(char letra,string letrasContexto, ListaEx
 				probTotal+=caracteres[(int)i];
 				if (acumulo){
 					probAcum+= caracteres[(int)i];
-					listaExclusion->excluirCaracter(i);
 				}
+				listaExclusion->excluirCaracter(i);
 				cantDistintos++;
 			}
 		}
