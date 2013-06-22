@@ -22,7 +22,10 @@ Aritmetico::~Aritmetico(){
 }
 
 int Aritmetico::comprimir(unsigned short probaCaracter, unsigned short probaAcumulada, unsigned short total){
-    FILE* f;
+    if (total==0) {
+    	return 0;
+    }
+	FILE* f;
     f=fopen("logCompresor.txt","a");
     unsigned int rango = this->techo - this->piso + 1;
     this->techo = this->piso + (rango * (probaCaracter+probaAcumulada)/total) -1;
