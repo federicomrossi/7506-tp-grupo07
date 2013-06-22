@@ -2,7 +2,7 @@
 using namespace std;
 
 CtxN::CtxN(short int orden){
-
+	this->ordenContexto = orden;
 }
 
 CtxN::~CtxN(){
