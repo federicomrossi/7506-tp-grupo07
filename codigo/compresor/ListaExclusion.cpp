@@ -13,6 +13,11 @@ void ListaExclusion::excluirCaracter(char a)
 	exclusionesTemporales[(int)a] = true;
 }
 
+void ListaExclusion::excluirCaracter(int a)
+{
+	exclusionesTemporales[a] = true;
+}
+
 
 void ListaExclusion::reset()
 {
@@ -29,6 +34,11 @@ void ListaExclusion::reset()
 bool ListaExclusion::estaExcluido(char caracter)
 {
 	return exclusiones[(int)caracter];
+}
+
+bool ListaExclusion::estaExcluido(int caracter)
+{
+	return exclusiones[caracter];
 }
 
 

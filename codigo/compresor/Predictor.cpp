@@ -38,7 +38,7 @@ int Predictor::comprimir(char c,std::string contextoActual){
     std::list<Contexto*>::iterator it;
     probabilidades probas;
     for(it = listaContextos->begin();it != listaContextos->end();it++){
-        probas = (*it)->getProbabilidades(c, contextoActual,*listaExclusion);
+        probas = (*it)->getProbabilidades(c, contextoActual,listaExclusion);
         (*it)->aumentarFrec(c,contextoActual);
         if(probas.probaCaracter > 0){
             aritmetico->comprimir(probas.probaCaracter,probas.probaAcumulada,probas.probaTotal+probas.cantDistintos);
@@ -55,7 +55,7 @@ int Predictor::finalizarCompresion(std::string contextoActual){
     std::list<Contexto*>::iterator it;
     probabilidades probas;
     for(it = listaContextos->begin();it != listaContextos->end();it++){
-        probas = (*it)->getProbabilidadesEscape(contextoActual,*listaExclusion);
+        probas = (*it)->getProbabilidadesEscape(contextoActual,listaExclusion);
         if((distance(it,listaContextos->end())) == 1){
             aritmetico->comprimir(1,probas.probaTotal,probas.probaTotal+1);
         }else{
@@ -77,16 +77,16 @@ int Predictor::descomprimir(std::string contextoActual){
     int caracter = -1;
     probabilidades probas;
     for(it = listaContextos->begin();it != listaContextos->end();it++){
-        probas = (*it)->getProbabilidadesEscape(contextoActual,*listaExclusion);
+        probas = (*it)->getProbabilidadesEscape(contextoActual,listaExclusion);
         if(probas.probaTotal+probas.cantDistintos == 0){
             caracter = -1;
             break;
         }else{
             probaAcumulada = aritmetico->descomprimir(probas.probaTotal+probas.cantDistintos);
-            caracter = (*it)->extraerCaracter(probaAcumulada,contextoActual,*listaExclusion);
+            caracter = (*it)->extraerCaracter(probaAcumulada,contextoActual,listaExclusion);
         }
         if(caracter > -1){
-            probas = (*it)->getProbabilidades((char)caracter,contextoActual,*listaExclusion);
+            probas = (*it)->getProbabilidades((char)caracter,contextoActual,listaExclusion);
             aritmetico->actualizarRangosDescompresion(probas.probaCaracter,probas.probaAcumulada,probas.probaTotal+probas.cantDistintos);
             (*it)->aumentarFrec(caracter,contextoActual);
             while(it != listaContextos->begin()){
@@ -96,7 +96,7 @@ int Predictor::descomprimir(std::string contextoActual){
             listaExclusion->reset();
             break;
         }else{
-            probas = (*it)->getProbabilidadesEscape(contextoActual,*listaExclusion);
+            probas = (*it)->getProbabilidadesEscape(contextoActual,listaExclusion);
             aritmetico->actualizarRangosDescompresion(probas.cantDistintos,probas.probaTotal,probas.probaTotal+probas.cantDistintos);
         }
     }

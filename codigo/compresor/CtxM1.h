@@ -26,11 +26,11 @@ class CtxM1: public Contexto {
 		//unsigned int getTotal(std::list<letraFrec>, std::string letrasContexto){return 0; };
 		//Devuelve en el campo probaTotal 257 - la cantidad de caracteres incluidos
 		//en el campo probaCaracter siempre tengo un 1
-		probabilidades getProbabilidades(char letra, std::string letrasContexto,ListaExclusion& listaExclusion);
+		probabilidades getProbabilidades(char letra, std::string letrasContexto,ListaExclusion *listaExclusion);
 
-		probabilidades getProbabilidadesEscape(std::string letrasContexto,ListaExclusion&);
+		probabilidades getProbabilidadesEscape(std::string letrasContexto,ListaExclusion *listaExclusion);
 
-		int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion &listaExclusion);
+		int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion *listaExclusion);
 
 	protected:
 		unsigned short int probTotal;

@@ -8,13 +8,13 @@ CtxM1::CtxM1(){
 
 CtxM1::~CtxM1(){}
 
-probabilidades CtxM1::getProbabilidadesEscape(string letrasContexto, ListaExclusion& listaExclusion){
+probabilidades CtxM1::getProbabilidadesEscape(string letrasContexto, ListaExclusion  *listaExclusion){
 	probabilidades aux;
 	unsigned short int cantDistintos=MAX_NUM_CARACTERES;
 	unsigned int probAcum=0;
 	unsigned int probTotal=MAX_NUM_CARACTERES;
 	for (int i=0; i<MAX_NUM_CARACTERES ; i++){
-		if ( listaExclusion.estaExcluido((char)i)) {
+		if ( listaExclusion->estaExcluido(i)) {
 			probTotal--;
 			cantDistintos--;
 		}
@@ -25,7 +25,7 @@ probabilidades CtxM1::getProbabilidadesEscape(string letrasContexto, ListaExclus
 	return aux;
 }
 
-probabilidades CtxM1::getProbabilidades(char letra,string letrasContexto, ListaExclusion& listaExclusion){
+probabilidades CtxM1::getProbabilidades(char letra,string letrasContexto, ListaExclusion *listaExclusion){
 	probabilidades aux;
 	unsigned short int cantDistintos=MAX_NUM_CARACTERES;
 	unsigned int probAcum=0;
@@ -34,11 +34,11 @@ probabilidades CtxM1::getProbabilidades(char letra,string letrasContexto, ListaE
 	bool acumulo = true;
 	for (int i=0; i<MAX_NUM_CARACTERES ; i++){
 		if ( ((int)letra != i) ) {
-			if (!listaExclusion.estaExcluido((char)i)){
+			if (!listaExclusion->estaExcluido(i)){
 				if (acumulo){
 					probAcum++ ;
 				}
-			}else{
+			}else if (listaExclusion->estaExcluido(i)){
 				probTotal--;
 				cantDistintos--;
 			}
@@ -55,7 +55,7 @@ probabilidades CtxM1::getProbabilidades(char letra,string letrasContexto, ListaE
 	return aux;
 }
 
-int CtxM1::extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion &listaExclusion)
+int CtxM1::extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion *listaExclusion)
 {
 	
 	unsigned int acumulada=0;
@@ -65,7 +65,7 @@ int CtxM1::extraerCaracter(unsigned short probaAcumulada, std::string contextoAc
 			return i-1;
 		}
 
-		if (!listaExclusion.estaExcluido((char)i)) {
+		if (!listaExclusion->estaExcluido(i)) {
 			acumulada++;
 		}
 	}
@@ -73,7 +73,7 @@ int CtxM1::extraerCaracter(unsigned short probaAcumulada, std::string contextoAc
 	if (probaAcumulada<acumulada) {
 		return MAX_NUM_CARACTERES-1;
 	} else {
-		listaExclusion.persistir();
+		listaExclusion->persistir();
 		return -1;
 	}
 
