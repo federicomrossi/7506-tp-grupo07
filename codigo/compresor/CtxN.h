@@ -1,7 +1,7 @@
 //Clase abstracta para manejar los contextos superiores a 1
 
 #ifndef CTXN_H_
-#define CTXN_N_
+#define CTXN_H_
 #include <string>
 #include "Contexto.h"
 #include <list>

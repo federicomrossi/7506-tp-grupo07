@@ -7,6 +7,6 @@ int testPPMC(){
     ppmc->comprimir("aComprimir");
     delete ppmc;
     ppmc = new PPMC(0,"aComprimir");
-    ppmc->descomprimir("aComprimir");
+    ppmc->descomprimir("destinoDescomprimido");
     return 0;
 }

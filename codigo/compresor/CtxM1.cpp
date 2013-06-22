@@ -1,15 +1,12 @@
 #include "CtxM1.h"
 #include <stdio.h>
-#define MAX_NUM_CARACTERES 257
 
 using namespace std;
 CtxM1::CtxM1(){
 	this->ordenContexto=-1;
 }
 
-int CtxM1::extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion&){
-    return 0;
-}
+CtxM1::~CtxM1(){}
 
 probabilidades CtxM1::getProbabilidadesEscape(string letrasContexto, ListaExclusion& listaExclusion){
 	probabilidades aux;
@@ -58,7 +55,7 @@ probabilidades CtxM1::getProbabilidades(char letra,string letrasContexto, ListaE
 	return aux;
 }
 
-int extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion &listaExclusion)
+int CtxM1::extraerCaracter(unsigned short probaAcumulada, std::string contextoActual, ListaExclusion &listaExclusion)
 {
 	
 	unsigned int acumulada=0;

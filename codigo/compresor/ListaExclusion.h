@@ -16,6 +16,7 @@ public:
 	bool estaExcluido(char caracter);
 	void persistir();
 	void reset();
+	void imprimir();
 
 private:
 

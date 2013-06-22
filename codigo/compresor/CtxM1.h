@@ -14,7 +14,7 @@ using namespace std;
 class CtxM1: public Contexto {
 	public:
 		CtxM1();
-		~CtxM1(){};
+		~CtxM1();
 		//por que esto tiene que estar aca???
 		//de otra forma no compila
 		//TODO: ve

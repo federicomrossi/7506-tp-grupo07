@@ -78,8 +78,13 @@ int Predictor::descomprimir(std::string contextoActual){
     probabilidades probas;
     for(it = listaContextos->begin();it != listaContextos->end();it++){
         probas = (*it)->getProbabilidadesEscape(contextoActual,*listaExclusion);
-        probaAcumulada = aritmetico->descomprimir(probas.probaTotal+probas.cantDistintos);
-        caracter = (*it)->extraerCaracter(probaAcumulada,contextoActual,*listaExclusion);
+        if(probas.probaTotal+probas.cantDistintos == 0){
+            caracter = -1;
+            break;
+        }else{
+            probaAcumulada = aritmetico->descomprimir(probas.probaTotal+probas.cantDistintos);
+            caracter = (*it)->extraerCaracter(probaAcumulada,contextoActual,*listaExclusion);
+        }
         if(caracter > -1){
             probas = (*it)->getProbabilidades((char)caracter,contextoActual,*listaExclusion);
             aritmetico->actualizarRangosDescompresion(probas.probaCaracter,probas.probaAcumulada,probas.probaTotal+probas.cantDistintos);
