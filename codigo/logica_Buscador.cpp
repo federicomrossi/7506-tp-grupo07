@@ -5,7 +5,7 @@
 #include "runtimeConfig.h"
 
 
-Buscador::Buscador(){
+Buscador::Buscador(Estadista *estadista) : estadista(estadista) {
     this->dest = destPath();
     this->outName=dest+"salida.out";
     rtt = new RTTgenerator(dest);
@@ -24,6 +24,10 @@ int Buscador::buscarPorAutor(std::string autor){
     listilla = new std::list<unsigned int>;
     autores->recuperar(autor,listilla);
     remove(outName.c_str());
+
+    // Censamos en el estadista
+    this->estadista->censarBusquedaPorAutor(autor);
+
     if(listilla->size() == 0){
         cout << "No se encontraron temas" << std::endl;
         delete listilla;
@@ -39,6 +43,10 @@ int Buscador::buscarPorAutor(std::string autor){
         file.seekg(*it);
         file.read((char*)&largo,sizeof(largo));
         getline(file,header);
+
+         // Censamos resultado en el estadista
+        this->estadista->censarResultadoDeBusqueda(header);
+
         cout << header << std::endl;
         imprimirCancion(*it);
     }
@@ -53,6 +61,10 @@ int Buscador::buscarPorTitulo(std::string titulo){
     listilla = new std::list<unsigned int>;
     titulos->recuperar(titulo,listilla);
     remove(outName.c_str());
+
+    // Censamos en el estadista
+    this->estadista->censarBusquedaPorTitulo(titulo);
+
     if(listilla->size() == 0){
         cout << "No se encontraron temas" << std::endl;
         delete listilla;
@@ -68,6 +80,10 @@ int Buscador::buscarPorTitulo(std::string titulo){
         file.seekg(*it);
         file.read((char*)&largo,sizeof(largo));
         getline(file,header);
+
+        // Censamos resultado en el estadista
+        this->estadista->censarResultadoDeBusqueda(header);
+
         cout << header << std::endl;
         imprimirCancion(*it);
     }
@@ -82,6 +98,10 @@ int Buscador::buscarPorFrase(std::string frase){
     listilla = new std::list<unsigned int>;
     rtt->recuperar(frase,listilla);
     remove(outName.c_str());
+
+    // Censamos en el estadista
+    this->estadista->censarBusquedaPorFrase(frase);
+
     if(listilla->size() == 0){
         cout << "No se encontraron temas" << std::endl;
         delete listilla;
@@ -97,6 +117,10 @@ int Buscador::buscarPorFrase(std::string frase){
         file.seekg(*it);
         file.read((char*)&largo,sizeof(largo));
         getline(file,header);
+
+        // Censamos resultado en el estadista
+        this->estadista->censarResultadoDeBusqueda(header);
+
         cout << header << std::endl;
         imprimirCancion(*it);
     }

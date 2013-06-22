@@ -4,6 +4,7 @@
 #include "logica_IndiceAutor.h"
 #include "logica_IndiceTitulo.h"
 #include "logica_RTTgenerator.h"
+#include "logica_Estadista.h"
 
 
 /**
@@ -14,7 +15,7 @@
 */
 class Buscador{
     public:
-        Buscador();
+        Buscador(Estadista *estadista);
         ~Buscador();
         int buscarPorAutor(std::string autor);
         int buscarPorTitulo(std::string titulo);
@@ -25,9 +26,9 @@ class Buscador{
         IndiceAutor *autores;
         IndiceTitulo *titulos;
         RTTgenerator *rtt;
+        Estadista *estadista;
         std::string dest;
         std::string outName;
-
 };
 
 

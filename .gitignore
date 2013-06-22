@@ -1,1 +1,14 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.deps
+
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+
+# Others
 .DS_Store

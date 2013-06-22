@@ -28,4 +28,10 @@ unsigned int hashBlockSize();
 
 unsigned int arbolBlockSize();
 
+int estadistaMaximoAutoresMasBuscados();
+
+int estadistaMaximoTitulosMasBuscados();
+
+int estadistaMaximoFrasesMasBuscadas();
+
 #endif
