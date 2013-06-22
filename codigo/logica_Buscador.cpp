@@ -24,10 +24,6 @@ int Buscador::buscarPorAutor(std::string autor){
     listilla = new std::list<unsigned int>;
     autores->recuperar(autor,listilla);
     remove(outName.c_str());
-
-    // Censamos en el estadista
-    this->estadista->censarBusquedaPorAutor(autor);
-
     if(listilla->size() == 0){
         cout << "No se encontraron temas" << std::endl;
         delete listilla;
@@ -61,10 +57,6 @@ int Buscador::buscarPorTitulo(std::string titulo){
     listilla = new std::list<unsigned int>;
     titulos->recuperar(titulo,listilla);
     remove(outName.c_str());
-
-    // Censamos en el estadista
-    this->estadista->censarBusquedaPorTitulo(titulo);
-
     if(listilla->size() == 0){
         cout << "No se encontraron temas" << std::endl;
         delete listilla;
@@ -98,10 +90,6 @@ int Buscador::buscarPorFrase(std::string frase){
     listilla = new std::list<unsigned int>;
     rtt->recuperar(frase,listilla);
     remove(outName.c_str());
-
-    // Censamos en el estadista
-    this->estadista->censarBusquedaPorFrase(frase);
-
     if(listilla->size() == 0){
         cout << "No se encontraron temas" << std::endl;
         delete listilla;

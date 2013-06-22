@@ -71,6 +71,10 @@ int Menu::ingresarOpcion(int opcion){
             std::cout << "Ingrese el autor a buscar" << std::endl;
             std::cin.ignore();
             std::getline(std::cin, text);
+
+            // Censamos en el estadista
+            this->estadista.censarBusquedaPorAutor(text);
+
             text = Utils::uniformizarString(text);
             std::cout << std::endl;
             while (text.compare("0")){
@@ -88,6 +92,10 @@ int Menu::ingresarOpcion(int opcion){
             cout << "Ingrese el titulo a buscar" << endl;
             std::cin.ignore();
             std::getline(std::cin, text);
+
+            // Censamos en el estadista
+            this->estadista.censarBusquedaPorTitulo(text);
+
             text = Utils::uniformizarString(text);
             std::cout << std::endl;
             while (text.compare("0")){
@@ -106,6 +114,10 @@ int Menu::ingresarOpcion(int opcion){
             cout << "Ingrese la frase a buscar" << endl;
             std::cin.ignore();
             std::getline(std::cin, text);
+
+            // Censamos en el estadista
+            this->estadista.censarBusquedaPorFrase(text);
+
             std::cout << std::endl;
             while (text.compare("0")){
                 busc->buscarPorFrase(text);
