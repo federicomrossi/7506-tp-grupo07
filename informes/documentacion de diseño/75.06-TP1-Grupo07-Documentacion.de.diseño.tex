@@ -482,19 +482,32 @@
 
 
 
-% DETALLES TECNICOS - Indexacion - Indice de Autor
-\subsubsection{Índice de Autor}
+% DETALLES TECNICOS - Compresion - Aritmetico
+\subsubsection{Aritmético}
 \medskip
 
-	El mismo esta basado en un Árbol B$^+$. En este último se almacenan registros con el formato 
-	\bigskip
+	La implementación del mismo se realizo siguiendo al teoría desarrollada en clase. Sus parametros son la probabilidad del caracter a comprimir/descomprimir, la probabilidad acumulada y la probabilidad total. 
 
-	{\ttfamily\footnotesize
-	(idAutor, clave1, clave2, clave3, clave4, clave5, refLista) \\}
-
-	Las claves representan referencias a posiciones de canciones en el archivo maestro. La ``\textit{refLista}'' representa una referencia a una posicion al archivo de listas de autores. Se eligio esta solucion ya que es factible que existan muchas canciones del mismo autor.
 \bigskip
 
 
+% DETALLES TECNICOS - Compresion - Predictor
+\subsubsection{Predictor}
+\medskip
+
+	Este caso requerio de mayor planeamiento debido a la escasa bibliografía con respecto a la implementación de este aspecto del PPMC. A diferencia del resto del diseño, para está parte se decidió realizar una planificación conjunta, llegando a la siguiente realización. Debido a las particularidades de cada uno de los ordenes divisamos tres tipos distintos, representados por las clases ``\textit{CtxM1}'', ``\textit{Ctx0}'' y ``\textit{CtxN}''. La estructura principal del predictor es una lista enlazada, cuyos nodos representan cada uno de los ordenes con los cuales se esta trabajando.
+	\medskip
+
+	Las carácteristicas de los ordenes -1 y 0, permitían generar las estrúcturas para almacenar los contextos de manerar estática (desde el punto de vista de la alocación de la memoria). En particular, el orden -1 se maneja con un simple contador para representar la probabilidad total y se va decrementando según el resultado de las exclusiones, es decir, que la probabilidad de los caracteres se obtiene de manera implícita. Para el caso del orden 0, las probabilidades se alojan en un arreglo de 257 posiciones. Debido a que esto genera un bajo overhead de memoria pero, permite acceso O(1) a todas las probabilidades, fue el camino escogido.
+	\medskip
+
+	El mayor inconveniente se presenta para los ordenes mayores a 1. Debido a que uno de los requerimientos era que el orden del PPMC fuera un parametro de configuración accesible al usuario final, la implementación del mismo debía ser tal que de manera genérica pudieran crearse los contextos para cualquier orden. En este caso el enfoque de los arreglos estaticos es inviable por el hecho de que se necesitaría demasiada memoria para los ordenes superiores (aproximadamente 8GB para orden 4).
+	Fue por ello que se decidio implementar los contextos mediante un mapa {\ttfamily\footnotesize Contexto => Lista<Frecuencias> \\} donde cada nuevo contexto generaba dinamicamente una lista enlazada para registrar la ocurrencia de un caracter. Debido a esta implementación, los algoritmos de ``\textit{CtxN}'' se aseguran de obetner todos los datos necesarios en una unica iteración del contexto correpondiente.
+	\medskip
+
+	Finalmente se genero una clase virtual padre para todos los contextos, apropiadamente llamada ``\textit{Contexto}'', de forma tal que se pudieran utilizar metodos polimórficos para el recorrido de los distintos ordenes.
+	\medskip
+
+\bigskip
 
 \end{document}
