@@ -1,4 +1,4 @@
-#include "ListaExclusion.h"
+#include "compresion_ListaExclusion.h"
 
 ListaExclusion::ListaExclusion() 
 {

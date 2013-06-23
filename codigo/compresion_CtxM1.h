@@ -1,11 +1,11 @@
-#ifndef CTXM1_H_
-#define CTXM1_H_
+#ifndef COMPRESION_CTXM1_H_
+#define COMPRESION_CTXM1_H_
 
 
 //este sera el contexto -1
 //en este contexto no sera falta la exclusion, ya que cada vez que entro aca tengo que reducir en 1 la probabilidad total
-#include "Contexto.h"
-#include "letraFrec.h"
+#include "compresion_Contexto.h"
+#include "compresion_letraFrec.h"
 #include <string>
 
 

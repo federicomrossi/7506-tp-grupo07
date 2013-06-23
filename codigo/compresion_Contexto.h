@@ -1,10 +1,10 @@
-#ifndef CONTEXTO_H_
-#define CONTEXTO_H_
+#ifndef COMPRESION_CONTEXTO_H_
+#define COMPRESION_CONTEXTO_H_
 
 #include <string>
 #include <list>
-#include "letraFrec.h"
-#include "ListaExclusion.h"
+#include "compresion_letraFrec.h"
+#include "compresion_ListaExclusion.h"
 #define MAX_NUM_CARACTERES 257
 //clase virtual para hacer polimorfismo
 

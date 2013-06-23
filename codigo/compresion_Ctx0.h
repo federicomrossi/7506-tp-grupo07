@@ -1,9 +1,9 @@
-#ifndef CTX0_H_
-#define CTX0_H_
+#ifndef COMPRESION_CTX0_H_
+#define COMPRESION_CTX0_H_
 
 
-#include "Contexto.h"
-#include "letraFrec.h"
+#include "compresion_Contexto.h"
+#include "compresion_letraFrec.h"
 #include <string>
 #include <list>
 //este sera el contexto 0

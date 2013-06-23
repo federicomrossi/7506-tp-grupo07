@@ -1,9 +1,9 @@
-#ifndef PREDICTOR_H_
-#define PREDICTOR_H_
+#ifndef COMPRESION_PREDICTOR_H_
+#define COMPRESION_PREDICTOR_H_
 
 #include <iostream>
 #include <list>
-#include "Contexto.h"
+#include "compresion_Contexto.h"
 #include "compresion_Aritmetico.h"
 
 using namespace std;

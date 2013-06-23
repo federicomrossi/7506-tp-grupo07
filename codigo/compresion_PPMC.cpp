@@ -1,4 +1,4 @@
-#include "PPMC.h"
+#include "compresion_PPMC.h"
 #include <fstream>
 
 PPMC::PPMC(unsigned short int orden,std::string archivo){

@@ -1,10 +1,10 @@
-#ifndef PPMC_H_
-#define PPMC_H_
+#ifndef COMPRESION_PPMC_H_
+#define COMPRESION_PPMC_H_
 
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "Predictor.h"
+#include "compresion_Predictor.h"
 // FALTA INCLUIR CONTEXTOS (POSIBLEMENTE PREDICTOR.H)
 
 class PPMC
