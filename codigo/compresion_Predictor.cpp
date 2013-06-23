@@ -33,6 +33,7 @@ Predictor::~Predictor(){
     }
     delete listaContextos;
     delete aritmetico;
+    delete listaExclusion;
 }
 
 int Predictor::comprimir(char c,std::string contextoActual){
