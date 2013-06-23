@@ -7,6 +7,7 @@
 #include "logica_Validator.h"
 #include "logica_Utils.h"
 #include "runtimeConfig.h"
+#include "compresion_PPMC.h"
 
 Indexer::Indexer(){
     this->fromPath=sourcePath();
@@ -51,6 +52,7 @@ int Indexer::indexarCancionesDesde(int mode){
             }else{
                 std::cout << "OK." << std::endl;
                 unsigned int songPosition = this->copyToMaster(*it, masterName); //copio al archivo mestro la cancion
+                std::cout << songPosition;
                 this->indexarAutores(header,songPosition); //agrego ocurrencia de autor
                 this->indexarTitulo(header,songPosition);//agrego ocurrencia de titulo
                 this->generateRTT(*it,songPosition);//agrego ocurrencia de rtt
@@ -103,14 +105,26 @@ int Indexer::estaIndexado(std::string header){
 int Indexer::copyToMaster(std::string from, std::string to){
     std::ifstream source(from.c_str());
     std::ofstream dest(to.c_str(), std::fstream::app);
+    std::string header;
+    getline(source,header);
+    source.close();
+    unsigned int tam = header.length() +1;
+    PPMC* ppmc = new PPMC(PPMCOrder(),from);
+    ppmc->comprimir(from);
+    delete ppmc;
+    std::string s = from + ".ppmc";
+    std::ifstream comprimido;
+    comprimido.open(s.c_str());
+    comprimido.seekg(0,std::ios_base::end);
+    tam += comprimido.tellg();
     unsigned int pos = dest.tellp();
-    source.seekg(0,std::ios_base::end);
-    unsigned int tam = source.tellg();
-    source.seekg(0,std::ios_base::beg);
+    comprimido.seekg(0,std::ios_base::beg);
     dest.write((char*)&tam, sizeof(tam));
     //dest << tam;
-    dest << source.rdbuf();
-    source.close();
+    dest << header << endl;
+    dest << comprimido.rdbuf();
+    comprimido.close();
+    remove(s.c_str());
     dest.close();
     return pos;
 }

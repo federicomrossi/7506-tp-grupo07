@@ -3,6 +3,7 @@
 #include "logica_Buscador.h"
 #include "logica_Utils.h"
 #include "runtimeConfig.h"
+#include "compresion_PPMC.h"
 
 
 Buscador::Buscador(Estadista *estadista) : estadista(estadista) {
@@ -127,11 +128,29 @@ int Buscador::imprimirCancion(unsigned int ref){
     unsigned int largo;
     file.seekg(ref);
     file.read((char*)&largo,sizeof(largo));
-    for(unsigned int i=0;i<largo;i++){
+    std::string header;
+    getline(file,header);
+    std::ofstream temporal;
+    temporal.open("temporal.ppmc",std::fstream::app);
+    for(unsigned int i=0;i<largo-header.length()-1;i++){
         char c;
         file.read(&c,sizeof(char));
-        out.write(&c,sizeof(char));
+        temporal.write(&c,sizeof(char));
     }
+    temporal.close();
+    std::string s = "temporal";
+    PPMC* ppmc= new PPMC(PPMCOrder(),s);
+    ppmc->descomprimir(s);
+    std::ifstream temp2("temporal");
+    remove("temporal.ppmc");
+    char c2=0;
+    temp2.read(&c2,sizeof(char));
+    while(!temp2.eof()){
+        out.write(&c2,sizeof(char));
+        temp2.read(&c2,sizeof(char));
+    }
+    temp2.close();
+    remove("temporal");
     out << std::endl;
     file.close();
     out.close();
