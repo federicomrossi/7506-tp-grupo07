@@ -174,10 +174,10 @@
 
 
 
-% DETALLES TECNICOS
-\section{Detalles técnicos}
+% DETALLES TECNICOS: 1ra Parte
+\section{Detalles técnicos: \textit{1ra Parte}}
 
-	A continuación se describirá con un mayor nivel de detalle cada uno de los módulos que componen el sistema. \\
+	A continuación se describirá con un mayor nivel de detalle cada uno de los módulos que componen el sistema en esta primer etapa del proyecto. \\
 
 
 % DETALLES TECNICOS - Capa Física
@@ -468,5 +468,23 @@
 
 	Las resoluciones de las consultas se imprimen por pantalla, mientras que las letras recuperadas se imprimen en el archivo ``\textit{salida.out}'' el cual se almacena en la carpeta destino especificada en el archivo de configuración ``\textit{parametros.conf}'' (este se encuentra en el directorio \textit{codigo}).
 \bigskip
+
+
+
+% DETALLES TECNICOS: 2da Parte
+\section{Detalles técnicos: \textit{2da Parte}}
+
+	A continuación se describirá con un mayor nivel de detalle cada uno de los módulos que componen el sistema en esta segunda etapa del proyecto. \\
+
+
+% DETALLES TECNICOS - Capa Física
+\subsection{Módulo de estadísticas}
+
+	El módulo de estadísticas se encuentra representado por la clase \textit{Estadista}, quien permite censar búsquedas por \textit{autor}, por \textit{título} y por \textit{frases}, como así también permite el censo de resultados de búsquedas.
+	\par
+	Para poder efectuar dichos censos, se insertan
+	puntos de cómputo en donde se llaman a los distintos métodos que corresponden a cada categoría de censado. En nuestro caso, para la aplicación en sí, se han realizado dichas llamadas en los puntos en los que el usuario realiza el ingreso del parámetro de búsqueda por entrada estándar. Por otro lado, para censar los resultados de búsquedas, se insertaron puntos de cómputo en las salidas de cada procesamiento de búsqueda.
+	\par
+	Las estadísticas pueden ser consultadas en cualquier momento, lo cual permitirá ver el estado de lo computado y procesado hasta el momento. Se permite especificar en estos la cantidad 
 
 \end{document}
