@@ -464,7 +464,7 @@
 \subsubsection{Aritmético}
 \medskip
 
-	La implementación del mismo se realizo siguiendo al teoría desarrollada en clase. Sus parametros son la probabilidad del caracter a comprimir/descomprimir, la probabilidad acumulada y la probabilidad total. 
+	La implementación del mismo se realizó siguiendo la teoría desarrollada en clase. Sus parametros son la probabilidad del caracter a comprimir/descomprimir, la probabilidad acumulada y la probabilidad total. 
 
 \bigskip
 
@@ -474,7 +474,7 @@
 \subsubsection{Predictor}
 \medskip
 
-	Este caso requerio de mayor planeamiento debido a la escasa bibliografía con respecto a la implementación de este aspecto del PPMC. A diferencia del resto del diseño, para está parte se decidió realizar una planificación conjunta, llegando a la siguiente realización. Debido a las particularidades de cada uno de los ordenes divisamos tres tipos distintos, representados por las clases ``\textit{CtxM1}'', ``\textit{Ctx0}'' y ``\textit{CtxN}''. La estructura principal del predictor es una lista enlazada, cuyos nodos representan cada uno de los ordenes con los cuales se esta trabajando.
+	Este caso requirió de mayor planeamiento debido a la escasa bibliografía con respecto a la implementación de este aspecto del PPMC. A diferencia del resto del diseño, para esta parte se decidió realizar una planificación conjunta, llegando a la siguiente realización. Debido a las particularidades de cada uno de los ordenes divisamos tres tipos distintos, representados por las clases ``\textit{CtxM1}'', ``\textit{Ctx0}'' y ``\textit{CtxN}''. La estructura principal del predictor es una lista enlazada, cuyos nodos representan cada uno de los ordenes con los cuales se esta trabajando.
 	\par
 	Las carácteristicas de los ordenes -1 y 0, permitían generar las estrúcturas para almacenar los contextos de manerar estática (desde el punto de vista de la alocación de la memoria). En particular, el orden -1 se maneja con un simple contador para representar la probabilidad total y se va decrementando según el resultado de las exclusiones, es decir, que la probabilidad de los caracteres se obtiene de manera implícita. Para el caso del orden 0, las probabilidades se alojan en un arreglo de 257 posiciones. Debido a que esto genera un bajo overhead de memoria pero, permite acceso O(1) a todas las probabilidades, fue el camino escogido.
 	\par
