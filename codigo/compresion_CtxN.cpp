@@ -1,4 +1,4 @@
-#include "CtxN.h"
+#include "compresion_CtxN.h"
 using namespace std;
 
 CtxN::CtxN(short int orden){

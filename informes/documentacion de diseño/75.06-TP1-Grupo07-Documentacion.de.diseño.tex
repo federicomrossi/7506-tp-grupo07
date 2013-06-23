@@ -469,4 +469,32 @@
 	Las resoluciones de las consultas se imprimen por pantalla, mientras que las letras recuperadas se imprimen en el archivo ``\textit{salida.out}'' el cual se almacena en la carpeta destino especificada en el archivo de configuración ``\textit{parametros.conf}'' (este se encuentra en el directorio \textit{codigo}).
 \bigskip
 
+
+
+
+% DETALLES TECNICOS - Compresion
+\subsection{Compresion}
+\medskip
+
+	La compresión de los temas fue realizada mediante una implementación del algoritmo PPMC. El mismo fue subdivido en dos módulos para su realización: el correspondiente a la compresión/descompresión aritmética (implementado en la clase ``\textit{Aritmetico}'') y el de la predicción (implementado en la clase ``\textit{Contexto}'' y sus herederas). A continuación un detalle de ambos.
+
+\bigskip
+
+
+
+% DETALLES TECNICOS - Indexacion - Indice de Autor
+\subsubsection{Índice de Autor}
+\medskip
+
+	El mismo esta basado en un Árbol B$^+$. En este último se almacenan registros con el formato 
+	\bigskip
+
+	{\ttfamily\footnotesize
+	(idAutor, clave1, clave2, clave3, clave4, clave5, refLista) \\}
+
+	Las claves representan referencias a posiciones de canciones en el archivo maestro. La ``\textit{refLista}'' representa una referencia a una posicion al archivo de listas de autores. Se eligio esta solucion ya que es factible que existan muchas canciones del mismo autor.
+\bigskip
+
+
+
 \end{document}

@@ -1,12 +1,12 @@
 //Clase abstracta para manejar los contextos superiores a 1
 
-#ifndef CTXN_H_
-#define CTXN_H_
+#ifndef COMPRESION_CTXN_H_
+#define COMPRESION_CTXN_H_
 #include <string>
-#include "Contexto.h"
+#include "compresion_Contexto.h"
 #include <list>
 #include <map>
-#include "letraFrec.h"
+#include "compresion_letraFrec.h"
 
 //declaraciones necesarias para el map
 

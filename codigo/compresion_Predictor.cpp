@@ -1,10 +1,10 @@
-#include "Predictor.h"
-#include "ListaExclusion.h"
+#include "compresion_Predictor.h"
+#include "compresion_ListaExclusion.h"
 #include "compresion_Aritmetico.h"
-#include "Contexto.h"
-#include "CtxM1.h"
-#include "Ctx0.h"
-#include "CtxN.h"
+#include "compresion_Contexto.h"
+#include "compresion_CtxM1.h"
+#include "compresion_Ctx0.h"
+#include "compresion_CtxN.h"
 #include <stdio.h>
 
 #include <iterator>
