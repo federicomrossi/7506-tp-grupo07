@@ -12,3 +12,18 @@
 
 # Others
 .DS_Store
+.gitignore
+temas2/
+*.sublime-project
+*.sublime-workspace
+*.o
+
+codigo/compresor/main.cpp
+
+codigo/compresor/.cproject
+
+codigo/compresor/.project
+
+codigo/compresor/test.txt
+
+

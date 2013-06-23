@@ -34,4 +34,6 @@ int estadistaMaximoTitulosMasBuscados();
 
 int estadistaMaximoFrasesMasBuscadas();
 
+unsigned int PPMCOrder();
+
 #endif

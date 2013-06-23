@@ -94,3 +94,10 @@ int estadistaMaximoFrasesMasBuscadas()
 {
     return stoi(readParam("ESTADISTA_MAXIMO_FRASES_MAS_BUSCADAS"));
 }
+unsigned int PPMCOrder()
+{
+    return stoi(readParam("PPMC_ORDER"));
+}
+
+
+

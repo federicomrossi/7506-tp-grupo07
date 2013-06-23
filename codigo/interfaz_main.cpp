@@ -1,9 +1,8 @@
 #include <iostream>
 #include "interfaz_Menu.h"
-
-
-#include "testCompresion.h"
+#include "./compresor/testCompresion.h"
 #include "testEstadista.h"
+#include "./compresor/testPPMC.h"
 
 
 int main()
@@ -15,4 +14,10 @@ int main()
 	while(m->start());
 	delete m;
 	return 0;
+    //testAritmetico();
+	//
+	//
+	//
+	//Para la segunda parte
+    //testPPMC();
 }

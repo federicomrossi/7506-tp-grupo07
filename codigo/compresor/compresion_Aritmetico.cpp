@@ -22,19 +22,22 @@ Aritmetico::~Aritmetico(){
 }
 
 int Aritmetico::comprimir(unsigned short probaCaracter, unsigned short probaAcumulada, unsigned short total){
-    FILE* f;
-    f=fopen("logCompresor.txt","a");
+    //FILE* f;
+    //f=fopen("logCompresor.txt","a");
+    if (total==0) {
+    	return 0;
+    }
     unsigned int rango = this->techo - this->piso + 1;
     this->techo = this->piso + (rango * (probaCaracter+probaAcumulada)/total) -1;
     this->piso = this->piso + (rango * probaAcumulada/total);
-    fprintf(f,"Rango: %d \n",rango);
-    fprintf(f,"Techo: %d \n",techo);
-    fprintf(f,"Piso: %d \n",piso);
+    //fprintf(f,"Rango: %d \n",rango);
+    //fprintf(f,"Techo: %d \n",techo);
+    //fprintf(f,"Piso: %d \n",piso);
     int finished = 0;
     while(!finished){
         short bitMasSignificativo= (this->techo ^ this->piso) / 0x8000;
         if(!bitMasSignificativo){ //overflow
-            fprintf(f,"Overflow \n");
+            //fprintf(f,"Overflow \n");
             char msb = this->techo / 0x8000;//escribo bit mas significativo
             bitBuffer <<= 1;
             if(msb){
@@ -55,10 +58,10 @@ int Aritmetico::comprimir(unsigned short probaCaracter, unsigned short probaAcum
             this->piso <<= 1;
             this->techo <<= 1;
             this->techo = this->techo | 0x0001;
-            fprintf(f,"Techo: %d \n",techo);
-            fprintf(f,"Piso: %d \n",piso);
+            //fprintf(f,"Techo: %d \n",techo);
+            //fprintf(f,"Piso: %d \n",piso);
         }else if(!(this->techo & 0x4000) && (this->piso & 0x4000)){ //verifico underflow
-                fprintf(f,"Underflow \n");
+                //fprintf(f,"Underflow \n");
                 UF++;
                 this->piso = this->piso & 0x3FFF;
                 this->techo = this->techo | 0x4000;
@@ -66,13 +69,13 @@ int Aritmetico::comprimir(unsigned short probaCaracter, unsigned short probaAcum
                 this->techo <<= 1;
                 this->techo = this->techo | 0x0001;
 
-                fprintf(f,"Techo: %d \n",techo);
-                fprintf(f,"Piso: %d \n",piso);
+                //fprintf(f,"Techo: %d \n",techo);
+                //fprintf(f,"Piso: %d \n",piso);
         }else{
             finished=1;
         }
     }
-    fclose(f);
+//    fclose(f);
     return 0;
 }
 
@@ -145,34 +148,34 @@ unsigned short Aritmetico::descomprimir(unsigned short total){
 }
 
 int Aritmetico::actualizarRangosDescompresion(unsigned short probaCaracter, unsigned short probaAcumulada, unsigned short total){
-     FILE* f;
-    f=fopen("logDescompresor.txt","a");
+    // FILE* f;
+    //f=fopen("logDescompresor.txt","a");
     unsigned int rango = this->techo - this->piso + 1;
     this->techo = this->piso + (rango * (probaCaracter+probaAcumulada)/total) -1;
     this->piso = this->piso + (rango * probaAcumulada/total);
-    if(codigoDescompresion < piso || codigoDescompresion > techo){
-        fprintf(f,"//////////////////// ERROR //////////////// \n");
+    /*if(codigoDescompresion < piso || codigoDescompresion > techo){
+        //fprintf(f,"//////////////////// ERROR //////////////// \n");
     }
     fprintf(f,"Codigo: %d \n",codigoDescompresion);
     fprintf(f,"Buffer: %d \n",bitBuffer);
     fprintf(f,"Rango: %d \n",rango);
     fprintf(f,"Techo: %d \n",techo);
-    fprintf(f,"Piso: %d \n",piso);
+    fprintf(f,"Piso: %d \n",piso);*/
     int finished = 0;
     while(!finished){
         short bitMasSignificativo= (this->techo ^ this->piso) / 0x8000;
         if(!bitMasSignificativo){ //overflow
-            fprintf(f,"Overflow \n");
+            //fprintf(f,"Overflow \n");
             readBufferDescompresion();
             this->piso <<= 1;
             this->techo <<= 1;
             this->techo = this->techo | 0x0001;
-            fprintf(f,"Techo: %d \n",techo);
+            /*fprintf(f,"Techo: %d \n",techo);
             fprintf(f,"Piso: %d \n",piso);
             fprintf(f,"Codigo %d \n",codigoDescompresion);
-            fprintf(f,"Buffer: %d \n",bitBuffer);
+            fprintf(f,"Buffer: %d \n",bitBuffer);*/
         }else if(!(this->techo & 0x4000) && (this->piso & 0x4000)){ //verifico underflow
-                fprintf(f,"Underflow \n");
+                //fprintf(f,"Underflow \n");
                 this->codigoDescompresion ^= 0x4000;
                 this->piso = this->piso & 0x3FFF;
                 this->techo = this->techo | 0x4000;
@@ -180,16 +183,16 @@ int Aritmetico::actualizarRangosDescompresion(unsigned short probaCaracter, unsi
                 this->piso <<= 1;
                 this->techo <<= 1;
                 this->techo = this->techo | 0x0001;
-                fprintf(f,"Techo: %d \n",techo);
+                /*fprintf(f,"Techo: %d \n",techo);
                 fprintf(f,"Piso: %d \n",piso);
                 fprintf(f,"Codigo %d \n",codigoDescompresion);
-                fprintf(f,"Buffer: %d \n",bitBuffer);
+                fprintf(f,"Buffer: %d \n",bitBuffer);*/
         }else{
             finished=1;
         }
     }
-    fflush(f);
-    fclose(f);
+    //fflush(f);
+    //fclose(f);
     return 0;
 }
 
