@@ -154,6 +154,7 @@ int Buscador::imprimirCancion(unsigned int ref){
     out << std::endl;
     file.close();
     out.close();
+    delete ppmc;
     return 0;
 }
 
