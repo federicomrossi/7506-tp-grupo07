@@ -206,6 +206,10 @@
 
 	\item \textit{ARBOL\_TAMANIO\_BLOQUE}: Tamaño de los bloques que representan nodos en el Arbol B$^+$.
 
+	\item \textit{ESTADISTA\_MAXIMO\_}: Son tres parametros que indican la cantidad máxima de resultados en las estadísticas.
+
+	\item \textit{PPMC\_ORDER}: Orden máximo para el algoritmo de compresión.
+
 \end{itemize}
 \bigskip
 
@@ -248,7 +252,7 @@
 	% Figura 1
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.50\textwidth]{images/menu.png}
+	\includegraphics[width=0.75\textwidth]{images/menu.png}
 	\medskip
 	\caption{Menú principal del programa.}
 \end{figure}
@@ -291,7 +295,38 @@
 % UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Busqueda de canciones por frase
 \subsection{Búsqueda de canciones por frase}
 
-	Por último, la opción 5 permite la busqueda de canciones por frase. Se retornarán por pantalla todos los temas que coincidan con la búsqueda, y se depositarán en el archivo ``\textit{salida.out}'' las letras de dichas canciones.
+	La opción 5 permite la busqueda de canciones por frase. Se retornarán por pantalla todos los temas que coincidan con la búsqueda, y se depositarán en el archivo ``\textit{salida.out}'' las letras de dichas canciones.
+\bigskip
+
+
+
+% UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Busqueda de canciones por frase
+\subsection{Listado de temas indexados}
+
+	La opción 6 permite listar todos los temas que fueron indexados en el primer y segundo paso.
+\bigskip
+
+
+
+% UTILIZACION DE LA INTERFAZ DEL PROGRAMA - Busqueda de canciones por frase
+\subsection{Mostrar estadísticas}
+
+	Por último, la opción 7 permite al usuario ver las estadísticas sobre las búsquedas realizadas y resultados obtenidos en base a estas. Más específicamente, al ingresar a esta opción se podrán visualizar las siguientes estadísitcas:
+
+
+\begin{itemize}
+\itemsep=5pt \topsep=0pt \partopsep=0pt \parskip=0pt \parsep=0pt
+	
+	\item Títulos más buscados;
+	\item Autores más buscados;
+	\item Frases más buscadas;
+	\item Tema que coincidió mas veces en todas las búsquedas.
+
+\end{itemize}
+\bigskip
+
+	
+	La última de estas estadísticas muestra múltiples temas en el caso de que varias canciones posean la misma estadística máxima.
 \bigskip\bigskip
 
 

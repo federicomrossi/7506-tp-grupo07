@@ -65,7 +65,8 @@
 	language = Oz,                       
 	numbers = left,
 	numbersep = 5pt,
-	numberstyle = \tiny\ttfamily\color{gray50},
+	numberstyle = \tiny\ttf
+amily\color{gray50},
 	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
 	rulecolor = \color{gray75},
 	showspaces = false,
@@ -174,10 +175,10 @@
 
 
 
-% DETALLES TECNICOS
-\section{Detalles técnicos}
+% DETALLES TECNICOS: 1ra Parte
+\section{Detalles técnicos: \textit{1ra Parte}}
 
-	A continuación se describirá con un mayor nivel de detalle cada uno de los módulos que componen el sistema. \\
+	A continuación se describirá con un mayor nivel de detalle cada uno de los módulos que componen el sistema en esta primer etapa del proyecto. \\
 
 
 % DETALLES TECNICOS - Capa Física
@@ -444,8 +445,67 @@
 
 
 
+% DETALLES TECNICOS: 2da Parte
+\section{Detalles técnicos: \textit{2da Parte}}
+
+	A continuación se describirá con un mayor nivel de detalle cada uno de los módulos que componen el sistema en esta segunda etapa del proyecto. \\
+
+
+
+% DETALLES TECNICOS - Compresion
+\subsection{Compresión}
+\medskip
+
+	La compresión de los temas fue realizada mediante una implementación del algoritmo PPMC. El mismo fue subdivido en dos módulos para su realización: el correspondiente a la compresión/descompresión aritmética (implementado en la clase ``\textit{Aritmetico}'') y el de la predicción (implementado en la clase ``\textit{Contexto}'' y sus herederas). A continuación un detalle de ambos.
+\bigskip
+
+
+
+% DETALLES TECNICOS - Compresion - Aritmetico
+\subsubsection{Aritmético}
+\medskip
+
+	La implementación del mismo se realizó siguiendo la teoría desarrollada en clase. Sus parametros son la probabilidad del caracter a comprimir/descomprimir, la probabilidad acumulada y la probabilidad total. 
+
+\bigskip
+
+
+
+% DETALLES TECNICOS - Compresion - Predictor
+\subsubsection{Predictor}
+\medskip
+
+	Este caso requirió de mayor planeamiento debido a la escasa bibliografía con respecto a la implementación de este aspecto del PPMC. A diferencia del resto del diseño, para esta parte se decidió realizar una planificación conjunta, llegando a la siguiente realización. Debido a las particularidades de cada uno de los ordenes divisamos tres tipos distintos, representados por las clases ``\textit{CtxM1}'', ``\textit{Ctx0}'' y ``\textit{CtxN}''. La estructura principal del predictor es una lista enlazada, cuyos nodos representan cada uno de los ordenes con los cuales se esta trabajando.
+	\par
+	Las carácteristicas de los ordenes -1 y 0, permitían generar las estrúcturas para almacenar los contextos de manerar estática (desde el punto de vista de la alocación de la memoria). En particular, el orden -1 se maneja con un simple contador para representar la probabilidad total y se va decrementando según el resultado de las exclusiones, es decir, que la probabilidad de los caracteres se obtiene de manera implícita. Para el caso del orden 0, las probabilidades se alojan en un arreglo de 257 posiciones. Debido a que esto genera un bajo overhead de memoria pero, permite acceso O(1) a todas las probabilidades, fue el camino escogido.
+	\par
+	El mayor inconveniente se presenta para los ordenes mayores a 1. Debido a que uno de los requerimientos era que el orden del PPMC fuera un parametro de configuración accesible al usuario final, la implementación del mismo debía ser tal que de manera genérica pudieran crearse los contextos para cualquier orden. En este caso el enfoque de los arreglos estaticos es inviable por el hecho de que se necesitaría demasiada memoria para los ordenes superiores (aproximadamente 8GB para orden 4).
+	Fue por ello que se decidio implementar los contextos mediante un mapa {\ttfamily\footnotesize Contexto => Lista<Frecuencias> \\} donde cada nuevo contexto generaba dinamicamente una lista enlazada para registrar la ocurrencia de un caracter. Debido a esta implementación, los algoritmos de ``\textit{CtxN}'' se aseguran de obetner todos los datos necesarios en una unica iteración del contexto correpondiente.
+	\par
+
+	Finalmente se genero una clase virtual padre para todos los contextos, apropiadamente llamada ``\textit{Contexto}'', de forma tal que se pudieran utilizar metodos polimórficos para el recorrido de los distintos ordenes.
+\bigskip
+
+
+
+% DETALLES TECNICOS - Capa Física
+\subsection{Módulo de estadísticas}
+
+	El módulo de estadísticas se encuentra representado por la clase \textit{Estadista}, quien permite censar búsquedas por \textit{autor}, por \textit{título} y por \textit{frases}, como así también permite el censo de resultados de búsquedas.
+	\par
+	Para poder efectuar dichos censos, se insertan
+	puntos de cómputo en donde se llaman a los distintos métodos que corresponden a cada categoría de censado. En nuestro caso, para la aplicación en sí, se han realizado dichas llamadas en los puntos en los que el usuario realiza el ingreso del parámetro de búsqueda por entrada estándar. Por otro lado, para censar los resultados de búsquedas, se insertaron puntos de cómputo en las salidas de cada procesamiento de búsqueda.
+	\par
+	Las estadísticas pueden ser consultadas en cualquier momento, lo cual permite ver el estado de lo computado y procesado hasta el momento. Además, es posible especificar qué cantidad de más buscados desea que se muestre. Esto se realiza desde el archivo de configuración \textit{parámetros.conf}.
+	\par
+	En el caso del \textit{tema que coincidió más veces en todas las búsquedas}, solamente se mostrará un solo tema a menos que sean varios los que posean el mismo número de censos acumulados.
+	\bigskip\bigskip
+
+
+
+
 % DETALLES TECNICOS - Front-end
-\subsection{Front-end (Interfaz)}
+\section{Front-end (Interfaz)}
 \medskip
 
 	La interfaz esta basada en modo texto a través de la salida estandar, en nuestro caso, la consola del sistema operativo. La misma se implementa en la clase ``Menu''. Se imprimen 5 opciones posibles:
@@ -460,7 +520,8 @@
 		\item \textit{Opción 4}: Buscar canciones por titulo;
 		\item \textit{Opción 5}: Buscar canciones por frase;
 		\item \textit{Opción 6}: Listar todos los temas indexados;
-		\item \textit{Opción 7}: Salir.
+		\item \textit{Opción 7}: Ver estadísticas;
+		\item \textit{Opción 8}: Salir.
 
 	\end{itemize}
 	\medskip
@@ -469,45 +530,5 @@
 	Las resoluciones de las consultas se imprimen por pantalla, mientras que las letras recuperadas se imprimen en el archivo ``\textit{salida.out}'' el cual se almacena en la carpeta destino especificada en el archivo de configuración ``\textit{parametros.conf}'' (este se encuentra en el directorio \textit{codigo}).
 \bigskip
 
-
-
-
-% DETALLES TECNICOS - Compresion
-\subsection{Compresion}
-\medskip
-
-	La compresión de los temas fue realizada mediante una implementación del algoritmo PPMC. El mismo fue subdivido en dos módulos para su realización: el correspondiente a la compresión/descompresión aritmética (implementado en la clase ``\textit{Aritmetico}'') y el de la predicción (implementado en la clase ``\textit{Contexto}'' y sus herederas). A continuación un detalle de ambos.
-
-\bigskip
-
-
-
-% DETALLES TECNICOS - Compresion - Aritmetico
-\subsubsection{Aritmético}
-\medskip
-
-	La implementación del mismo se realizo siguiendo al teoría desarrollada en clase. Sus parametros son la probabilidad del caracter a comprimir/descomprimir, la probabilidad acumulada y la probabilidad total. 
-
-\bigskip
-
-
-% DETALLES TECNICOS - Compresion - Predictor
-\subsubsection{Predictor}
-\medskip
-
-	Este caso requerio de mayor planeamiento debido a la escasa bibliografía con respecto a la implementación de este aspecto del PPMC. A diferencia del resto del diseño, para está parte se decidió realizar una planificación conjunta, llegando a la siguiente realización. Debido a las particularidades de cada uno de los ordenes divisamos tres tipos distintos, representados por las clases ``\textit{CtxM1}'', ``\textit{Ctx0}'' y ``\textit{CtxN}''. La estructura principal del predictor es una lista enlazada, cuyos nodos representan cada uno de los ordenes con los cuales se esta trabajando.
-	\medskip
-
-	Las carácteristicas de los ordenes -1 y 0, permitían generar las estrúcturas para almacenar los contextos de manerar estática (desde el punto de vista de la alocación de la memoria). En particular, el orden -1 se maneja con un simple contador para representar la probabilidad total y se va decrementando según el resultado de las exclusiones, es decir, que la probabilidad de los caracteres se obtiene de manera implícita. Para el caso del orden 0, las probabilidades se alojan en un arreglo de 257 posiciones. Debido a que esto genera un bajo overhead de memoria pero, permite acceso O(1) a todas las probabilidades, fue el camino escogido.
-	\medskip
-
-	El mayor inconveniente se presenta para los ordenes mayores a 1. Debido a que uno de los requerimientos era que el orden del PPMC fuera un parametro de configuración accesible al usuario final, la implementación del mismo debía ser tal que de manera genérica pudieran crearse los contextos para cualquier orden. En este caso el enfoque de los arreglos estaticos es inviable por el hecho de que se necesitaría demasiada memoria para los ordenes superiores (aproximadamente 8GB para orden 4).
-	Fue por ello que se decidio implementar los contextos mediante un mapa {\ttfamily\footnotesize Contexto => Lista<Frecuencias> \\} donde cada nuevo contexto generaba dinamicamente una lista enlazada para registrar la ocurrencia de un caracter. Debido a esta implementación, los algoritmos de ``\textit{CtxN}'' se aseguran de obetner todos los datos necesarios en una unica iteración del contexto correpondiente.
-	\medskip
-
-	Finalmente se genero una clase virtual padre para todos los contextos, apropiadamente llamada ``\textit{Contexto}'', de forma tal que se pudieran utilizar metodos polimórficos para el recorrido de los distintos ordenes.
-	\medskip
-
-\bigskip
 
 \end{document}
